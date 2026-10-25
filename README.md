@@ -1,5 +1,7 @@
 # DocFlow · 技术文档检索与工单处理 Agent
 
+[![Offline verification](https://github.com/Edenzty/DocFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/Edenzty/DocFlow/actions/workflows/ci.yml)
+
 **将技术问题变成带引用、可审核、可恢复的工单回复。** DocFlow 在本机检索12篇技术文档，生成回复草稿，经人工批准后写入本地模拟工单系统。第一版只支持单用户、文本知识库、一个工作流和一个提交工具。
 
 这是可运行的学习项目。默认使用离线模拟模型，模拟结果只验证工程流程；真实模型、检索效果、失败案例与测试记录以[实际验证结果](docs/RESULTS.md)为准。代码实现完成和学习者独立掌握分开记录。
@@ -9,6 +11,10 @@
                                       ↓                     ↓
                                   SQLite检查点          超时后幂等重试
 ```
+
+离线模拟工作台示例：
+
+![DocFlow离线模拟工作台](docs/examples/workbench-preview.jpg)
 
 ## 五分钟体验
 

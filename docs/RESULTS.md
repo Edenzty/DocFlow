@@ -8,7 +8,9 @@
 - `python -m pip check`：**No broken requirements found**。
 - 离线完整演示：6项流程检查通过、真实模型请求0次，见[演示记录](examples/demo.json)。
 - 实际浏览器操作已覆盖：关键词Top5、引用展示、生成模拟草稿、先审核再提交、提交成功后模拟超时、重试复用同一回复、页面刷新后按工单编号恢复。见[工作台截图](examples/workbench.jpg)。
-- 已公开上传至[Edenzty/DocFlow](https://github.com/Edenzty/DocFlow)，正在进行修复后的Windows/Ubuntu离线矩阵复测。首次远端检查发现英文Windows输出编码与离线测试夹具依赖本机Torch两处问题；均已修复，本机61项回归通过，远端通过状态待补记。
+- 已公开上传至[Edenzty/DocFlow](https://github.com/Edenzty/DocFlow)。Windows和Ubuntu的Python 3.11离线CI均通过：每个平台61项测试、依赖检查、CLI帮助、6项流程演示和30题离线评测均成功。[实际CI记录](https://github.com/Edenzty/DocFlow/actions/runs/40162297258)，对应[代码提交cc06cac](https://github.com/Edenzty/DocFlow/commit/cc06cac34155b6bbd5552eb0ceb8a9e84bb1840d)。
+
+首次远端检查发现英文Windows输出编码与离线测试夹具依赖本机Torch两处问题；均已修复并完成上述复测。此后补记CI结果与README展示的提交仅修改文档，不改变已验证代码，也不重新调用模型。
 
 测试涵盖：未审核不能提交、审批绑定版本与内容、旧审批失效、SQLite检查点重启恢复、审批事务与检查点之间崩溃的恢复、提交已写入后超时重试、并发重复提交唯一回复、文档诱导不能替代审批、坏引用被拒绝、错误脱敏、40次并发预算与开发/留出配额。
 
