@@ -210,6 +210,7 @@ def test_real_vector_loading_is_lazy_offline_and_cpu_without_download(tmp_path, 
     module._MODEL_CACHE.clear()
     chunks = [Chunk("c1", "d1", "标题", "章节", "original", "1", "401签名失败")]
     constructors = []
+    thread_limits = []
 
     class PretendSentenceTransformer(FakeEmbedder):
         def __init__(self, name, **kwargs):
@@ -217,16 +218,20 @@ def test_real_vector_loading_is_lazy_offline_and_cpu_without_download(tmp_path, 
             constructors.append((name, kwargs))
 
     monkeypatch.setitem(sys.modules, "sentence_transformers", types.SimpleNamespace(SentenceTransformer=PretendSentenceTransformer))
+    monkeypatch.setitem(sys.modules, "torch", types.SimpleNamespace(set_num_threads=thread_limits.append))
     retriever = VectorRetriever(chunks, tmp_path / "unused")
     assert not constructors
+    assert not thread_limits
     retriever._load_model(allow_download=False)
     second = VectorRetriever(chunks, tmp_path / "unused")
     second._load_model(allow_download=False)
     assert len(constructors) == 1
+    assert thread_limits == [4]
     assert constructors[0][0] == BGE_MODEL
     assert constructors[0][1]["device"] == "cpu"
     assert constructors[0][1]["local_files_only"] is True
     assert constructors[0][1]["trust_remote_code"] is False
+    assert constructors[0][1]["revision"] == module.BGE_REVISION
     module._MODEL_CACHE.clear()
 
 

@@ -12,10 +12,16 @@
 
 ## 五分钟体验
 
-使用 Python 3.11，在项目根目录执行。Windows PowerShell示例：
+使用 Python 3.11。首次获取项目时，在准备存放代码的目录运行：
 
 ```powershell
-Set-Location -LiteralPath 'D:\personal development\docflow-lab'
+git clone https://github.com/Edenzty/DocFlow.git docflow-lab
+Set-Location -LiteralPath '.\docflow-lab'
+```
+
+已有本地项目时，直接进入项目根目录，再执行以下 Windows PowerShell 命令：
+
+```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e ".[dev,vector]"
 .\.venv\Scripts\python.exe -m docflow_lab demo --output reports/demo-01

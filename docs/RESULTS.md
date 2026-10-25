@@ -4,11 +4,11 @@
 
 ## 工程验收
 
-- Windows、Python 3.11，`python -m pytest -q`：**60 passed**。
+- Windows、Python 3.11，`python -m pytest -q`：**61 passed**。
 - `python -m pip check`：**No broken requirements found**。
 - 离线完整演示：6项流程检查通过、真实模型请求0次，见[演示记录](examples/demo.json)。
 - 实际浏览器操作已覆盖：关键词Top5、引用展示、生成模拟草稿、先审核再提交、提交成功后模拟超时、重试复用同一回复、页面刷新后按工单编号恢复。见[工作台截图](examples/workbench.jpg)。
-- GitHub Actions已配置Windows/Ubuntu离线矩阵；远端仓库创建和上传前，不能声称远端CI已通过。
+- 已公开上传至[Edenzty/DocFlow](https://github.com/Edenzty/DocFlow)，正在进行修复后的Windows/Ubuntu离线矩阵复测。首次远端检查发现英文Windows输出编码与离线测试夹具依赖本机Torch两处问题；均已修复，本机61项回归通过，远端通过状态待补记。
 
 测试涵盖：未审核不能提交、审批绑定版本与内容、旧审批失效、SQLite检查点重启恢复、审批事务与检查点之间崩溃的恢复、提交已写入后超时重试、并发重复提交唯一回复、文档诱导不能替代审批、坏引用被拒绝、错误脱敏、40次并发预算与开发/留出配额。
 
@@ -52,7 +52,7 @@ Top5章节召回micro = 命中的标注章节数 / 全部标注章节数；同�
 
 以上保留原回复和失败材料，不用程序把模型文字改成标准答案。独立的[助手逐题复核](ASSISTANT_REVIEW.md)发现25题已给内容有据、5题部分有据，完整覆盖所需事实24/30；这些仅为辅助审阅，`reviewer_type=assistant`，**不替代人工语义验收**。人工复核模板保存在各评测目录，状态仍为pending。
 
-评测之后仅修复了API说明页与本机CSP的兼容性，并调整页面文案；`app.py`因此与首次评测时的快照不同。检索、模型提示、评测标签和工单工作流未因留出结果改变。API说明采用本地静态页与OpenAPI JSON，不依赖被CSP阻止的Swagger CDN资源。
+评测之后修复了API说明页与本机CSP的兼容性，以及英文Windows下中文CLI输出的编码，并调整页面文案与离线测试夹具；`app.py`和`__main__.py`因此与首次评测时的快照不同。检索、模型提示、评测标签和工单工作流未因留出结果改变。API说明采用本地静态页与OpenAPI JSON，不依赖被CSP阻止的Swagger CDN资源。
 
 后续改进可以研究检索融合、章节扩展、草稿一致性检查；在看过本次留出结果后调优，需要新增未用于调优的数据再评估。本轮范围固定，不为提高数字继续消耗余下10次请求。
 

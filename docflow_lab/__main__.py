@@ -2,11 +2,17 @@ import argparse
 from datetime import datetime, timezone
 import json
 from pathlib import Path
+import sys
 
 from .config import Settings
 
 
 def main():
+    # A redirected English Windows console defaults to cp1252. Our Chinese help
+    # and JSON must remain UTF-8 even when the host locale is different.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="DocFlow · 本地技术文档检索与人工审核工单")
     parser.add_argument("--data-dir", type=Path, help="工作流/向量数据目录（不改变共享40次模型预算）")
     sub = parser.add_subparsers(dest="command", required=True)
