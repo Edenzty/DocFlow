@@ -1,0 +1,370 @@
+{
+  "artifact": "public_minimized_workflow_summary",
+  "mode": "offline_agent_acceptance_demo",
+  "created_at": "2026-10-25T04:53:03.103314+00:00",
+  "checks": [
+    {
+      "case": "background_job_created",
+      "passed": true,
+      "detail": "通过后台队列创建只读Agent工单。"
+    },
+    {
+      "case": "background_job_completed",
+      "passed": true,
+      "detail": "在10秒轮询窗口内完成后台离线生成。"
+    },
+    {
+      "case": "awaiting_human_review",
+      "passed": true,
+      "detail": "Agent生成后停在人工审核，未自动审批或提交。"
+    },
+    {
+      "case": "read_only_tool_trace",
+      "passed": true,
+      "detail": "保存当前工单上下文读取与知识库检索的真实工具执行轨迹。"
+    },
+    {
+      "case": "quote_validation_recorded",
+      "passed": true,
+      "detail": "仅验证逐条引文存在，不将其当作语义支持证明。"
+    },
+    {
+      "case": "citations_from_actual_evidence",
+      "passed": true,
+      "detail": "草稿引用来自本次真实BM25召回的片段。"
+    },
+    {
+      "case": "unreviewed_submit_denied",
+      "passed": true,
+      "detail": "未审核的草稿不能提交。"
+    },
+    {
+      "case": "followup_creates_new_version",
+      "passed": true,
+      "detail": "用户补充信息产生v2，保留v1及原始问题。"
+    },
+    {
+      "case": "conversation_history_preserved",
+      "passed": true,
+      "detail": "补充信息作为新消息保存，没有覆盖原问题。"
+    },
+    {
+      "case": "approval_binds_draft",
+      "passed": true,
+      "detail": "审批绑定当前版本及草稿、证据、质量记录的摘要。"
+    },
+    {
+      "case": "manual_edit_invalidates_approval",
+      "passed": true,
+      "detail": "人工编辑产生v3，v2审批失效。"
+    },
+    {
+      "case": "manual_edit_resets_quote_quality",
+      "passed": true,
+      "detail": "人工编辑后不沿用旧的逐条引文校验结果。"
+    },
+    {
+      "case": "old_version_review_denied",
+      "passed": true,
+      "detail": "旧版本审批不能批准v3草稿。"
+    },
+    {
+      "case": "edited_unreviewed_submit_denied",
+      "passed": true,
+      "detail": "v3必须重新审核后才能提交。"
+    },
+    {
+      "case": "restart_preserves_review",
+      "passed": true,
+      "detail": "关闭并重建Engine后，SQLite检查点恢复v3审核，不重新生成。"
+    },
+    {
+      "case": "committed_then_timeout",
+      "passed": true,
+      "detail": "模拟本地回复已写入，但提交响应超时。"
+    },
+    {
+      "case": "restart_retry_recovers",
+      "passed": true,
+      "detail": "再次重启后只重试失败提交，复用已经存在的同一回复。"
+    },
+    {
+      "case": "repeated_submit_one_reply",
+      "passed": true,
+      "detail": "重复提交仍只有一条本地模拟工单回复。"
+    },
+    {
+      "case": "idempotency_event_recorded",
+      "passed": true,
+      "detail": "幂等重放留有审计事件。"
+    },
+    {
+      "case": "three_versions_preserved",
+      "passed": true,
+      "detail": "原始生成、补充生成、人工编辑三个版本均可追溯。"
+    },
+    {
+      "case": "zero_llm_requests",
+      "passed": true,
+      "detail": "所有生成明确使用离线Agent客户端，无模型API请求。"
+    }
+  ],
+  "status": "passed",
+  "passed": 21,
+  "total": 21,
+  "model_requests": 0,
+  "snapshots": {
+    "initial": {
+      "id": "894b9fdd610448ed85fef68c918c4e61",
+      "version": 1,
+      "status": "awaiting_review",
+      "strategy": "agent",
+      "mode": "mock",
+      "draft_hash": "4da89bf9b3b4fec7c3fbe3a2e838c9580019f5940a7fc922897044d8d15d62bf",
+      "evidence_count": 6,
+      "message_count": 2,
+      "versions": [
+        {
+          "version": 1,
+          "status": "awaiting_review"
+        }
+      ],
+      "approval": null,
+      "reply_id": null,
+      "quality": {
+        "status": "verified_quotes",
+        "validation": "quote_presence_only",
+        "checked_quotes": 1
+      },
+      "trace": [
+        {
+          "step": 1,
+          "kind": "model",
+          "status": "completed"
+        },
+        {
+          "step": 2,
+          "kind": "tool",
+          "status": "completed",
+          "tool": "get_ticket_context"
+        },
+        {
+          "step": 3,
+          "kind": "tool",
+          "status": "completed",
+          "tool": "search_knowledge"
+        },
+        {
+          "step": 4,
+          "kind": "model",
+          "status": "completed"
+        },
+        {
+          "step": 5,
+          "kind": "tool",
+          "status": "completed",
+          "tool": "expand_evidence"
+        },
+        {
+          "step": 6,
+          "kind": "model",
+          "status": "completed"
+        },
+        {
+          "step": 7,
+          "kind": "quote_check",
+          "status": "completed"
+        }
+      ]
+    },
+    "followup": {
+      "id": "894b9fdd610448ed85fef68c918c4e61",
+      "version": 2,
+      "status": "awaiting_review",
+      "strategy": "agent",
+      "mode": "mock",
+      "draft_hash": "5517d9486de9575369f8a4676addc238890511832c76a667f075ca00057a5d00",
+      "evidence_count": 6,
+      "message_count": 4,
+      "versions": [
+        {
+          "version": 2,
+          "status": "awaiting_review"
+        },
+        {
+          "version": 1,
+          "status": "awaiting_review"
+        }
+      ],
+      "approval": null,
+      "reply_id": null,
+      "quality": {
+        "status": "verified_quotes",
+        "validation": "quote_presence_only",
+        "checked_quotes": 1
+      },
+      "trace": [
+        {
+          "step": 1,
+          "kind": "model",
+          "status": "completed"
+        },
+        {
+          "step": 2,
+          "kind": "tool",
+          "status": "completed",
+          "tool": "get_ticket_context"
+        },
+        {
+          "step": 3,
+          "kind": "tool",
+          "status": "completed",
+          "tool": "search_knowledge"
+        },
+        {
+          "step": 4,
+          "kind": "model",
+          "status": "completed"
+        },
+        {
+          "step": 5,
+          "kind": "tool",
+          "status": "completed",
+          "tool": "expand_evidence"
+        },
+        {
+          "step": 6,
+          "kind": "model",
+          "status": "completed"
+        },
+        {
+          "step": 7,
+          "kind": "quote_check",
+          "status": "completed"
+        }
+      ]
+    },
+    "edited": {
+      "id": "894b9fdd610448ed85fef68c918c4e61",
+      "version": 3,
+      "status": "awaiting_review",
+      "strategy": "agent",
+      "mode": "mock",
+      "draft_hash": "c823b5341e59bf5ec048a144c73b110867b59e1ff8cab33300167b93d2aed7a2",
+      "evidence_count": 6,
+      "message_count": 5,
+      "versions": [
+        {
+          "version": 3,
+          "status": "awaiting_review"
+        },
+        {
+          "version": 2,
+          "status": "approved"
+        },
+        {
+          "version": 1,
+          "status": "awaiting_review"
+        }
+      ],
+      "approval": null,
+      "reply_id": null,
+      "quality": {
+        "status": "manual_review_required",
+        "validation": "manual_review_required",
+        "checked_quotes": 0
+      },
+      "trace": [
+        {
+          "kind": "manual_edit",
+          "status": "completed"
+        }
+      ]
+    },
+    "committed_then_timeout": {
+      "id": "894b9fdd610448ed85fef68c918c4e61",
+      "version": 3,
+      "status": "submission_failed",
+      "strategy": "agent",
+      "mode": "mock",
+      "draft_hash": "c823b5341e59bf5ec048a144c73b110867b59e1ff8cab33300167b93d2aed7a2",
+      "evidence_count": 6,
+      "message_count": 5,
+      "versions": [
+        {
+          "version": 3,
+          "status": "submission_failed"
+        },
+        {
+          "version": 2,
+          "status": "approved"
+        },
+        {
+          "version": 1,
+          "status": "awaiting_review"
+        }
+      ],
+      "approval": {
+        "version": 3,
+        "draft_hash": "c823b5341e59bf5ec048a144c73b110867b59e1ff8cab33300167b93d2aed7a2",
+        "approved": true,
+        "created_at": "2026-10-25T04:53:04.731883+00:00"
+      },
+      "reply_id": "8675ec3a1a9d4d31a8fe3e0a6e65495f",
+      "quality": {
+        "status": "manual_review_required",
+        "validation": "manual_review_required",
+        "checked_quotes": 0
+      },
+      "trace": [
+        {
+          "kind": "manual_edit",
+          "status": "completed"
+        }
+      ]
+    },
+    "final": {
+      "id": "894b9fdd610448ed85fef68c918c4e61",
+      "version": 3,
+      "status": "submitted",
+      "strategy": "agent",
+      "mode": "mock",
+      "draft_hash": "c823b5341e59bf5ec048a144c73b110867b59e1ff8cab33300167b93d2aed7a2",
+      "evidence_count": 6,
+      "message_count": 5,
+      "versions": [
+        {
+          "version": 3,
+          "status": "submitted"
+        },
+        {
+          "version": 2,
+          "status": "approved"
+        },
+        {
+          "version": 1,
+          "status": "awaiting_review"
+        }
+      ],
+      "approval": {
+        "version": 3,
+        "draft_hash": "c823b5341e59bf5ec048a144c73b110867b59e1ff8cab33300167b93d2aed7a2",
+        "approved": true,
+        "created_at": "2026-10-25T04:53:04.731883+00:00"
+      },
+      "reply_id": "8675ec3a1a9d4d31a8fe3e0a6e65495f",
+      "quality": {
+        "status": "manual_review_required",
+        "validation": "manual_review_required",
+        "checked_quotes": 0
+      },
+      "trace": [
+        {
+          "kind": "manual_edit",
+          "status": "completed"
+        }
+      ]
+    }
+  },
+  "note": "Public state summary only. Full original drafts, evidence and local paths remain in the local reports directory."
+}

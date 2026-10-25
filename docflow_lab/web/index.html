@@ -1,97 +1,39 @@
 <!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light" />
-    <title>DocFlow · 技术工单工作台</title>
-    <link rel="stylesheet" href="/static/style.css" />
-    <script src="/static/app.js" defer></script>
-  </head>
-  <body>
-    <a class="skip-link" href="#workspace">跳至工作区</a>
-    <header class="site-header">
-      <a class="brand" href="/" aria-label="DocFlow 首页">
-        <span class="brand-icon" aria-hidden="true">D<span></span></span>
-        <span>DocFlow<small>技术工单工作台</small></span>
-      </a>
-      <div class="header-meta"><span class="local-dot"></span>本地演示 · 单用户</div>
-    </header>
-
-    <main id="workspace" class="workspace">
-      <div class="intro">
-        <div><p class="eyebrow">从问题到有据可查的回复</p><h1>让每一次回复，<br class="mobile-break" />都有证据与审核。</h1><p class="intro-copy">检索技术文档，生成带引用的草稿。由你审核，再写入本地模拟工单系统。</p></div>
-        <div class="system-card" aria-label="运行状态">
-          <div class="system-top"><span class="mini-label">MODEL REQUESTS</span><span id="connection-status" class="connection">正在连接</span></div>
-          <p class="budget"><strong id="budget-remaining">—</strong><span>/ <span id="budget-limit">40</span> 次剩余</span></p>
-          <div class="budget-track"><span id="budget-progress"></span></div>
-          <p id="runtime-status" class="runtime-status">正在读取服务配置…</p>
-        </div>
-      </div>
-
-      <div id="global-message" class="message" role="status" aria-live="polite" hidden></div>
-
-      <section class="workbench" aria-label="工单工作区">
-        <aside class="question-column">
-          <div class="panel question-panel">
-            <div class="panel-title"><span class="step-number">01</span><h2>描述问题</h2></div>
-            <form id="question-form">
-              <label class="field-label" for="question">用户遇到了什么问题？</label>
-              <textarea id="question" name="question" rows="6" maxlength="2000" placeholder="例如：设备 A 访问设备 B 的配置接口返回 403，该怎么排查？" required></textarea>
-              <p class="field-help">保留错误码、操作与设备信息，帮助检索相关章节。</p>
-              <div class="examples" aria-label="试试这些问题">
-                <button type="button" class="example-button" data-example="设备 A 读取设备 B 的配置接口返回 403，应该怎么排查？">403 越权排查<span aria-hidden="true">↗</span></button>
-                <button type="button" class="example-button" data-example="请求签名正确，但修改请求体后接口返回 401，为什么？">401 签名验证<span aria-hidden="true">↗</span></button>
-                <button type="button" class="example-button" data-example="我的设备连接不上，应该如何处理？">信息不足时追问<span aria-hidden="true">↗</span></button>
-              </div>
-
-              <fieldset class="retrieval-fieldset"><legend class="field-label">检索方式</legend>
-                <div class="segmented">
-                  <label><input type="radio" name="method" value="keyword" checked /><span>关键词检索<small>BM25</small></span></label>
-                  <label><input type="radio" name="method" value="vector" /><span>向量检索<small>BGE · Chroma</small></span></label>
-                </div>
-                <p id="vector-hint" class="field-help">默认使用关键词；向量检索需要先完成本地索引。</p>
-              </fieldset>
-
-              <div class="model-selection">
-                <label class="check-label"><input id="live-mode" type="checkbox" /><span>调用真实 DeepSeek<span class="optional-tag">需显式开启</span></span></label>
-                <p id="model-hint">当前使用离线模拟模型，不消耗请求预算。模拟输出用于验证流程。</p>
-              </div>
-              <div class="question-actions"><button type="submit" id="create-button" class="button button-primary">检索并生成草稿<span aria-hidden="true">→</span></button><button type="button" id="search-button" class="button button-secondary">仅检索</button></div>
-            </form>
-          </div>
-
-          <div class="panel load-panel">
-            <h2>恢复已有工单</h2><p>服务重启后，用工单编号继续审核或重试。</p>
-            <form id="load-form" class="load-form"><label class="sr-only" for="ticket-id-input">工单编号</label><input id="ticket-id-input" type="text" placeholder="粘贴工单编号" autocomplete="off" required /><button id="load-button" class="button button-secondary" type="submit">载入</button></form>
-          </div>
-        </aside>
-
-        <div class="results-column">
-          <div class="panel flow-panel">
-            <ol class="flow" aria-label="当前工作流"><li id="flow-retrieve" class="current"><span>1</span>检索证据</li><li id="flow-draft"><span>2</span>生成草稿</li><li id="flow-review"><span>3</span>人工审核</li><li id="flow-submit"><span>4</span>本地提交</li></ol>
-          </div>
-
-          <section id="empty-state" class="panel empty-state"><div class="document-art" aria-hidden="true"><span></span><span></span><span></span><b>“</b></div><h2>先提出一个具体问题</h2><p>右侧会展示召回的文档片段、草稿引用和处理记录。<br />每条回复都需要你的明确审核。</p><div class="empty-tags"><span>12 篇知识文档</span><span>Top 5 检索</span><span>版本绑定审批</span></div></section>
-
-          <section id="ticket-panel" class="panel ticket-panel" hidden>
-            <div class="ticket-heading"><div><p class="eyebrow">CURRENT TICKET</p><h2>回复草稿<span id="draft-version" class="version-tag"></span></h2></div><span id="ticket-status" class="status-tag"></span></div>
-            <div class="ticket-meta"><span id="ticket-mode" class="mode-tag"></span><span id="ticket-method"></span><button id="refresh-button" type="button" class="text-button">刷新状态</button></div>
-            <div class="ticket-reference"><span>工单编号</span><code id="ticket-id"></code><button id="copy-id-button" class="text-button" type="button">复制</button></div>
-            <p id="ticket-question" class="ticket-question"></p>
-            <div id="ticket-error" class="message message-error" role="alert" hidden></div>
-            <div class="draft-box"><div class="draft-label"><span id="draft-decision"></span><span id="mock-note"></span></div><div id="draft-answer" class="draft-answer"></div><div id="draft-citations" class="draft-citations" aria-label="草稿引用"></div></div>
-            <div class="review-section"><div><h3>人工审核</h3><p id="approval-description">核对引用和建议后，再批准当前版本。</p></div><div class="review-actions"><button id="reject-button" type="button" class="button button-secondary">驳回草稿</button><button id="approve-button" type="button" class="button button-primary">批准当前版本</button></div></div>
-            <div class="submission-section"><label class="check-label timeout-option"><input id="simulate-timeout" type="checkbox" /><span>模拟：提交成功后响应超时</span></label><p class="field-help">用于验证重试后只保留一条回复。提交工具只写入本地模拟系统。</p><div class="submit-actions"><button id="regenerate-button" type="button" class="button button-secondary">生成新版本</button><button id="retry-button" type="button" class="button button-secondary" hidden>重试失败步骤</button><button id="submit-button" type="button" class="button button-primary" disabled>提交到本地工单</button></div></div>
-            <div id="reply-panel" class="reply-panel" hidden><div class="reply-title"><span class="success-mark" aria-hidden="true">✓</span><h3>本地系统已保存回复</h3></div><p id="reply-note"></p><code id="reply-id"></code><div id="reply-body" class="reply-body"></div></div>
-          </section>
-
-          <section id="evidence-panel" class="panel evidence-panel" hidden><div class="section-heading"><div class="panel-title"><span class="step-number">02</span><h2>检索证据<span id="evidence-count" class="count-tag">0</span></h2></div><span id="evidence-method" class="subtle-label"></span></div><p class="section-description">引用存在不等于结论正确。请结合原文，检查回复是否得到证据支持。</p><div id="evidence-list" class="evidence-list"></div></section>
-
-          <section id="events-panel" class="panel events-panel" hidden><div class="section-heading"><div class="panel-title"><span class="step-number">03</span><h2>调用与状态记录</h2></div><span class="subtle-label">可追踪 · 可恢复</span></div><ol id="event-list" class="event-list"></ol></section>
-        </div>
+<html lang="zh-CN"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="color-scheme" content="light" /><title>DocFlow · 技术工单工作台</title><link rel="stylesheet" href="/static/style.css" /><script src="/static/app.js" defer></script></head>
+<body><a class="skip-link" href="#workspace">跳至工作区</a>
+<header class="site-header"><a class="brand" href="/" aria-label="DocFlow 首页"><span class="brand-icon" aria-hidden="true">D<span></span></span><span>DocFlow<small>技术支持工作台</small></span><span class="release-tag">2.0</span></a><nav class="main-nav" aria-label="主要导航"><button class="nav-button active" data-view="workbench" aria-current="page">工单工作台</button><button class="nav-button" data-view="retrieval">检索实验</button><button class="nav-button" data-view="knowledge">知识库</button></nav><div class="header-meta"><span class="local-dot"></span>本地演示 · 单用户</div></header>
+<main id="workspace" class="workspace">
+  <div class="intro"><div><p class="eyebrow">RETRIEVE · REASON · REVIEW</p><h1>有据可查，放心回复。</h1><p class="intro-copy">从问题检索到人工审核，把每次处理过程留下来。</p></div><div class="system-card" aria-label="运行状态"><div class="system-top"><span class="mini-label">真实模型请求预算</span><span id="connection-status" class="connection">正在连接</span></div><p class="budget"><strong id="budget-remaining">—</strong><span>/ <span id="budget-limit">40</span> 次剩余</span></p><div class="budget-track"><span id="budget-progress"></span></div><p id="runtime-status" class="runtime-status">正在读取服务配置…</p></div></div>
+  <div id="global-message" class="message" role="status" aria-live="polite" hidden></div>
+  <section id="view-workbench" class="view" aria-label="工单工作台">
+    <div class="statistics" aria-label="工单概览"><div><span>全部工单</span><strong id="stat-total">—</strong><small>服务端持久化</small></div><div><span>等待审核</span><strong id="stat-review">—</strong><small>由你决定是否提交</small></div><div><span>已提交</span><strong id="stat-submitted">—</strong><small>本地模拟系统</small></div><div><span>需要处理</span><strong id="stat-failed">—</strong><small>失败后可显式重试</small></div></div>
+    <div class="workbench"><aside class="question-column">
+      <div class="panel queue-panel"><div class="section-heading"><h2>工单列表 <span id="queue-count" class="count-tag">0</span></h2><button id="refresh-list-button" class="text-button" type="button">刷新</button></div><form id="filter-form" class="filter-form"><label class="sr-only" for="ticket-filter">搜索工单</label><input id="ticket-filter" type="search" placeholder="搜索问题或编号" /><label class="sr-only" for="status-filter">筛选状态</label><select id="status-filter"><option value="">全部状态</option><option value="awaiting_review">等待审核</option><option value="approved">已批准</option><option value="submitted">已提交</option><option value="generation_failed">生成失败</option><option value="submission_failed">提交失败</option><option value="rejected">已驳回</option></select><button class="filter-submit" type="submit">筛选</button></form><div id="ticket-list" class="ticket-list"><p class="muted queue-empty">正在读取工单…</p></div></div>
+      <div class="panel question-panel"><div class="panel-title"><span class="step-number">＋</span><h2>新建问题</h2></div><form id="question-form"><label class="field-label" for="question">用户遇到了什么问题？</label><textarea id="question" name="question" rows="5" maxlength="2000" placeholder="例如：设备 A 访问设备 B 的配置接口返回 403，该怎么排查？" required></textarea><p class="field-help">保留错误码、操作与设备信息。</p><div class="examples"><button type="button" class="example-button" data-example="设备 A 读取设备 B 的配置接口返回 403，应该怎么排查？">403 越权排查 ↗</button><button type="button" class="example-button" data-example="我的设备连接不上，应该如何处理？">信息不足时追问 ↗</button></div>
+        <fieldset class="retrieval-fieldset"><legend class="field-label">处理方式</legend><div class="segmented"><label><input type="radio" name="strategy" value="agent" checked /><span>检索 Agent<small>只读工具 · 有限步数</small></span></label><label><input type="radio" name="strategy" value="rag" /><span>单次 RAG<small>检索后生成草稿</small></span></label></div></fieldset>
+        <fieldset class="retrieval-fieldset"><legend class="field-label">检索方式</legend><div class="segmented three"><label><input type="radio" name="method" value="keyword" checked /><span>关键词<small>BM25</small></span></label><label><input type="radio" name="method" value="vector" /><span>向量<small>BGE</small></span></label><label><input type="radio" name="method" value="hybrid" /><span>混合<small>RRF</small></span></label></div><p id="vector-hint" class="field-help">正在检查向量索引…</p></fieldset>
+        <div class="model-selection"><label class="check-label"><input id="live-mode" type="checkbox" /><span>调用真实 DeepSeek<span class="optional-tag">需显式开启</span></span></label><p id="model-hint">离线模拟不消耗请求预算，只验证流程。</p></div><div class="question-actions"><button type="submit" id="create-button" class="button button-primary">检索并生成草稿 →</button><button type="button" id="search-button" class="button button-secondary">仅检索</button></div>
+      </form></div>
+      <div class="panel load-panel"><h2>恢复已有工单</h2><p>编号和状态保存在本地服务中。</p><form id="load-form" class="load-form"><label class="sr-only" for="ticket-id-input">工单编号</label><input id="ticket-id-input" type="text" placeholder="粘贴工单编号" autocomplete="off" required /><button id="load-button" class="button button-secondary" type="submit">载入</button></form></div>
+    </aside><div class="results-column">
+      <div class="panel flow-panel"><ol class="flow" aria-label="当前工作流"><li id="flow-retrieve" class="current"><span>1</span>检索证据</li><li id="flow-draft"><span>2</span>生成草稿</li><li id="flow-review"><span>3</span>人工审核</li><li id="flow-submit"><span>4</span>本地提交</li></ol></div>
+      <section id="job-panel" class="panel job-panel" role="status" aria-live="polite" hidden><div class="section-heading"><div><p class="eyebrow">BACKGROUND TASK</p><h2 id="job-title">正在处理问题</h2></div><span id="job-status" class="status-tag">排队中</span></div><div class="job-progress"><span></span></div><p id="job-detail" class="muted"></p><code id="job-id"></code><button id="job-retry-button" class="button button-secondary" type="button" hidden>重试后台任务</button></section>
+      <section id="empty-state" class="panel empty-state"><div class="document-art" aria-hidden="true"><span></span><span></span><span></span><b>“</b></div><h2>从一个具体问题开始</h2><p>新建问题，或从左侧工单列表继续处理。<br />你会看到证据、草稿、工具轨迹和每次版本变更。</p><div class="empty-tags"><span>只读检索 Agent</span><span>原文摘录检查</span><span>人工审核后提交</span></div></section>
+      <section id="ticket-panel" class="panel ticket-panel" hidden><div class="ticket-heading"><div><p class="eyebrow">CURRENT TICKET</p><h2>回复草稿 <span id="draft-version" class="version-tag"></span></h2></div><span id="ticket-status" class="status-tag"></span></div><div class="ticket-meta"><span id="ticket-mode" class="mode-tag"></span><span id="ticket-strategy" class="mode-tag"></span><span id="ticket-method"></span><button id="refresh-button" type="button" class="text-button">刷新状态</button></div><div class="ticket-reference"><span>工单编号</span><code id="ticket-id"></code><button id="copy-id-button" class="text-button" type="button">复制</button></div><p id="ticket-question" class="ticket-question"></p><div id="ticket-error" class="message message-error" role="alert" hidden></div><div class="draft-box"><div class="draft-label"><span id="draft-decision"></span><span id="mock-note"></span></div><div id="draft-answer" class="draft-answer"></div><div id="draft-citations" class="draft-citations" aria-label="草稿引用"></div></div>
+        <div class="quality-section"><div class="section-heading"><h3>证据检查</h3><span id="quality-status" class="mode-tag">待检查</span></div><p class="field-help">检查引用及摘录是否出现在原文中。结论是否受到原文支持，仍需人工判断。</p><div id="quality-warnings" class="quality-warnings"></div><div id="claim-list" class="claim-list"></div></div>
+        <div class="review-section"><div><h3>人工审核</h3><p id="approval-description">核对引用和建议后，再批准当前版本。</p></div><div class="review-actions"><button id="reject-button" type="button" class="button button-secondary">驳回草稿</button><button id="approve-button" type="button" class="button button-primary">批准当前版本</button></div></div>
+        <div class="submission-section"><label class="check-label timeout-option"><input id="simulate-timeout" type="checkbox" /><span>模拟：提交成功后响应超时</span></label><p class="field-help">验证重试只保留一条回复；提交工具仅写入本地模拟系统。</p><div class="submit-actions"><button id="regenerate-button" type="button" class="button button-secondary">生成新版本</button><button id="edit-toggle-button" type="button" class="button button-secondary">人工修改</button><button id="retry-button" type="button" class="button button-secondary" hidden>重试失败步骤</button><button id="submit-button" type="button" class="button button-primary" disabled>提交到本地工单</button></div></div>
+        <form id="edit-form" class="edit-form" hidden><label class="field-label" for="edit-answer">人工修改草稿</label><textarea id="edit-answer" rows="6" maxlength="6000" required></textarea><p class="field-help">保存会创建新版本，撤销之前的审批。人工修改内容不标记为模型生成结果。</p><div class="inline-actions"><button id="edit-cancel-button" class="text-button" type="button">取消</button><button id="edit-save-button" class="button button-primary" type="submit">保存为新版本</button></div></form>
+        <div id="reply-panel" class="reply-panel" hidden><div class="reply-title"><span class="success-mark" aria-hidden="true">✓</span><h3>本地系统已保存回复</h3></div><p id="reply-note"></p><code id="reply-id"></code><div id="reply-body" class="reply-body"></div></div>
       </section>
-      <footer class="site-footer"><span>DocFlow Lab</span><p>本地学习项目 · 离线模拟与真实模型结果分别标记 · 审核通过后才可提交</p><a href="/docs" target="_blank" rel="noopener noreferrer">API 文档<span aria-hidden="true"> ↗</span></a></footer>
-    </main>
-  </body>
-</html>
+      <section id="conversation-panel" class="panel conversation-panel" hidden><div class="section-heading"><h2>问题与补充信息</h2><span class="subtle-label">同一工单 · 连续处理</span></div><ol id="message-list" class="message-list"></ol><form id="followup-form"><label class="field-label" for="followup-message">补充排查信息</label><textarea id="followup-message" rows="2" maxlength="2000" placeholder="例如：使用 device-a 的身份读取 device-b/config，返回 403。" required></textarea><div class="followup-actions"><p class="field-help">将重新检索并创建草稿版本，需要重新审核。</p><button id="followup-button" class="button button-secondary" type="submit">补充并重新生成</button></div></form></section>
+      <section id="evidence-panel" class="panel evidence-panel" hidden><div class="section-heading"><div class="panel-title"><span class="step-number">01</span><h2>检索证据 <span id="evidence-count" class="count-tag">0</span></h2></div><span id="evidence-method" class="subtle-label"></span></div><p class="section-description">展开查看原文、来源与版本。检索分数用于排序，不代表回答正确的概率。</p><div id="evidence-list" class="evidence-list"></div></section>
+      <section id="trace-panel" class="panel trace-panel" hidden><div class="section-heading"><div class="panel-title"><span class="step-number">02</span><h2>Agent 工具轨迹</h2></div><span class="subtle-label">只读工具 · 无审核与提交权限</span></div><p class="section-description">展示实际记录的检索与读取步骤；离线模式为模拟决策轨迹。</p><ol id="trace-list" class="trace-list"></ol></section>
+      <section id="versions-panel" class="panel versions-panel" hidden><div class="section-heading"><h2>草稿版本</h2><span class="subtle-label">审批始终绑定具体版本</span></div><div id="version-list" class="version-list"></div></section>
+      <section id="events-panel" class="panel events-panel" hidden><div class="section-heading"><div class="panel-title"><span class="step-number">03</span><h2>调用与状态记录</h2></div><span class="subtle-label">可追踪 · 可恢复</span></div><ol id="event-list" class="event-list"></ol></section>
+    </div></div>
+  </section>
+  <section id="view-retrieval" class="view" aria-label="检索实验" hidden><div class="view-heading"><div><p class="eyebrow">RETRIEVAL LAB</p><h2>同一个问题，比较三种召回。</h2><p>观察关键词、向量与混合检索的 Top 5，找到更可靠的证据入口。</p></div><span class="mode-tag">只检索 · 不调用模型</span></div><div class="panel lab-search"><form id="compare-form"><label class="field-label" for="compare-query">输入要比较的问题</label><div class="lab-search-row"><input id="compare-query" type="text" maxlength="2000" value="设备 A 读取设备 B 的配置接口返回 403，应该怎么排查？" required /><button id="compare-button" class="button button-primary" type="submit">对比检索</button></div></form><p class="field-help">BM25、向量相似度与 RRF 数值尺度不同，不能直接横向比较大小。混合检索也不保证优于关键词；默认保留当前题集表现更好的关键词方式。</p></div><div id="compare-results" class="comparison-grid"><div class="panel comparison-placeholder">输入问题，查看三种方式各自排在前面的章节。</div></div></section>
+  <section id="view-knowledge" class="view" aria-label="知识库" hidden><div class="view-heading"><div><p class="eyebrow">KNOWLEDGE LIBRARY</p><h2>每条建议，都能找到原文。</h2><p>知识库仅包含本项目整理的技术说明和原创 FAQ，保留来源与版本。</p></div><span id="knowledge-summary" class="mode-tag">正在读取</span></div><div id="knowledge-list" class="knowledge-grid"></div></section>
+  <footer class="site-footer"><span>DocFlow Lab <span class="footer-version">2.0</span></span><p>本地学习项目 · 模拟与真实模型结果分开标记 · 人工审核后提交</p><a href="/docs" target="_blank" rel="noopener noreferrer">API 文档 ↗</a></footer>
+</main></body></html>

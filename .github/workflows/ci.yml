@@ -29,4 +29,5 @@ jobs:
       - run: python -m docflow_lab --help
       - run: python -m pytest -q
       - run: python -m docflow_lab demo --output reports/ci-demo
+      - run: python -m docflow_lab demo-v2 --output reports/ci-demo-v2
       - run: python -m docflow_lab evaluate --suite all --method keyword --output reports/ci-evaluation

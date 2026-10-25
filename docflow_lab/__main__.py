@@ -23,6 +23,11 @@ def main():
     sub.add_parser("budget", help="读取共享模型请求账本")
     demo = sub.add_parser("demo", help="离线演示：审核、版本失效、超时后幂等恢复")
     demo.add_argument("--output", type=Path)
+    demo_v2 = sub.add_parser("demo-v2", help="离线演示：只读Agent、追问、人工编辑、后台任务与恢复")
+    demo_v2.add_argument("--output", type=Path, required=True)
+    retrieval_eval = sub.add_parser("evaluate-retrieval", help="比较BM25、BGE与RRF融合；不调用生成模型")
+    retrieval_eval.add_argument("--suite", choices=["development", "holdout", "all"], default="all")
+    retrieval_eval.add_argument("--output", type=Path, required=True)
     evaluation = sub.add_parser("evaluate", help="冻结数据评测；默认模拟，不调用模型")
     evaluation.add_argument("--suite", choices=["development", "holdout", "all"], default="all")
     evaluation.add_argument("--method", choices=["keyword", "vector", "both"], default="both")
@@ -43,6 +48,14 @@ def main():
         vector = VectorRetriever(load_chunks(settings.knowledge_dir), settings.vector_dir, model_path=settings.model_path)
         vector.build()
         print(json.dumps(vector.info(), ensure_ascii=False, indent=2))
+    elif args.command == "evaluate-retrieval":
+        from .retrieval_v2 import evaluate_retrieval
+        result = evaluate_retrieval(settings, args.output, args.suite)
+        print(json.dumps({"output": str(args.output.resolve()), "model_requests": 0}, ensure_ascii=False, indent=2))
+    elif args.command == "demo-v2":
+        from .demo_v2 import run_demo
+        result = run_demo(settings, args.output)
+        print(json.dumps({k: result[k] for k in ("mode", "status", "passed", "total", "model_requests", "output_directory")}, ensure_ascii=False, indent=2))
     elif args.command == "evaluate":
         from .evaluation import evaluate
         result = evaluate(settings, args.output, args.suite, args.method, args.live)

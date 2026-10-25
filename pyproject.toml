@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "docflow-lab"
-version = "0.1.0"
+version = "0.2.0"
 description = "Local evidence-grounded RAG drafts with durable human review and idempotent ticket replies"
 requires-python = ">=3.11,<3.12"
 dependencies = [

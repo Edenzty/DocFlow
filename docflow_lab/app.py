@@ -18,7 +18,7 @@ from .workflow import Engine
 class SearchInput(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
     query: str = Field(min_length=1, max_length=2000)
-    method: Literal["keyword", "vector"] = "keyword"
+    method: Literal["keyword", "vector", "hybrid"] = "keyword"
 
     @field_validator("query")
     @classmethod
@@ -31,8 +31,9 @@ class SearchInput(BaseModel):
 class TicketInput(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
     question: str = Field(min_length=1, max_length=2000)
-    method: Literal["keyword", "vector"] = "keyword"
+    method: Literal["keyword", "vector", "hybrid"] = "keyword"
     live: bool = False
+    strategy: Literal["rag", "agent"] = "rag"
 
     @field_validator("question")
     @classmethod
@@ -45,8 +46,9 @@ class TicketInput(BaseModel):
 class DraftInput(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
     question: str | None = Field(default=None, min_length=1, max_length=2000)
-    method: Literal["keyword", "vector"] | None = None
+    method: Literal["keyword", "vector", "hybrid"] | None = None
     live: bool = False
+    strategy: Literal["rag", "agent"] | None = None
 
     @field_validator("question")
     @classmethod
@@ -68,6 +70,34 @@ class SubmitInput(BaseModel):
     simulate_timeout: bool = False
 
 
+class FollowupInput(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    message: str = Field(min_length=1, max_length=2000)
+    method: Literal["keyword", "vector", "hybrid"] | None = None
+    live: bool = False
+    strategy: Literal["rag", "agent"] | None = None
+
+    @field_validator("message")
+    @classmethod
+    def nonblank(cls, value):
+        if not value.strip():
+            raise ValueError("追问不能为空")
+        return value.strip()
+
+
+class EditInput(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    version: int = Field(ge=1)
+    answer: str = Field(min_length=1, max_length=6000)
+
+    @field_validator("answer")
+    @classmethod
+    def nonblank(cls, value):
+        if not value.strip():
+            raise ValueError("回复不能为空")
+        return value.strip()
+
+
 def create_app(settings: Settings | None = None, *, engine: Engine | None = None):
     settings = settings or (engine.settings if engine else Settings())
     owned = engine is None
@@ -79,7 +109,7 @@ def create_app(settings: Settings | None = None, *, engine: Engine | None = None
         if owned:
             service.close()
 
-    app = FastAPI(title="DocFlow · 技术文档与工单 Agent", version="0.1.0", lifespan=lifespan,
+    app = FastAPI(title="DocFlow · 技术文档与工单 Agent", version="0.2.0", lifespan=lifespan,
                   docs_url=None, redoc_url=None)
     app.state.engine = service
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "testserver", "[::1]"])
@@ -122,15 +152,52 @@ def create_app(settings: Settings | None = None, *, engine: Engine | None = None
         vector = service.retrievers.get("vector")
         return {"model": settings.model, "live_enabled": settings.allow_live,
                 "budget": service.budget.summary(), "vector_ready": bool(vector and vector.ready),
-                "knowledge_documents": len({c.document_id for c in service.chunks}), "chunks": len(service.chunks)}
+                "knowledge_documents": len({c.document_id for c in service.chunks}), "chunks": len(service.chunks),
+                "strategies": ["rag", "agent"], "methods": list(service.retrievers), "statistics": service.store.statistics()}
 
     @app.post("/api/search")
     def search(data: SearchInput):
         return {"results": service.search(data.query, data.method)}
 
+    @app.post("/api/search/compare")
+    def compare(data: SearchInput):
+        results, errors = {}, {}
+        for method in ("keyword", "vector", "hybrid"):
+            try:
+                results[method] = service.search(data.query, method)
+            except (RetrievalError, Conflict) as exc:
+                results[method], errors[method] = [], str(exc)
+        return {"results": results, "errors": errors}
+
+    @app.get("/api/knowledge")
+    def knowledge():
+        documents = {}
+        for chunk in service.chunks:
+            item = documents.setdefault(chunk.document_id, {"document_id": chunk.document_id, "title": chunk.title,
+                                         "source": chunk.source, "version": chunk.version, "sections": set(), "chunks": 0})
+            item["sections"].add(chunk.section)
+            item["chunks"] += 1
+        return {"documents": [{**item, "sections": len(item["sections"])} for item in documents.values()], "chunks": len(service.chunks)}
+
+    @app.get("/api/tickets")
+    def listing(status: str | None = None, q: str | None = None, limit: int = 50):
+        return service.store.list_tickets(status, q, limit)
+
     @app.post("/api/tickets", status_code=201)
     def create(data: TicketInput):
-        return service.create(data.question, data.method, data.live)
+        return service.create(data.question, data.method, data.live, data.strategy)
+
+    @app.post("/api/jobs", status_code=202)
+    def enqueue(data: TicketInput):
+        return service.enqueue(data.question, data.method, data.live, data.strategy)
+
+    @app.get("/api/jobs/{jid}")
+    def job(jid: str):
+        return service.store.get_job(jid)
+
+    @app.post("/api/jobs/{jid}/retry")
+    def retry_job(jid: str):
+        return service.retry_job(jid)
 
     @app.get("/api/tickets/{tid}")
     def get(tid: str):
@@ -138,7 +205,15 @@ def create_app(settings: Settings | None = None, *, engine: Engine | None = None
 
     @app.post("/api/tickets/{tid}/draft")
     def draft(tid: str, data: DraftInput):
-        return service.regenerate(tid, data.question, data.method, data.live)
+        return service.regenerate(tid, data.question, data.method, data.live, data.strategy)
+
+    @app.post("/api/tickets/{tid}/followups")
+    def followup(tid: str, data: FollowupInput):
+        return service.followup(tid, data.message, data.method, data.live, data.strategy)
+
+    @app.post("/api/tickets/{tid}/edit")
+    def edit(tid: str, data: EditInput):
+        return service.edit(tid, data.version, data.answer)
 
     @app.post("/api/tickets/{tid}/review")
     def review(tid: str, data: ReviewInput):

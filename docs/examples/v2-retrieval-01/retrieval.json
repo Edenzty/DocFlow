@@ -1,0 +1,5786 @@
+{
+  "created_at": "2026-10-25T04:46:44.556530+00:00",
+  "suite": "all",
+  "mode": "retrieval_only_real_bge_cpu",
+  "model_requests": 0,
+  "corpus_sha256": "04a514741f473f3b4d5a43db1855d087af922eccdcb000e381ede4a91ffb93d2",
+  "algorithm": {
+    "name": "reciprocal_rank_fusion",
+    "candidate_k": 20,
+    "rrf_k": 60,
+    "max_chunks_per_section": 2,
+    "parameters_tuned_on_labels": false,
+    "score_note": "RRF融合排名；BM25与余弦分数分开记录，均不作为回答可信概率。"
+  },
+  "protocol_note": "沿用v1冻结材料；已观察的holdout现在是回归集，不是新的盲测。无生成或语义支持评分。",
+  "summary": {
+    "keyword": {
+      "questions": 30,
+      "successful_queries": 30,
+      "failed_queries": 0,
+      "questions_with_evidence": 26,
+      "expected_sections": 29,
+      "recalled_sections": 28,
+      "micro_recall_at_5": 0.9655172413793104,
+      "macro_recall_at_5": 0.9615384615384616,
+      "mrr_at_5": 0.9423076923076923,
+      "any_evidence_recalled_questions": 25,
+      "all_evidence_recalled_questions": 25,
+      "expanded_context": {
+        "max_chunks": 15,
+        "micro_recall": 0.9655172413793104,
+        "macro_recall": 0.9615384615384616,
+        "all_evidence_recalled_questions": 25,
+        "note": "邻窗只扩展同一章节，章节级召回不会凭空提高；上下文覆盖不等于Top5指标。"
+      },
+      "metric_denominator": "所有存在标注证据的问题；失败按零召回计，知识库外且无标注证据题不进入召回分母。"
+    },
+    "vector": {
+      "questions": 30,
+      "successful_queries": 30,
+      "failed_queries": 0,
+      "questions_with_evidence": 26,
+      "expected_sections": 29,
+      "recalled_sections": 23,
+      "micro_recall_at_5": 0.7931034482758621,
+      "macro_recall_at_5": 0.8269230769230769,
+      "mrr_at_5": 0.6923076923076923,
+      "any_evidence_recalled_questions": 22,
+      "all_evidence_recalled_questions": 21,
+      "expanded_context": {
+        "max_chunks": 15,
+        "micro_recall": 0.7931034482758621,
+        "macro_recall": 0.8269230769230769,
+        "all_evidence_recalled_questions": 21,
+        "note": "邻窗只扩展同一章节，章节级召回不会凭空提高；上下文覆盖不等于Top5指标。"
+      },
+      "metric_denominator": "所有存在标注证据的问题；失败按零召回计，知识库外且无标注证据题不进入召回分母。"
+    },
+    "hybrid": {
+      "questions": 30,
+      "successful_queries": 30,
+      "failed_queries": 0,
+      "questions_with_evidence": 26,
+      "expected_sections": 29,
+      "recalled_sections": 26,
+      "micro_recall_at_5": 0.896551724137931,
+      "macro_recall_at_5": 0.9230769230769231,
+      "mrr_at_5": 0.8493589743589745,
+      "any_evidence_recalled_questions": 25,
+      "all_evidence_recalled_questions": 23,
+      "expanded_context": {
+        "max_chunks": 15,
+        "micro_recall": 0.896551724137931,
+        "macro_recall": 0.9230769230769231,
+        "all_evidence_recalled_questions": 23,
+        "note": "邻窗只扩展同一章节，章节级召回不会凭空提高；上下文覆盖不等于Top5指标。"
+      },
+      "metric_denominator": "所有存在标注证据的问题；失败按零召回计，知识库外且无标注证据题不进入召回分母。"
+    }
+  },
+  "split_summary": {
+    "development": {
+      "keyword": {
+        "questions": 10,
+        "successful_queries": 10,
+        "failed_queries": 0,
+        "questions_with_evidence": 9,
+        "expected_sections": 9,
+        "recalled_sections": 9,
+        "micro_recall_at_5": 1.0,
+        "macro_recall_at_5": 1.0,
+        "mrr_at_5": 1.0,
+        "any_evidence_recalled_questions": 9,
+        "all_evidence_recalled_questions": 9,
+        "expanded_context": {
+          "max_chunks": 15,
+          "micro_recall": 1.0,
+          "macro_recall": 1.0,
+          "all_evidence_recalled_questions": 9,
+          "note": "邻窗只扩展同一章节，章节级召回不会凭空提高；上下文覆盖不等于Top5指标。"
+        },
+        "metric_denominator": "所有存在标注证据的问题；失败按零召回计，知识库外且无标注证据题不进入召回分母。"
+      },
+      "vector": {
+        "questions": 10,
+        "successful_queries": 10,
+        "failed_queries": 0,
+        "questions_with_evidence": 9,
+        "expected_sections": 9,
+        "recalled_sections": 9,
+        "micro_recall_at_5": 1.0,
+        "macro_recall_at_5": 1.0,
+        "mrr_at_5": 0.9166666666666666,
+        "any_evidence_recalled_questions": 9,
+        "all_evidence_recalled_questions": 9,
+        "expanded_context": {
+          "max_chunks": 15,
+          "micro_recall": 1.0,
+          "macro_recall": 1.0,
+          "all_evidence_recalled_questions": 9,
+          "note": "邻窗只扩展同一章节，章节级召回不会凭空提高；上下文覆盖不等于Top5指标。"
+        },
+        "metric_denominator": "所有存在标注证据的问题；失败按零召回计，知识库外且无标注证据题不进入召回分母。"
+      },
+      "hybrid": {
+        "questions": 10,
+        "successful_queries": 10,
+        "failed_queries": 0,
+        "questions_with_evidence": 9,
+        "expected_sections": 9,
+        "recalled_sections": 9,
+        "micro_recall_at_5": 1.0,
+        "macro_recall_at_5": 1.0,
+        "mrr_at_5": 0.9444444444444444,
+        "any_evidence_recalled_questions": 9,
+        "all_evidence_recalled_questions": 9,
+        "expanded_context": {
+          "max_chunks": 15,
+          "micro_recall": 1.0,
+          "macro_recall": 1.0,
+          "all_evidence_recalled_questions": 9,
+          "note": "邻窗只扩展同一章节，章节级召回不会凭空提高；上下文覆盖不等于Top5指标。"
+        },
+        "metric_denominator": "所有存在标注证据的问题；失败按零召回计，知识库外且无标注证据题不进入召回分母。"
+      }
+    },
+    "holdout": {
+      "keyword": {
+        "questions": 20,
+        "successful_queries": 20,
+        "failed_queries": 0,
+        "questions_with_evidence": 17,
+        "expected_sections": 20,
+        "recalled_sections": 19,
+        "micro_recall_at_5": 0.95,
+        "macro_recall_at_5": 0.9411764705882353,
+        "mrr_at_5": 0.9117647058823529,
+        "any_evidence_recalled_questions": 16,
+        "all_evidence_recalled_questions": 16,
+        "expanded_context": {
+          "max_chunks": 15,
+          "micro_recall": 0.95,
+          "macro_recall": 0.9411764705882353,
+          "all_evidence_recalled_questions": 16,
+          "note": "邻窗只扩展同一章节，章节级召回不会凭空提高；上下文覆盖不等于Top5指标。"
+        },
+        "metric_denominator": "所有存在标注证据的问题；失败按零召回计，知识库外且无标注证据题不进入召回分母。"
+      },
+      "vector": {
+        "questions": 20,
+        "successful_queries": 20,
+        "failed_queries": 0,
+        "questions_with_evidence": 17,
+        "expected_sections": 20,
+        "recalled_sections": 14,
+        "micro_recall_at_5": 0.7,
+        "macro_recall_at_5": 0.7352941176470589,
+        "mrr_at_5": 0.5735294117647058,
+        "any_evidence_recalled_questions": 13,
+        "all_evidence_recalled_questions": 12,
+        "expanded_context": {
+          "max_chunks": 15,
+          "micro_recall": 0.7,
+          "macro_recall": 0.7352941176470589,
+          "all_evidence_recalled_questions": 12,
+          "note": "邻窗只扩展同一章节，章节级召回不会凭空提高；上下文覆盖不等于Top5指标。"
+        },
+        "metric_denominator": "所有存在标注证据的问题；失败按零召回计，知识库外且无标注证据题不进入召回分母。"
+      },
+      "hybrid": {
+        "questions": 20,
+        "successful_queries": 20,
+        "failed_queries": 0,
+        "questions_with_evidence": 17,
+        "expected_sections": 20,
+        "recalled_sections": 17,
+        "micro_recall_at_5": 0.85,
+        "macro_recall_at_5": 0.8823529411764706,
+        "mrr_at_5": 0.7990196078431372,
+        "any_evidence_recalled_questions": 16,
+        "all_evidence_recalled_questions": 14,
+        "expanded_context": {
+          "max_chunks": 15,
+          "micro_recall": 0.85,
+          "macro_recall": 0.8823529411764706,
+          "all_evidence_recalled_questions": 14,
+          "note": "邻窗只扩展同一章节，章节级召回不会凭空提高；上下文覆盖不等于Top5指标。"
+        },
+        "metric_denominator": "所有存在标注证据的问题；失败按零召回计，知识库外且无标注证据题不进入召回分母。"
+      }
+    }
+  },
+  "artifact": "public_minimized_retrieval_summary",
+  "vector_index": {
+    "collection": "docflow_81972554a2b9a64c3d07125030e908a0",
+    "fingerprint": "81972554a2b9a64c3d07125030e908a0ce7780abe12b6020b2ec37d989a9cddf",
+    "corpus_hash": "04a514741f473f3b4d5a43db1855d087af922eccdcb000e381ede4a91ffb93d2",
+    "chunks": 71,
+    "model": "BAAI/bge-small-zh-v1.5",
+    "model_identity": "BAAI/bge-small-zh-v1.5:local-sha256:78fbd0f442e0bddb600d0c336b78a05faa87d72c895f089432226d3d31e77180",
+    "embedding_mode": "real_bge_cpu",
+    "metric": "cosine",
+    "reused": false
+  },
+  "rows": [
+    {
+      "id": "dev-01",
+      "split": "development",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.5532000213861465,
+          "results": [
+            {
+              "chunk_id": "guide-02-4cb743dd327435be",
+              "score": 29.08556728,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-3b3826bd63329b97",
+              "score": 23.11485252,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-02-17124003c14d0913",
+              "score": 16.29837313,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-02-ee93c1db21363bab",
+              "score": 15.83177634,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-93196e350a01cd7c",
+              "score": 14.77830487,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-02-4cb743dd327435be",
+            "faq-01-3b3826bd63329b97",
+            "guide-02-17124003c14d0913",
+            "guide-02-ee93c1db21363bab",
+            "faq-01-93196e350a01cd7c",
+            "guide-02-728e57c8b07a0023",
+            "guide-02-fcc8da8759db3338"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 0.25,
+          "elapsed_ms": 12985.72680001962,
+          "results": [
+            {
+              "chunk_id": "faq-01-3b3826bd63329b97",
+              "score": 0.75258523,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 0.68767542,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-01-93196e350a01cd7c",
+              "score": 0.68318987,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-02-4cb743dd327435be",
+              "score": 0.65595239,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-02-17124003c14d0913",
+              "score": 0.63725042,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-01-3b3826bd63329b97",
+            "faq-01-26b3d0b13780d0f3",
+            "faq-01-93196e350a01cd7c",
+            "guide-02-4cb743dd327435be",
+            "guide-02-17124003c14d0913",
+            "guide-02-728e57c8b07a0023",
+            "guide-02-ee93c1db21363bab",
+            "guide-02-fcc8da8759db3338"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 0.5,
+          "elapsed_ms": 15.407700004288927,
+          "results": [
+            {
+              "chunk_id": "faq-01-3b3826bd63329b97",
+              "score": 0.032522474881,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 23.11485252,
+                "vector": 0.75258523
+              }
+            },
+            {
+              "chunk_id": "guide-02-4cb743dd327435be",
+              "score": 0.032018442623,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 29.08556728,
+                "vector": 0.65595239
+              }
+            },
+            {
+              "chunk_id": "faq-01-93196e350a01cd7c",
+              "score": 0.031257631258,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 5,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 14.77830487,
+                "vector": 0.68318987
+              }
+            },
+            {
+              "chunk_id": "guide-02-17124003c14d0913",
+              "score": 0.031257631258,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": 16.29837313,
+                "vector": 0.63725042
+              }
+            },
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 0.030017921147,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 12,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 7.83929917,
+                "vector": 0.68767542
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-01-3b3826bd63329b97",
+            "guide-02-4cb743dd327435be",
+            "faq-01-93196e350a01cd7c",
+            "guide-02-17124003c14d0913",
+            "faq-01-26b3d0b13780d0f3",
+            "guide-02-728e57c8b07a0023",
+            "guide-02-ee93c1db21363bab",
+            "guide-02-fcc8da8759db3338"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "dev-02",
+      "split": "development",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.5702000053133816,
+          "results": [
+            {
+              "chunk_id": "faq-06-d54ae357bb03dc50",
+              "score": 49.37297335,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-01-7f7d46c93bfdc812",
+              "score": 45.05467428,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-01-2998e44c39a045e2",
+              "score": 13.78250501,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-06-fdd7f4deb2eb6e27",
+              "score": 10.7666237,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-01-b90926d16e227c38",
+              "score": 10.30676563,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-d54ae357bb03dc50",
+            "guide-01-7f7d46c93bfdc812",
+            "guide-01-2998e44c39a045e2",
+            "faq-06-fdd7f4deb2eb6e27",
+            "guide-01-b90926d16e227c38",
+            "guide-01-0c11d4174c049b67"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 11.825900000985712,
+          "results": [
+            {
+              "chunk_id": "faq-06-d54ae357bb03dc50",
+              "score": 0.80526733,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-06-fdd7f4deb2eb6e27",
+              "score": 0.75777274,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 0.69954622,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-01-7f7d46c93bfdc812",
+              "score": 0.69182277,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-1ab68fae2c78630d",
+              "score": 0.61894298,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-d54ae357bb03dc50",
+            "faq-06-fdd7f4deb2eb6e27",
+            "faq-06-532b6606f99baf24",
+            "guide-01-7f7d46c93bfdc812",
+            "faq-04-1ab68fae2c78630d",
+            "faq-04-4e74edcb2ddc00c4",
+            "faq-06-cbee5805275340b2",
+            "guide-01-0c11d4174c049b67",
+            "guide-01-2998e44c39a045e2"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 14.439899998251349,
+          "results": [
+            {
+              "chunk_id": "faq-06-d54ae357bb03dc50",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 49.37297335,
+                "vector": 0.80526733
+              }
+            },
+            {
+              "chunk_id": "faq-06-fdd7f4deb2eb6e27",
+              "score": 0.031754032258,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 10.7666237,
+                "vector": 0.75777274
+              }
+            },
+            {
+              "chunk_id": "guide-01-7f7d46c93bfdc812",
+              "score": 0.031754032258,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 45.05467428,
+                "vector": 0.69182277
+              }
+            },
+            {
+              "chunk_id": "guide-01-2998e44c39a045e2",
+              "score": 0.030578898226,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 8
+              },
+              "component_scores": {
+                "keyword": 13.78250501,
+                "vector": 0.60916543
+              }
+            },
+            {
+              "chunk_id": "guide-01-b90926d16e227c38",
+              "score": 0.030536130536,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 5,
+                "vector": 6
+              },
+              "component_scores": {
+                "keyword": 10.30676563,
+                "vector": 0.61889303
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-d54ae357bb03dc50",
+            "faq-06-fdd7f4deb2eb6e27",
+            "guide-01-7f7d46c93bfdc812",
+            "guide-01-2998e44c39a045e2",
+            "guide-01-b90926d16e227c38",
+            "guide-01-0c11d4174c049b67"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "dev-03",
+      "split": "development",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.43620000360533595,
+          "results": [
+            {
+              "chunk_id": "guide-03-f0f92c2e54701b0c",
+              "score": 33.89773167,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-03-0fef506d890a0970",
+              "score": 19.279102,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-5da558a944a5142c",
+              "score": 11.31660662,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-02-697797dc9710e4da",
+              "score": 9.52347803,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-04-26d9cff8fe0fca54",
+              "score": 9.01483831,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-03-f0f92c2e54701b0c",
+            "faq-03-0fef506d890a0970",
+            "guide-03-5da558a944a5142c",
+            "guide-02-697797dc9710e4da",
+            "guide-04-26d9cff8fe0fca54",
+            "guide-02-6b31796c49b25f22",
+            "guide-03-8e53620495f6fac2",
+            "guide-04-cee647fe496d41bc"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 11.029399989638478,
+          "results": [
+            {
+              "chunk_id": "guide-03-f0f92c2e54701b0c",
+              "score": 0.63712072,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-03-0fef506d890a0970",
+              "score": 0.53499538,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-01-93196e350a01cd7c",
+              "score": 0.51785088,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-03-5da558a944a5142c",
+              "score": 0.51213396,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-03-4474cb98c8d5c86a",
+              "score": 0.50155473,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-03-f0f92c2e54701b0c",
+            "faq-03-0fef506d890a0970",
+            "faq-01-93196e350a01cd7c",
+            "guide-03-5da558a944a5142c",
+            "faq-03-4474cb98c8d5c86a",
+            "faq-01-3b3826bd63329b97",
+            "faq-03-4815fd1571c01678",
+            "guide-03-8e53620495f6fac2"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 14.653499994892627,
+          "results": [
+            {
+              "chunk_id": "guide-03-f0f92c2e54701b0c",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 33.89773167,
+                "vector": 0.63712072
+              }
+            },
+            {
+              "chunk_id": "faq-03-0fef506d890a0970",
+              "score": 0.032258064516,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 19.279102,
+                "vector": 0.53499538
+              }
+            },
+            {
+              "chunk_id": "guide-03-5da558a944a5142c",
+              "score": 0.031498015873,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 11.31660662,
+                "vector": 0.51213396
+              }
+            },
+            {
+              "chunk_id": "faq-03-4474cb98c8d5c86a",
+              "score": 0.030536130536,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 6,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": 7.02465909,
+                "vector": 0.50155473
+              }
+            },
+            {
+              "chunk_id": "guide-02-697797dc9710e4da",
+              "score": 0.029513888889,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 12
+              },
+              "component_scores": {
+                "keyword": 9.52347803,
+                "vector": 0.48345619
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-03-f0f92c2e54701b0c",
+            "faq-03-0fef506d890a0970",
+            "guide-03-5da558a944a5142c",
+            "faq-03-4474cb98c8d5c86a",
+            "guide-02-697797dc9710e4da",
+            "faq-03-4815fd1571c01678",
+            "guide-02-6b31796c49b25f22",
+            "guide-03-8e53620495f6fac2"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "dev-04",
+      "split": "development",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.4437000025063753,
+          "results": [
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 29.75550474,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-df954881920749b3",
+              "score": 25.87603165,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-730eca15b0027939",
+              "score": 15.96684102,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-02-bb0fa32b19391d74",
+              "score": 11.93709282,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-8e53620495f6fac2",
+              "score": 11.75116837,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-01-4e7f17f17a6eea6a",
+            "guide-03-df954881920749b3",
+            "guide-03-730eca15b0027939",
+            "guide-02-bb0fa32b19391d74",
+            "guide-03-8e53620495f6fac2",
+            "guide-02-1702fa34e85cfced",
+            "guide-03-f0f92c2e54701b0c"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 11.985899996943772,
+          "results": [
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 0.77029443,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-01-93196e350a01cd7c",
+              "score": 0.61568278,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-03-8e53620495f6fac2",
+              "score": 0.57153386,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-01-3b3826bd63329b97",
+              "score": 0.57120633,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-03-df954881920749b3",
+              "score": 0.56747371,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-01-93196e350a01cd7c",
+            "guide-03-8e53620495f6fac2",
+            "faq-01-3b3826bd63329b97",
+            "guide-03-df954881920749b3",
+            "guide-03-f0f92c2e54701b0c"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 14.82510002097115,
+          "results": [
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 29.75550474,
+                "vector": 0.77029443
+              }
+            },
+            {
+              "chunk_id": "guide-03-df954881920749b3",
+              "score": 0.031513647643,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": 25.87603165,
+                "vector": 0.56747371
+              }
+            },
+            {
+              "chunk_id": "guide-03-8e53620495f6fac2",
+              "score": 0.031257631258,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 5,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 11.75116837,
+                "vector": 0.57153386
+              }
+            },
+            {
+              "chunk_id": "guide-02-bb0fa32b19391d74",
+              "score": 0.030776515152,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 6
+              },
+              "component_scores": {
+                "keyword": 11.93709282,
+                "vector": 0.56488585
+              }
+            },
+            {
+              "chunk_id": "guide-03-730eca15b0027939",
+              "score": 0.030578898226,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 8
+              },
+              "component_scores": {
+                "keyword": 15.96684102,
+                "vector": 0.56357545
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-01-4e7f17f17a6eea6a",
+            "guide-03-df954881920749b3",
+            "guide-03-8e53620495f6fac2",
+            "guide-02-bb0fa32b19391d74",
+            "guide-03-730eca15b0027939",
+            "guide-02-1702fa34e85cfced",
+            "guide-03-f0f92c2e54701b0c"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "dev-05",
+      "split": "development",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.43879999429918826,
+          "results": [
+            {
+              "chunk_id": "guide-05-376b2939d1f60ebb",
+              "score": 15.01107695,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-7ae7f9f1f04312df",
+              "score": 6.39693226,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-05-8138af3a37218276",
+              "score": 5.56484809,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-06-8cd93f1a470193d0",
+              "score": 5.49328133,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-02-4cb743dd327435be",
+              "score": 4.65342076,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-05-376b2939d1f60ebb",
+            "guide-05-7ae7f9f1f04312df",
+            "faq-05-8138af3a37218276",
+            "guide-06-8cd93f1a470193d0",
+            "guide-02-4cb743dd327435be",
+            "guide-02-728e57c8b07a0023",
+            "guide-06-74097e5d9466ecf2"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 11.097799986600876,
+          "results": [
+            {
+              "chunk_id": "guide-05-376b2939d1f60ebb",
+              "score": 0.71975034,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-7ae7f9f1f04312df",
+              "score": 0.68617183,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-0a02bf3e2dac8c6f",
+              "score": 0.67249274,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 0.66136432,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-97003d9f89f26237",
+              "score": 0.6590625,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-05-376b2939d1f60ebb",
+            "guide-05-7ae7f9f1f04312df",
+            "guide-05-0a02bf3e2dac8c6f",
+            "faq-04-243b566ac3654806",
+            "guide-05-97003d9f89f26237",
+            "faq-04-68f28d172a1afb3c"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 14.485799998510629,
+          "results": [
+            {
+              "chunk_id": "guide-05-376b2939d1f60ebb",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 15.01107695,
+                "vector": 0.71975034
+              }
+            },
+            {
+              "chunk_id": "guide-05-7ae7f9f1f04312df",
+              "score": 0.032258064516,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 6.39693226,
+                "vector": 0.68617183
+              }
+            },
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 0.030550373134,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 7,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 3.9719519,
+                "vector": 0.66136432
+              }
+            },
+            {
+              "chunk_id": "guide-05-97003d9f89f26237",
+              "score": 0.030090497738,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 8,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": 3.4141137,
+                "vector": 0.6590625
+              }
+            },
+            {
+              "chunk_id": "guide-02-4cb743dd327435be",
+              "score": 0.029877369008,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 5,
+                "vector": 9
+              },
+              "component_scores": {
+                "keyword": 4.65342076,
+                "vector": 0.65168542
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-05-376b2939d1f60ebb",
+            "guide-05-7ae7f9f1f04312df",
+            "faq-04-243b566ac3654806",
+            "guide-05-97003d9f89f26237",
+            "guide-02-4cb743dd327435be",
+            "faq-04-68f28d172a1afb3c",
+            "guide-02-728e57c8b07a0023",
+            "guide-05-0a02bf3e2dac8c6f"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "dev-06",
+      "split": "development",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.4393999988678843,
+          "results": [
+            {
+              "chunk_id": "faq-05-cdf20472c1434f0e",
+              "score": 15.80468778,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-137999829b85b554",
+              "score": 14.22856781,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-a29bd14c32b32b82",
+              "score": 11.71791567,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-06-6cc1056663944039",
+              "score": 10.96998125,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-05-8138af3a37218276",
+              "score": 10.04530619,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-05-cdf20472c1434f0e",
+            "guide-05-137999829b85b554",
+            "guide-05-a29bd14c32b32b82",
+            "guide-06-6cc1056663944039",
+            "faq-05-8138af3a37218276",
+            "faq-05-716dca93f951382c",
+            "guide-06-667099c43ef4f00c"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 11.69569999910891,
+          "results": [
+            {
+              "chunk_id": "faq-05-cdf20472c1434f0e",
+              "score": 0.65933186,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-05-716dca93f951382c",
+              "score": 0.62994087,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-05-21983a9bd3fbcf51",
+              "score": 0.61119455,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-68f28d172a1afb3c",
+              "score": 0.59414816,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-06-6cc1056663944039",
+              "score": 0.57297951,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-05-cdf20472c1434f0e",
+            "faq-05-716dca93f951382c",
+            "faq-05-21983a9bd3fbcf51",
+            "faq-04-68f28d172a1afb3c",
+            "guide-06-6cc1056663944039",
+            "faq-04-243b566ac3654806",
+            "guide-06-667099c43ef4f00c"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 14.486300002317876,
+          "results": [
+            {
+              "chunk_id": "faq-05-cdf20472c1434f0e",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 15.80468778,
+                "vector": 0.65933186
+              }
+            },
+            {
+              "chunk_id": "faq-05-716dca93f951382c",
+              "score": 0.03128054741,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 6,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 9.81975684,
+                "vector": 0.62994087
+              }
+            },
+            {
+              "chunk_id": "guide-06-6cc1056663944039",
+              "score": 0.031009615385,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": 10.96998125,
+                "vector": 0.57297951
+              }
+            },
+            {
+              "chunk_id": "faq-05-8138af3a37218276",
+              "score": 0.030309988519,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 5,
+                "vector": 7
+              },
+              "component_scores": {
+                "keyword": 10.04530619,
+                "vector": 0.56577963
+              }
+            },
+            {
+              "chunk_id": "guide-05-a29bd14c32b32b82",
+              "score": 0.029761904762,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 12
+              },
+              "component_scores": {
+                "keyword": 11.71791567,
+                "vector": 0.54368985
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-05-cdf20472c1434f0e",
+            "faq-05-716dca93f951382c",
+            "guide-06-6cc1056663944039",
+            "faq-05-8138af3a37218276",
+            "guide-05-a29bd14c32b32b82",
+            "guide-05-137999829b85b554",
+            "guide-06-667099c43ef4f00c"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "dev-07",
+      "split": "development",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.43149999692104757,
+          "results": [
+            {
+              "chunk_id": "faq-02-2169169ebd0262d0",
+              "score": 13.64267772,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 9.03524593,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-02-f0ef315fdb4cc4e1",
+              "score": 8.94166994,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-02-bf168e7cdc89ab42",
+              "score": 8.49877204,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-02-728e57c8b07a0023",
+              "score": 7.47095785,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-02-2169169ebd0262d0",
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-02-f0ef315fdb4cc4e1",
+            "faq-02-bf168e7cdc89ab42",
+            "guide-02-728e57c8b07a0023",
+            "guide-02-4cb743dd327435be"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 11.410799983423203,
+          "results": [
+            {
+              "chunk_id": "faq-02-2169169ebd0262d0",
+              "score": 0.65076011,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-02-f0ef315fdb4cc4e1",
+              "score": 0.62002391,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-02-bb0fa32b19391d74",
+              "score": 0.59352577,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 0.59217048,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-02-bf168e7cdc89ab42",
+              "score": 0.58313054,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-02-2169169ebd0262d0",
+            "faq-02-f0ef315fdb4cc4e1",
+            "guide-02-bb0fa32b19391d74",
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-02-bf168e7cdc89ab42",
+            "guide-02-1702fa34e85cfced"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 13.370900007430464,
+          "results": [
+            {
+              "chunk_id": "faq-02-2169169ebd0262d0",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 13.64267772,
+                "vector": 0.65076011
+              }
+            },
+            {
+              "chunk_id": "faq-02-f0ef315fdb4cc4e1",
+              "score": 0.032002048131,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 8.94166994,
+                "vector": 0.62002391
+              }
+            },
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 0.031754032258,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 9.03524593,
+                "vector": 0.59217048
+              }
+            },
+            {
+              "chunk_id": "faq-02-bf168e7cdc89ab42",
+              "score": 0.031009615385,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": 8.49877204,
+                "vector": 0.58313054
+              }
+            },
+            {
+              "chunk_id": "guide-03-f0f92c2e54701b0c",
+              "score": 0.02904040404,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 12,
+                "vector": 6
+              },
+              "component_scores": {
+                "keyword": 5.30591026,
+                "vector": 0.57797021
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-02-2169169ebd0262d0",
+            "faq-02-f0ef315fdb4cc4e1",
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-02-bf168e7cdc89ab42",
+            "guide-03-f0f92c2e54701b0c",
+            "guide-03-8e53620495f6fac2"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "dev-08",
+      "split": "development",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.3281999961473048,
+          "results": [
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 7.23051017,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-04-26d9cff8fe0fca54",
+              "score": 5.61807667,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 5.1517381,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-3b3826bd63329b97",
+              "score": 3.93169421,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-06-6cc1056663944039",
+              "score": 3.38215099,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-01-26b3d0b13780d0f3",
+            "guide-04-26d9cff8fe0fca54",
+            "faq-06-532b6606f99baf24",
+            "faq-01-3b3826bd63329b97",
+            "guide-06-6cc1056663944039",
+            "faq-01-93196e350a01cd7c",
+            "faq-06-cbee5805275340b2",
+            "guide-04-cee647fe496d41bc",
+            "guide-06-667099c43ef4f00c"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 9.568299981765449,
+          "results": [
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 0.58217961,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 0.55084884,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-68f28d172a1afb3c",
+              "score": 0.54122132,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-e2df879a3ae24e1b",
+              "score": 0.53426874,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-c22a47f8db9e5a30",
+              "score": 0.5284791,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-01-26b3d0b13780d0f3",
+            "faq-04-243b566ac3654806",
+            "faq-04-68f28d172a1afb3c",
+            "guide-04-e2df879a3ae24e1b",
+            "guide-04-c22a47f8db9e5a30"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 11.96529998560436,
+          "results": [
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 7.23051017,
+                "vector": 0.58217961
+              }
+            },
+            {
+              "chunk_id": "faq-04-68f28d172a1afb3c",
+              "score": 0.030798389007,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 7,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 3.05233137,
+                "vector": 0.54122132
+              }
+            },
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 0.030798389007,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 7
+              },
+              "component_scores": {
+                "keyword": 5.1517381,
+                "vector": 0.52483404
+              }
+            },
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 0.030414746544,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 10,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 2.76669545,
+                "vector": 0.55084884
+              }
+            },
+            {
+              "chunk_id": "guide-05-137999829b85b554",
+              "score": 0.029644268775,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 9,
+                "vector": 6
+              },
+              "component_scores": {
+                "keyword": 2.9915764,
+                "vector": 0.52511317
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-01-26b3d0b13780d0f3",
+            "faq-04-68f28d172a1afb3c",
+            "faq-06-532b6606f99baf24",
+            "faq-04-243b566ac3654806",
+            "guide-05-137999829b85b554",
+            "faq-06-cbee5805275340b2",
+            "guide-05-a29bd14c32b32b82"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "dev-09",
+      "split": "development",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.37799999699927866,
+          "results": [
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 8.84853293,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-06-6cc1056663944039",
+              "score": 4.90203742,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-02-fcc8da8759db3338",
+              "score": 4.5761299,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-06-dc59de19d6b11332",
+              "score": 4.38925581,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-01-7f7d46c93bfdc812",
+              "score": 3.4240906,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-532b6606f99baf24",
+            "guide-06-6cc1056663944039",
+            "guide-02-fcc8da8759db3338",
+            "faq-06-dc59de19d6b11332",
+            "guide-01-7f7d46c93bfdc812",
+            "faq-06-cbee5805275340b2",
+            "guide-01-0c11d4174c049b67",
+            "guide-01-2998e44c39a045e2",
+            "guide-02-ee93c1db21363bab",
+            "guide-02-17124003c14d0913",
+            "guide-06-667099c43ef4f00c"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 11.368499981472269,
+          "results": [
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 0.58089149,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-68f28d172a1afb3c",
+              "score": 0.57358444,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 0.57056659,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-06-cbee5805275340b2",
+              "score": 0.56222379,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-4e74edcb2ddc00c4",
+              "score": 0.54746306,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-532b6606f99baf24",
+            "faq-04-68f28d172a1afb3c",
+            "faq-04-243b566ac3654806",
+            "faq-06-cbee5805275340b2",
+            "faq-04-4e74edcb2ddc00c4",
+            "faq-04-1ab68fae2c78630d"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 12.080499989679083,
+          "results": [
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 8.84853293,
+                "vector": 0.58089149
+              }
+            },
+            {
+              "chunk_id": "guide-02-fcc8da8759db3338",
+              "score": 0.031024531025,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 6
+              },
+              "component_scores": {
+                "keyword": 4.5761299,
+                "vector": 0.52582932
+              }
+            },
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 0.029857397504,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 6,
+                "vector": 8
+              },
+              "component_scores": {
+                "keyword": 3.1444505,
+                "vector": 0.52021676
+              }
+            },
+            {
+              "chunk_id": "faq-06-dc59de19d6b11332",
+              "score": 0.029513888889,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 12
+              },
+              "component_scores": {
+                "keyword": 4.38925581,
+                "vector": 0.50258863
+              }
+            },
+            {
+              "chunk_id": "faq-04-68f28d172a1afb3c",
+              "score": 0.029286926995,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 16,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 2.26122001,
+                "vector": 0.57358444
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-532b6606f99baf24",
+            "guide-02-fcc8da8759db3338",
+            "faq-01-26b3d0b13780d0f3",
+            "faq-06-dc59de19d6b11332",
+            "faq-04-68f28d172a1afb3c",
+            "faq-04-243b566ac3654806",
+            "faq-06-cbee5805275340b2",
+            "guide-02-ee93c1db21363bab",
+            "guide-02-17124003c14d0913"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "dev-10",
+      "split": "development",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 0,
+          "recalled_sections": 0,
+          "recall_at_5": null,
+          "any_evidence_recalled": null,
+          "all_evidence_recalled": null,
+          "reciprocal_rank_at_5": null,
+          "elapsed_ms": 0.4022000066470355,
+          "results": [
+            {
+              "chunk_id": "faq-06-dc59de19d6b11332",
+              "score": 10.33527169,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-02-728e57c8b07a0023",
+              "score": 6.81637663,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-97003d9f89f26237",
+              "score": 5.16429999,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-04-1ab68fae2c78630d",
+              "score": 5.02507518,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-0a02bf3e2dac8c6f",
+              "score": 4.38356186,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-dc59de19d6b11332",
+            "guide-02-728e57c8b07a0023",
+            "guide-05-97003d9f89f26237",
+            "faq-04-1ab68fae2c78630d",
+            "guide-05-0a02bf3e2dac8c6f",
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-02-4cb743dd327435be"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 0,
+          "recalled_sections": 0,
+          "recall_at_5": null,
+          "any_evidence_recalled": null,
+          "all_evidence_recalled": null,
+          "reciprocal_rank_at_5": null,
+          "elapsed_ms": 10.4185999953188,
+          "results": [
+            {
+              "chunk_id": "faq-06-dc59de19d6b11332",
+              "score": 0.47933972,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-01-55aa792301c7b45a",
+              "score": 0.47383165,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-05-8138af3a37218276",
+              "score": 0.47184384,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-0a02bf3e2dac8c6f",
+              "score": 0.46722639,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-376b2939d1f60ebb",
+              "score": 0.4632355,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-dc59de19d6b11332",
+            "guide-01-55aa792301c7b45a",
+            "faq-05-8138af3a37218276",
+            "guide-05-0a02bf3e2dac8c6f",
+            "guide-05-376b2939d1f60ebb",
+            "guide-01-0447812a6452f292",
+            "guide-05-97003d9f89f26237",
+            "guide-05-7ae7f9f1f04312df"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 0,
+          "recalled_sections": 0,
+          "recall_at_5": null,
+          "any_evidence_recalled": null,
+          "all_evidence_recalled": null,
+          "reciprocal_rank_at_5": null,
+          "elapsed_ms": 13.402399985352531,
+          "results": [
+            {
+              "chunk_id": "faq-06-dc59de19d6b11332",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 10.33527169,
+                "vector": 0.47933972
+              }
+            },
+            {
+              "chunk_id": "guide-01-55aa792301c7b45a",
+              "score": 0.03128054741,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 6,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 4.25326495,
+                "vector": 0.47383165
+              }
+            },
+            {
+              "chunk_id": "guide-05-0a02bf3e2dac8c6f",
+              "score": 0.031009615385,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 5,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 4.38356186,
+                "vector": 0.46722639
+              }
+            },
+            {
+              "chunk_id": "faq-04-1ab68fae2c78630d",
+              "score": 0.030776515152,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 6
+              },
+              "component_scores": {
+                "keyword": 5.02507518,
+                "vector": 0.46255016
+              }
+            },
+            {
+              "chunk_id": "guide-05-97003d9f89f26237",
+              "score": 0.029761904762,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 12
+              },
+              "component_scores": {
+                "keyword": 5.16429999,
+                "vector": 0.45571059
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-dc59de19d6b11332",
+            "guide-01-55aa792301c7b45a",
+            "guide-05-0a02bf3e2dac8c6f",
+            "faq-04-1ab68fae2c78630d",
+            "guide-05-97003d9f89f26237",
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-01-0447812a6452f292"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-01",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 2,
+          "recalled_sections": 2,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.5290999833960086,
+          "results": [
+            {
+              "chunk_id": "guide-01-55aa792301c7b45a",
+              "score": 14.73734075,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-01-9053f77f41f09364",
+              "score": 11.90462875,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-06-d6949f78cde50c64",
+              "score": 11.26552892,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-01-0447812a6452f292",
+              "score": 10.73243949,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-01-b90926d16e227c38",
+              "score": 9.55044979,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-01-55aa792301c7b45a",
+            "guide-01-9053f77f41f09364",
+            "guide-06-d6949f78cde50c64",
+            "guide-01-0447812a6452f292",
+            "guide-01-b90926d16e227c38",
+            "guide-01-a6b0b88c9a7fdd23"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 2,
+          "recalled_sections": 1,
+          "recall_at_5": 0.5,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": false,
+          "reciprocal_rank_at_5": 0.25,
+          "elapsed_ms": 11.444600007962435,
+          "results": [
+            {
+              "chunk_id": "faq-04-4e74edcb2ddc00c4",
+              "score": 0.63790202,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-1ab68fae2c78630d",
+              "score": 0.57838649,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-01-3b3826bd63329b97",
+              "score": 0.57029867,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-01-55aa792301c7b45a",
+              "score": 0.56063563,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 0.55715293,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-04-4e74edcb2ddc00c4",
+            "faq-04-1ab68fae2c78630d",
+            "faq-01-3b3826bd63329b97",
+            "guide-01-55aa792301c7b45a",
+            "faq-04-243b566ac3654806",
+            "faq-01-93196e350a01cd7c",
+            "faq-04-68f28d172a1afb3c",
+            "guide-01-0447812a6452f292"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 2,
+          "recalled_sections": 1,
+          "recall_at_5": 0.5,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": false,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 15.344500017818063,
+          "results": [
+            {
+              "chunk_id": "guide-01-55aa792301c7b45a",
+              "score": 0.032018442623,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 14.73734075,
+                "vector": 0.56063563
+              }
+            },
+            {
+              "chunk_id": "faq-04-1ab68fae2c78630d",
+              "score": 0.03128054741,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 6,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 8.59169595,
+                "vector": 0.57838649
+              }
+            },
+            {
+              "chunk_id": "faq-04-4e74edcb2ddc00c4",
+              "score": 0.031099324976,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 8,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 5.47899468,
+                "vector": 0.63790202
+              }
+            },
+            {
+              "chunk_id": "guide-01-0447812a6452f292",
+              "score": 0.030117753623,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 9
+              },
+              "component_scores": {
+                "keyword": 10.73243949,
+                "vector": 0.54020542
+              }
+            },
+            {
+              "chunk_id": "guide-06-d6949f78cde50c64",
+              "score": 0.029206349206,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 15
+              },
+              "component_scores": {
+                "keyword": 11.26552892,
+                "vector": 0.52386785
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-01-55aa792301c7b45a",
+            "faq-04-1ab68fae2c78630d",
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-01-0447812a6452f292",
+            "guide-06-d6949f78cde50c64"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-02",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.5289999826345593,
+          "results": [
+            {
+              "chunk_id": "guide-02-1702fa34e85cfced",
+              "score": 27.73209499,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 20.91344368,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-02-bf168e7cdc89ab42",
+              "score": 19.77650427,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-02-bb0fa32b19391d74",
+              "score": 16.67718919,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-730eca15b0027939",
+              "score": 14.0058858,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-02-1702fa34e85cfced",
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-02-bf168e7cdc89ab42",
+            "guide-02-bb0fa32b19391d74",
+            "guide-03-730eca15b0027939"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 0,
+          "recall_at_5": 0.0,
+          "any_evidence_recalled": false,
+          "all_evidence_recalled": false,
+          "reciprocal_rank_at_5": 0.0,
+          "elapsed_ms": 13.855099998181686,
+          "results": [
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 0.63132954,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-02-bf168e7cdc89ab42",
+              "score": 0.58005285,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-05-21983a9bd3fbcf51",
+              "score": 0.56289226,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-03-0fef506d890a0970",
+              "score": 0.54734904,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-02-2169169ebd0262d0",
+              "score": 0.54732925,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-02-bf168e7cdc89ab42",
+            "faq-05-21983a9bd3fbcf51",
+            "faq-03-0fef506d890a0970",
+            "faq-02-2169169ebd0262d0",
+            "faq-02-f0ef315fdb4cc4e1"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 0.3333333333333333,
+          "elapsed_ms": 15.723999997135252,
+          "results": [
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 0.032522474881,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 20.91344368,
+                "vector": 0.63132954
+              }
+            },
+            {
+              "chunk_id": "faq-02-bf168e7cdc89ab42",
+              "score": 0.032002048131,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 19.77650427,
+                "vector": 0.58005285
+              }
+            },
+            {
+              "chunk_id": "guide-02-1702fa34e85cfced",
+              "score": 0.030886196246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 9
+              },
+              "component_scores": {
+                "keyword": 27.73209499,
+                "vector": 0.53085232
+              }
+            },
+            {
+              "chunk_id": "faq-02-2169169ebd0262d0",
+              "score": 0.030090497738,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 8,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": 11.97691639,
+                "vector": 0.54732925
+              }
+            },
+            {
+              "chunk_id": "faq-02-f0ef315fdb4cc4e1",
+              "score": 0.029644268775,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 9,
+                "vector": 6
+              },
+              "component_scores": {
+                "keyword": 11.95495382,
+                "vector": 0.54466993
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-02-bf168e7cdc89ab42",
+            "guide-02-1702fa34e85cfced",
+            "faq-02-2169169ebd0262d0",
+            "faq-02-f0ef315fdb4cc4e1",
+            "guide-02-bb0fa32b19391d74"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-03",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.4644000146072358,
+          "results": [
+            {
+              "chunk_id": "guide-03-2a3c8996c6de39ed",
+              "score": 24.19324022,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-730eca15b0027939",
+              "score": 14.42528924,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-11f9e5f33afb215f",
+              "score": 12.92852037,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-5da558a944a5142c",
+              "score": 12.15385362,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-df954881920749b3",
+              "score": 11.50475379,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-03-2a3c8996c6de39ed",
+            "guide-03-730eca15b0027939",
+            "guide-03-11f9e5f33afb215f",
+            "guide-03-5da558a944a5142c",
+            "guide-03-df954881920749b3"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 10.885800002142787,
+          "results": [
+            {
+              "chunk_id": "guide-03-11f9e5f33afb215f",
+              "score": 0.69295049,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-03-8e53620495f6fac2",
+              "score": 0.66089714,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-03-4474cb98c8d5c86a",
+              "score": 0.65524691,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-03-2a3c8996c6de39ed",
+              "score": 0.65296215,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-03-4815fd1571c01678",
+              "score": 0.65197223,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-03-11f9e5f33afb215f",
+            "guide-03-8e53620495f6fac2",
+            "faq-03-4474cb98c8d5c86a",
+            "guide-03-2a3c8996c6de39ed",
+            "faq-03-4815fd1571c01678",
+            "guide-03-f0f92c2e54701b0c"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 13.569300004746765,
+          "results": [
+            {
+              "chunk_id": "guide-03-11f9e5f33afb215f",
+              "score": 0.032266458496,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 12.92852037,
+                "vector": 0.69295049
+              }
+            },
+            {
+              "chunk_id": "guide-03-2a3c8996c6de39ed",
+              "score": 0.032018442623,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 24.19324022,
+                "vector": 0.65296215
+              }
+            },
+            {
+              "chunk_id": "guide-03-730eca15b0027939",
+              "score": 0.03128054741,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 6
+              },
+              "component_scores": {
+                "keyword": 14.42528924,
+                "vector": 0.65051758
+              }
+            },
+            {
+              "chunk_id": "guide-03-8e53620495f6fac2",
+              "score": 0.030621785881,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 9,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 8.96011709,
+                "vector": 0.66089714
+              }
+            },
+            {
+              "chunk_id": "guide-03-df954881920749b3",
+              "score": 0.030090497738,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 5,
+                "vector": 8
+              },
+              "component_scores": {
+                "keyword": 11.50475379,
+                "vector": 0.6476109
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-03-11f9e5f33afb215f",
+            "guide-03-2a3c8996c6de39ed",
+            "guide-03-730eca15b0027939",
+            "guide-03-8e53620495f6fac2",
+            "guide-03-df954881920749b3",
+            "guide-03-f0f92c2e54701b0c"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-04",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 0.5,
+          "elapsed_ms": 0.5929000035393983,
+          "results": [
+            {
+              "chunk_id": "guide-03-8e53620495f6fac2",
+              "score": 26.32346817,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-03-93f0877493ed47c1",
+              "score": 25.34972907,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 20.2091836,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-730eca15b0027939",
+              "score": 16.36568754,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-03-4474cb98c8d5c86a",
+              "score": 15.3152943,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-03-8e53620495f6fac2",
+            "faq-03-93f0877493ed47c1",
+            "faq-01-4e7f17f17a6eea6a",
+            "guide-03-730eca15b0027939",
+            "faq-03-4474cb98c8d5c86a",
+            "faq-03-4815fd1571c01678",
+            "guide-03-f0f92c2e54701b0c"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 0.5,
+          "elapsed_ms": 11.366999999154359,
+          "results": [
+            {
+              "chunk_id": "guide-03-8e53620495f6fac2",
+              "score": 0.76791698,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-03-93f0877493ed47c1",
+              "score": 0.74585885,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-03-df954881920749b3",
+              "score": 0.65889704,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-02-697797dc9710e4da",
+              "score": 0.65324986,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-03-730eca15b0027939",
+              "score": 0.65219355,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-03-8e53620495f6fac2",
+            "faq-03-93f0877493ed47c1",
+            "guide-03-df954881920749b3",
+            "guide-02-697797dc9710e4da",
+            "guide-03-730eca15b0027939",
+            "guide-02-6b31796c49b25f22",
+            "guide-03-f0f92c2e54701b0c"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 0.5,
+          "elapsed_ms": 14.969000010751188,
+          "results": [
+            {
+              "chunk_id": "guide-03-8e53620495f6fac2",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 26.32346817,
+                "vector": 0.76791698
+              }
+            },
+            {
+              "chunk_id": "faq-03-93f0877493ed47c1",
+              "score": 0.032258064516,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 25.34972907,
+                "vector": 0.74585885
+              }
+            },
+            {
+              "chunk_id": "guide-03-df954881920749b3",
+              "score": 0.031024531025,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 6,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 14.46825621,
+                "vector": 0.65889704
+              }
+            },
+            {
+              "chunk_id": "guide-03-730eca15b0027939",
+              "score": 0.031009615385,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": 16.36568754,
+                "vector": 0.65219355
+              }
+            },
+            {
+              "chunk_id": "guide-02-697797dc9710e4da",
+              "score": 0.029910714286,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 10,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 10.89432189,
+                "vector": 0.65324986
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-03-8e53620495f6fac2",
+            "faq-03-93f0877493ed47c1",
+            "guide-03-df954881920749b3",
+            "guide-03-730eca15b0027939",
+            "guide-02-697797dc9710e4da",
+            "guide-02-6b31796c49b25f22",
+            "guide-03-f0f92c2e54701b0c"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-05",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.4975000047124922,
+          "results": [
+            {
+              "chunk_id": "faq-03-0fef506d890a0970",
+              "score": 37.8545073,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-5da558a944a5142c",
+              "score": 31.98586345,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 9.99786688,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-f0f92c2e54701b0c",
+              "score": 8.05975788,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-df954881920749b3",
+              "score": 7.96745382,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-03-0fef506d890a0970",
+            "guide-03-5da558a944a5142c",
+            "faq-01-4e7f17f17a6eea6a",
+            "guide-03-f0f92c2e54701b0c",
+            "guide-03-df954881920749b3",
+            "guide-03-8e53620495f6fac2"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 13.095699978293851,
+          "results": [
+            {
+              "chunk_id": "faq-03-0fef506d890a0970",
+              "score": 0.79025555,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-03-5da558a944a5142c",
+              "score": 0.67846614,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-03-4474cb98c8d5c86a",
+              "score": 0.57186091,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-03-f0f92c2e54701b0c",
+              "score": 0.57117385,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-cee647fe496d41bc",
+              "score": 0.56087178,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-03-0fef506d890a0970",
+            "guide-03-5da558a944a5142c",
+            "faq-03-4474cb98c8d5c86a",
+            "guide-03-f0f92c2e54701b0c",
+            "guide-04-cee647fe496d41bc",
+            "faq-03-4815fd1571c01678",
+            "guide-03-8e53620495f6fac2",
+            "guide-04-26d9cff8fe0fca54"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 16.34959998773411,
+          "results": [
+            {
+              "chunk_id": "faq-03-0fef506d890a0970",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 37.8545073,
+                "vector": 0.79025555
+              }
+            },
+            {
+              "chunk_id": "guide-03-5da558a944a5142c",
+              "score": 0.032258064516,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 31.98586345,
+                "vector": 0.67846614
+              }
+            },
+            {
+              "chunk_id": "guide-03-f0f92c2e54701b0c",
+              "score": 0.03125,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 8.05975788,
+                "vector": 0.57117385
+              }
+            },
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 0.030798389007,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 7
+              },
+              "component_scores": {
+                "keyword": 9.99786688,
+                "vector": 0.54319984
+              }
+            },
+            {
+              "chunk_id": "faq-03-4474cb98c8d5c86a",
+              "score": 0.029761904762,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 12,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 5.1611545,
+                "vector": 0.57186091
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-03-0fef506d890a0970",
+            "guide-03-5da558a944a5142c",
+            "guide-03-f0f92c2e54701b0c",
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-03-4474cb98c8d5c86a",
+            "faq-03-4815fd1571c01678",
+            "guide-03-8e53620495f6fac2"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-06",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.46869998914189637,
+          "results": [
+            {
+              "chunk_id": "faq-03-4474cb98c8d5c86a",
+              "score": 28.19841984,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-5da558a944a5142c",
+              "score": 18.0897573,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-730eca15b0027939",
+              "score": 14.39668,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-2a3c8996c6de39ed",
+              "score": 12.88533459,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 10.72512985,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-03-4474cb98c8d5c86a",
+            "guide-03-5da558a944a5142c",
+            "guide-03-730eca15b0027939",
+            "guide-03-2a3c8996c6de39ed",
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-03-4815fd1571c01678",
+            "guide-03-11f9e5f33afb215f"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 14.339199988171458,
+          "results": [
+            {
+              "chunk_id": "faq-03-4474cb98c8d5c86a",
+              "score": 0.70738876,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-03-0fef506d890a0970",
+              "score": 0.64854431,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-03-5da558a944a5142c",
+              "score": 0.63583016,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-03-4815fd1571c01678",
+              "score": 0.6156857,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-03-93f0877493ed47c1",
+              "score": 0.59951121,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-03-4474cb98c8d5c86a",
+            "faq-03-0fef506d890a0970",
+            "guide-03-5da558a944a5142c",
+            "faq-03-4815fd1571c01678",
+            "faq-03-93f0877493ed47c1"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 16.490799986058846,
+          "results": [
+            {
+              "chunk_id": "faq-03-4474cb98c8d5c86a",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 28.19841984,
+                "vector": 0.70738876
+              }
+            },
+            {
+              "chunk_id": "guide-03-5da558a944a5142c",
+              "score": 0.032002048131,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 18.0897573,
+                "vector": 0.63583016
+              }
+            },
+            {
+              "chunk_id": "faq-03-4815fd1571c01678",
+              "score": 0.030776515152,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 6,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 8.86508747,
+                "vector": 0.6156857
+              }
+            },
+            {
+              "chunk_id": "faq-03-0fef506d890a0970",
+              "score": 0.030621785881,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 9,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 8.01029069,
+                "vector": 0.64854431
+              }
+            },
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 0.030090497738,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 5,
+                "vector": 8
+              },
+              "component_scores": {
+                "keyword": 10.72512985,
+                "vector": 0.58572745
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-03-4474cb98c8d5c86a",
+            "guide-03-5da558a944a5142c",
+            "faq-03-4815fd1571c01678",
+            "faq-03-0fef506d890a0970",
+            "faq-01-4e7f17f17a6eea6a"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-07",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.5876000213902444,
+          "results": [
+            {
+              "chunk_id": "faq-04-1ab68fae2c78630d",
+              "score": 28.85767189,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-04-4e74edcb2ddc00c4",
+              "score": 25.71630549,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-97003d9f89f26237",
+              "score": 21.21686427,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 20.81381464,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-0a02bf3e2dac8c6f",
+              "score": 16.36559499,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-04-1ab68fae2c78630d",
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-05-97003d9f89f26237",
+            "faq-06-532b6606f99baf24",
+            "guide-05-0a02bf3e2dac8c6f",
+            "faq-06-cbee5805275340b2"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 12.11670000338927,
+          "results": [
+            {
+              "chunk_id": "faq-04-4e74edcb2ddc00c4",
+              "score": 0.74578434,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-1ab68fae2c78630d",
+              "score": 0.74093413,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-97003d9f89f26237",
+              "score": 0.68596572,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 0.65745282,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-0a02bf3e2dac8c6f",
+              "score": 0.65496761,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-04-4e74edcb2ddc00c4",
+            "faq-04-1ab68fae2c78630d",
+            "guide-05-97003d9f89f26237",
+            "faq-06-532b6606f99baf24",
+            "guide-05-0a02bf3e2dac8c6f",
+            "faq-06-cbee5805275340b2"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 17.987700004596263,
+          "results": [
+            {
+              "chunk_id": "faq-04-1ab68fae2c78630d",
+              "score": 0.032522474881,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 28.85767189,
+                "vector": 0.74093413
+              }
+            },
+            {
+              "chunk_id": "faq-04-4e74edcb2ddc00c4",
+              "score": 0.032522474881,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 25.71630549,
+                "vector": 0.74578434
+              }
+            },
+            {
+              "chunk_id": "guide-05-97003d9f89f26237",
+              "score": 0.031746031746,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 21.21686427,
+                "vector": 0.68596572
+              }
+            },
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 0.03125,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 20.81381464,
+                "vector": 0.65745282
+              }
+            },
+            {
+              "chunk_id": "guide-05-0a02bf3e2dac8c6f",
+              "score": 0.030769230769,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 5,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": 16.36559499,
+                "vector": 0.65496761
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-04-1ab68fae2c78630d",
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-05-97003d9f89f26237",
+            "faq-06-532b6606f99baf24",
+            "guide-05-0a02bf3e2dac8c6f",
+            "faq-06-cbee5805275340b2"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-08",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.5632999818772078,
+          "results": [
+            {
+              "chunk_id": "guide-05-f7ff9e433cb3df8c",
+              "score": 34.71860132,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-7ae7f9f1f04312df",
+              "score": 18.45640732,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-04-63a06a11439153d3",
+              "score": 10.40148967,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-01-a6b0b88c9a7fdd23",
+              "score": 9.8108799,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-04-8b1d3fd175c57841",
+              "score": 7.74191532,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-05-f7ff9e433cb3df8c",
+            "guide-05-7ae7f9f1f04312df",
+            "guide-04-63a06a11439153d3",
+            "guide-01-a6b0b88c9a7fdd23",
+            "guide-04-8b1d3fd175c57841",
+            "guide-01-9053f77f41f09364",
+            "guide-04-d14af54f3cf07478",
+            "guide-05-376b2939d1f60ebb",
+            "guide-05-77ec42cc273d1d87"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 0.5,
+          "elapsed_ms": 11.448000004747882,
+          "results": [
+            {
+              "chunk_id": "guide-04-8b1d3fd175c57841",
+              "score": 0.65551448,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-f7ff9e433cb3df8c",
+              "score": 0.64242959,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-cee647fe496d41bc",
+              "score": 0.61954945,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-7ae7f9f1f04312df",
+              "score": 0.61323524,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-e2df879a3ae24e1b",
+              "score": 0.5972985,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-04-8b1d3fd175c57841",
+            "guide-05-f7ff9e433cb3df8c",
+            "guide-04-cee647fe496d41bc",
+            "guide-05-7ae7f9f1f04312df",
+            "guide-04-e2df879a3ae24e1b",
+            "guide-04-63a06a11439153d3",
+            "guide-04-d14af54f3cf07478",
+            "guide-04-26d9cff8fe0fca54",
+            "guide-04-c22a47f8db9e5a30",
+            "guide-05-376b2939d1f60ebb",
+            "guide-05-77ec42cc273d1d87"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 15.612899995176122,
+          "results": [
+            {
+              "chunk_id": "guide-05-f7ff9e433cb3df8c",
+              "score": 0.032522474881,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 34.71860132,
+                "vector": 0.64242959
+              }
+            },
+            {
+              "chunk_id": "guide-04-8b1d3fd175c57841",
+              "score": 0.031778058008,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 5,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 7.74191532,
+                "vector": 0.65551448
+              }
+            },
+            {
+              "chunk_id": "guide-05-7ae7f9f1f04312df",
+              "score": 0.031754032258,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 18.45640732,
+                "vector": 0.61323524
+              }
+            },
+            {
+              "chunk_id": "guide-01-a6b0b88c9a7fdd23",
+              "score": 0.030776515152,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 6
+              },
+              "component_scores": {
+                "keyword": 9.8108799,
+                "vector": 0.59318519
+              }
+            },
+            {
+              "chunk_id": "guide-04-63a06a11439153d3",
+              "score": 0.02886002886,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 17
+              },
+              "component_scores": {
+                "keyword": 10.40148967,
+                "vector": 0.54201764
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-05-f7ff9e433cb3df8c",
+            "guide-04-8b1d3fd175c57841",
+            "guide-05-7ae7f9f1f04312df",
+            "guide-01-a6b0b88c9a7fdd23",
+            "guide-04-63a06a11439153d3",
+            "guide-01-9053f77f41f09364",
+            "guide-04-d14af54f3cf07478",
+            "guide-05-376b2939d1f60ebb",
+            "guide-05-77ec42cc273d1d87"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-09",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.5796999903395772,
+          "results": [
+            {
+              "chunk_id": "guide-06-74097e5d9466ecf2",
+              "score": 31.16176175,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-137999829b85b554",
+              "score": 9.96410268,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-97003d9f89f26237",
+              "score": 9.75385601,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-2a3c8996c6de39ed",
+              "score": 9.43417827,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-01-55aa792301c7b45a",
+              "score": 8.99863584,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-06-74097e5d9466ecf2",
+            "guide-05-137999829b85b554",
+            "guide-05-97003d9f89f26237",
+            "guide-03-2a3c8996c6de39ed",
+            "guide-01-55aa792301c7b45a",
+            "guide-01-0447812a6452f292",
+            "guide-03-11f9e5f33afb215f",
+            "guide-05-0a02bf3e2dac8c6f",
+            "guide-05-a29bd14c32b32b82",
+            "guide-06-8cd93f1a470193d0"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 0.5,
+          "elapsed_ms": 14.873499982059002,
+          "results": [
+            {
+              "chunk_id": "guide-05-77ec42cc273d1d87",
+              "score": 0.56962132,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-06-74097e5d9466ecf2",
+              "score": 0.54385966,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-f7ff9e433cb3df8c",
+              "score": 0.53723073,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-06-88296befb39a1912",
+              "score": 0.53701895,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 0.53286469,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-05-77ec42cc273d1d87",
+            "guide-06-74097e5d9466ecf2",
+            "guide-05-f7ff9e433cb3df8c",
+            "guide-06-88296befb39a1912",
+            "faq-04-243b566ac3654806",
+            "faq-04-68f28d172a1afb3c",
+            "guide-06-8cd93f1a470193d0",
+            "guide-06-563fbb37efd55d1d"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 15.022200008388609,
+          "results": [
+            {
+              "chunk_id": "guide-06-74097e5d9466ecf2",
+              "score": 0.032522474881,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 31.16176175,
+                "vector": 0.54385966
+              }
+            },
+            {
+              "chunk_id": "guide-05-77ec42cc273d1d87",
+              "score": 0.030477949665,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 11,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 7.85713349,
+                "vector": 0.56962132
+              }
+            },
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 0.028542510121,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 16,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": 7.20197569,
+                "vector": 0.53286469
+              }
+            },
+            {
+              "chunk_id": "guide-05-97003d9f89f26237",
+              "score": 0.028531243721,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 19
+              },
+              "component_scores": {
+                "keyword": 9.75385601,
+                "vector": 0.48827177
+              }
+            },
+            {
+              "chunk_id": "guide-05-f7ff9e433cb3df8c",
+              "score": 0.028531243721,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 19,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 6.19846724,
+                "vector": 0.53723073
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-06-74097e5d9466ecf2",
+            "guide-05-77ec42cc273d1d87",
+            "faq-04-243b566ac3654806",
+            "guide-05-97003d9f89f26237",
+            "guide-05-f7ff9e433cb3df8c",
+            "faq-04-68f28d172a1afb3c",
+            "guide-05-0a02bf3e2dac8c6f",
+            "guide-06-8cd93f1a470193d0"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-10",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.7105999975465238,
+          "results": [
+            {
+              "chunk_id": "guide-06-667099c43ef4f00c",
+              "score": 37.58815333,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-06-6cc1056663944039",
+              "score": 32.0108025,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 7.56164587,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-77ec42cc273d1d87",
+              "score": 6.5702406,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-01-0c11d4174c049b67",
+              "score": 6.11422816,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-06-667099c43ef4f00c",
+            "guide-06-6cc1056663944039",
+            "faq-04-243b566ac3654806",
+            "guide-05-77ec42cc273d1d87",
+            "guide-01-0c11d4174c049b67",
+            "faq-04-68f28d172a1afb3c",
+            "guide-01-2998e44c39a045e2",
+            "guide-01-7f7d46c93bfdc812",
+            "guide-05-f7ff9e433cb3df8c"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 13.676899980055168,
+          "results": [
+            {
+              "chunk_id": "guide-06-6cc1056663944039",
+              "score": 0.71167719,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-06-667099c43ef4f00c",
+              "score": 0.70355666,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 0.65460217,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-77ec42cc273d1d87",
+              "score": 0.64775771,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-137999829b85b554",
+              "score": 0.64706081,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-06-6cc1056663944039",
+            "guide-06-667099c43ef4f00c",
+            "faq-04-243b566ac3654806",
+            "guide-05-77ec42cc273d1d87",
+            "guide-05-137999829b85b554",
+            "faq-04-68f28d172a1afb3c",
+            "guide-05-f7ff9e433cb3df8c",
+            "guide-05-a29bd14c32b32b82"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 16.892799991182983,
+          "results": [
+            {
+              "chunk_id": "guide-06-667099c43ef4f00c",
+              "score": 0.032522474881,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 37.58815333,
+                "vector": 0.70355666
+              }
+            },
+            {
+              "chunk_id": "guide-06-6cc1056663944039",
+              "score": 0.032522474881,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 32.0108025,
+                "vector": 0.71167719
+              }
+            },
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 0.031746031746,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 7.56164587,
+                "vector": 0.65460217
+              }
+            },
+            {
+              "chunk_id": "guide-05-77ec42cc273d1d87",
+              "score": 0.03125,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 6.5702406,
+                "vector": 0.64775771
+              }
+            },
+            {
+              "chunk_id": "guide-01-9053f77f41f09364",
+              "score": 0.028174603175,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 10,
+                "vector": 12
+              },
+              "component_scores": {
+                "keyword": 4.86439983,
+                "vector": 0.61616701
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-06-667099c43ef4f00c",
+            "guide-06-6cc1056663944039",
+            "faq-04-243b566ac3654806",
+            "guide-05-77ec42cc273d1d87",
+            "guide-01-9053f77f41f09364",
+            "faq-04-68f28d172a1afb3c",
+            "guide-01-a6b0b88c9a7fdd23",
+            "guide-05-f7ff9e433cb3df8c"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-11",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 2,
+          "recalled_sections": 2,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.514900020789355,
+          "results": [
+            {
+              "chunk_id": "faq-05-21983a9bd3fbcf51",
+              "score": 30.47481972,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-04-e2df879a3ae24e1b",
+              "score": 15.73246561,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-05-cdf20472c1434f0e",
+              "score": 15.4925321,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-05-716dca93f951382c",
+              "score": 10.66489653,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-04-7c3a84f84c635436",
+              "score": 10.51416067,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-05-21983a9bd3fbcf51",
+            "guide-04-e2df879a3ae24e1b",
+            "faq-05-cdf20472c1434f0e",
+            "faq-05-716dca93f951382c",
+            "guide-04-7c3a84f84c635436",
+            "guide-04-c22a47f8db9e5a30"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 2,
+          "recalled_sections": 2,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 11.687700025504455,
+          "results": [
+            {
+              "chunk_id": "faq-05-21983a9bd3fbcf51",
+              "score": 0.68295425,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-05-716dca93f951382c",
+              "score": 0.63854218,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-05-cdf20472c1434f0e",
+              "score": 0.61853552,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-8b1d3fd175c57841",
+              "score": 0.55749053,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-05-8138af3a37218276",
+              "score": 0.55572397,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-05-21983a9bd3fbcf51",
+            "faq-05-716dca93f951382c",
+            "faq-05-cdf20472c1434f0e",
+            "guide-04-8b1d3fd175c57841",
+            "faq-05-8138af3a37218276",
+            "guide-04-63a06a11439153d3",
+            "guide-04-d14af54f3cf07478"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 2,
+          "recalled_sections": 2,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 15.438900009030476,
+          "results": [
+            {
+              "chunk_id": "faq-05-21983a9bd3fbcf51",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 30.47481972,
+                "vector": 0.68295425
+              }
+            },
+            {
+              "chunk_id": "faq-05-716dca93f951382c",
+              "score": 0.031754032258,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 10.66489653,
+                "vector": 0.63854218
+              }
+            },
+            {
+              "chunk_id": "faq-05-cdf20472c1434f0e",
+              "score": 0.031746031746,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 15.4925321,
+                "vector": 0.61853552
+              }
+            },
+            {
+              "chunk_id": "faq-05-8138af3a37218276",
+              "score": 0.030309988519,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 7,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": 9.56546462,
+                "vector": 0.55572397
+              }
+            },
+            {
+              "chunk_id": "guide-04-cee647fe496d41bc",
+              "score": 0.029857397504,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 6,
+                "vector": 8
+              },
+              "component_scores": {
+                "keyword": 9.79131968,
+                "vector": 0.54404151
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-05-21983a9bd3fbcf51",
+            "faq-05-716dca93f951382c",
+            "faq-05-cdf20472c1434f0e",
+            "faq-05-8138af3a37218276",
+            "guide-04-cee647fe496d41bc",
+            "guide-04-26d9cff8fe0fca54"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-12",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.512800004798919,
+          "results": [
+            {
+              "chunk_id": "guide-04-7c3a84f84c635436",
+              "score": 21.8610859,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-05-8138af3a37218276",
+              "score": 15.38689692,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-05-cdf20472c1434f0e",
+              "score": 9.3257143,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-04-8b1d3fd175c57841",
+              "score": 8.81477937,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-01-9053f77f41f09364",
+              "score": 7.55544511,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-04-7c3a84f84c635436",
+            "faq-05-8138af3a37218276",
+            "faq-05-cdf20472c1434f0e",
+            "guide-04-8b1d3fd175c57841",
+            "guide-01-9053f77f41f09364",
+            "faq-05-716dca93f951382c",
+            "guide-01-a6b0b88c9a7fdd23",
+            "guide-04-63a06a11439153d3",
+            "guide-04-d14af54f3cf07478"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 12.233500019647181,
+          "results": [
+            {
+              "chunk_id": "guide-04-7c3a84f84c635436",
+              "score": 0.67877907,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-05-8138af3a37218276",
+              "score": 0.65499938,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-63a06a11439153d3",
+              "score": 0.63357008,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-e2df879a3ae24e1b",
+              "score": 0.61698049,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-05-21983a9bd3fbcf51",
+              "score": 0.59824741,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-04-7c3a84f84c635436",
+            "faq-05-8138af3a37218276",
+            "guide-04-63a06a11439153d3",
+            "guide-04-e2df879a3ae24e1b",
+            "faq-05-21983a9bd3fbcf51",
+            "guide-04-d14af54f3cf07478",
+            "guide-04-8b1d3fd175c57841",
+            "guide-04-c22a47f8db9e5a30"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 14.517100004013628,
+          "results": [
+            {
+              "chunk_id": "guide-04-7c3a84f84c635436",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 21.8610859,
+                "vector": 0.67877907
+              }
+            },
+            {
+              "chunk_id": "faq-05-8138af3a37218276",
+              "score": 0.032258064516,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 15.38689692,
+                "vector": 0.65499938
+              }
+            },
+            {
+              "chunk_id": "guide-04-8b1d3fd175c57841",
+              "score": 0.030776515152,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 6
+              },
+              "component_scores": {
+                "keyword": 8.81477937,
+                "vector": 0.59011883
+              }
+            },
+            {
+              "chunk_id": "guide-04-63a06a11439153d3",
+              "score": 0.030578898226,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 8,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 7.24995324,
+                "vector": 0.63357008
+              }
+            },
+            {
+              "chunk_id": "faq-05-cdf20472c1434f0e",
+              "score": 0.030365769496,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 9
+              },
+              "component_scores": {
+                "keyword": 9.3257143,
+                "vector": 0.57858664
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-04-7c3a84f84c635436",
+            "faq-05-8138af3a37218276",
+            "guide-04-8b1d3fd175c57841",
+            "guide-04-63a06a11439153d3",
+            "faq-05-cdf20472c1434f0e",
+            "faq-05-716dca93f951382c",
+            "guide-04-d14af54f3cf07478"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-13",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.5458000232465565,
+          "results": [
+            {
+              "chunk_id": "guide-04-c22a47f8db9e5a30",
+              "score": 16.81732892,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-04-26d9cff8fe0fca54",
+              "score": 14.313504,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-06-563fbb37efd55d1d",
+              "score": 13.31344938,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-f7ff9e433cb3df8c",
+              "score": 12.26058175,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-05-cdf20472c1434f0e",
+              "score": 9.18591624,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-04-c22a47f8db9e5a30",
+            "guide-04-26d9cff8fe0fca54",
+            "guide-06-563fbb37efd55d1d",
+            "guide-05-f7ff9e433cb3df8c",
+            "faq-05-cdf20472c1434f0e",
+            "faq-05-716dca93f951382c",
+            "guide-04-cee647fe496d41bc",
+            "guide-04-e2df879a3ae24e1b",
+            "guide-05-77ec42cc273d1d87",
+            "guide-06-88296befb39a1912"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 0.5,
+          "elapsed_ms": 10.492400004295632,
+          "results": [
+            {
+              "chunk_id": "guide-04-cee647fe496d41bc",
+              "score": 0.71123135,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-c22a47f8db9e5a30",
+              "score": 0.70563281,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-e2df879a3ae24e1b",
+              "score": 0.69173855,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-8b1d3fd175c57841",
+              "score": 0.66360503,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-26d9cff8fe0fca54",
+              "score": 0.65989411,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-04-cee647fe496d41bc",
+            "guide-04-c22a47f8db9e5a30",
+            "guide-04-e2df879a3ae24e1b",
+            "guide-04-8b1d3fd175c57841",
+            "guide-04-26d9cff8fe0fca54",
+            "guide-04-63a06a11439153d3",
+            "guide-04-d14af54f3cf07478"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 17.491400009021163,
+          "results": [
+            {
+              "chunk_id": "guide-04-c22a47f8db9e5a30",
+              "score": 0.032522474881,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 16.81732892,
+                "vector": 0.70563281
+              }
+            },
+            {
+              "chunk_id": "guide-04-26d9cff8fe0fca54",
+              "score": 0.031513647643,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": 14.313504,
+                "vector": 0.65989411
+              }
+            },
+            {
+              "chunk_id": "guide-04-cee647fe496d41bc",
+              "score": 0.030886196246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 9,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 8.07913584,
+                "vector": 0.71123135
+              }
+            },
+            {
+              "chunk_id": "guide-04-e2df879a3ae24e1b",
+              "score": 0.030798389007,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 7,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 8.81251293,
+                "vector": 0.69173855
+              }
+            },
+            {
+              "chunk_id": "faq-05-cdf20472c1434f0e",
+              "score": 0.02967032967,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 5,
+                "vector": 10
+              },
+              "component_scores": {
+                "keyword": 9.18591624,
+                "vector": 0.64548051
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-04-c22a47f8db9e5a30",
+            "guide-04-26d9cff8fe0fca54",
+            "guide-04-cee647fe496d41bc",
+            "guide-04-e2df879a3ae24e1b",
+            "faq-05-cdf20472c1434f0e",
+            "faq-05-716dca93f951382c"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-14",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 2,
+          "recalled_sections": 2,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.5508000031113625,
+          "results": [
+            {
+              "chunk_id": "guide-01-9053f77f41f09364",
+              "score": 16.41219081,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-3b3826bd63329b97",
+              "score": 16.37405802,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-02-1702fa34e85cfced",
+              "score": 15.35332575,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-06-fdd7f4deb2eb6e27",
+              "score": 11.95372964,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-02-ee93c1db21363bab",
+              "score": 11.48834943,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-01-9053f77f41f09364",
+            "faq-01-3b3826bd63329b97",
+            "guide-02-1702fa34e85cfced",
+            "faq-06-fdd7f4deb2eb6e27",
+            "guide-02-ee93c1db21363bab",
+            "faq-01-93196e350a01cd7c",
+            "faq-06-d54ae357bb03dc50",
+            "guide-01-a6b0b88c9a7fdd23",
+            "guide-02-bb0fa32b19391d74",
+            "guide-02-17124003c14d0913",
+            "guide-02-fcc8da8759db3338"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 2,
+          "recalled_sections": 0,
+          "recall_at_5": 0.0,
+          "any_evidence_recalled": false,
+          "all_evidence_recalled": false,
+          "reciprocal_rank_at_5": 0.0,
+          "elapsed_ms": 11.968000006163493,
+          "results": [
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 0.66986799,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-06-fdd7f4deb2eb6e27",
+              "score": 0.64913017,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 0.63078535,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-68f28d172a1afb3c",
+              "score": 0.61170149,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-02-bf168e7cdc89ab42",
+              "score": 0.610847,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-532b6606f99baf24",
+            "faq-06-fdd7f4deb2eb6e27",
+            "faq-01-26b3d0b13780d0f3",
+            "faq-04-68f28d172a1afb3c",
+            "faq-02-bf168e7cdc89ab42",
+            "faq-04-243b566ac3654806",
+            "faq-06-d54ae357bb03dc50",
+            "faq-06-cbee5805275340b2"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 2,
+          "recalled_sections": 1,
+          "recall_at_5": 0.5,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": false,
+          "reciprocal_rank_at_5": 0.5,
+          "elapsed_ms": 14.880799979437143,
+          "results": [
+            {
+              "chunk_id": "faq-06-fdd7f4deb2eb6e27",
+              "score": 0.031754032258,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 11.95372964,
+                "vector": 0.64913017
+              }
+            },
+            {
+              "chunk_id": "guide-01-9053f77f41f09364",
+              "score": 0.031544957774,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 6
+              },
+              "component_scores": {
+                "keyword": 16.41219081,
+                "vector": 0.60487688
+              }
+            },
+            {
+              "chunk_id": "faq-02-bf168e7cdc89ab42",
+              "score": 0.030536130536,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 6,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": 11.40879141,
+                "vector": 0.610847
+              }
+            },
+            {
+              "chunk_id": "guide-01-b90926d16e227c38",
+              "score": 0.029850746269,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 7,
+                "vector": 7
+              },
+              "component_scores": {
+                "keyword": 11.39510581,
+                "vector": 0.60380363
+              }
+            },
+            {
+              "chunk_id": "guide-02-1702fa34e85cfced",
+              "score": 0.029761904762,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 12
+              },
+              "component_scores": {
+                "keyword": 15.35332575,
+                "vector": 0.57401752
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-fdd7f4deb2eb6e27",
+            "guide-01-9053f77f41f09364",
+            "faq-02-bf168e7cdc89ab42",
+            "guide-01-b90926d16e227c38",
+            "guide-02-1702fa34e85cfced",
+            "faq-06-d54ae357bb03dc50",
+            "guide-01-a6b0b88c9a7fdd23",
+            "guide-02-bb0fa32b19391d74"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-15",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 0,
+          "recall_at_5": 0.0,
+          "any_evidence_recalled": false,
+          "all_evidence_recalled": false,
+          "reciprocal_rank_at_5": 0.0,
+          "elapsed_ms": 0.2198000147473067,
+          "results": [
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 0.0,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-3b3826bd63329b97",
+              "score": 0.0,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-4e7f17f17a6eea6a",
+              "score": 0.0,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-93196e350a01cd7c",
+              "score": 0.0,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-02-2169169ebd0262d0",
+              "score": 0.0,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-01-26b3d0b13780d0f3",
+            "faq-01-3b3826bd63329b97",
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-01-93196e350a01cd7c",
+            "faq-02-2169169ebd0262d0",
+            "faq-02-f0ef315fdb4cc4e1"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 0,
+          "recall_at_5": 0.0,
+          "any_evidence_recalled": false,
+          "all_evidence_recalled": false,
+          "reciprocal_rank_at_5": 0.0,
+          "elapsed_ms": 12.346999981673434,
+          "results": [
+            {
+              "chunk_id": "guide-04-c22a47f8db9e5a30",
+              "score": 0.43239897,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-8b1d3fd175c57841",
+              "score": 0.43006486,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-04-cee647fe496d41bc",
+              "score": 0.42594242,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-137999829b85b554",
+              "score": 0.4212873,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-a29bd14c32b32b82",
+              "score": 0.41496438,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-04-c22a47f8db9e5a30",
+            "guide-04-8b1d3fd175c57841",
+            "guide-04-cee647fe496d41bc",
+            "guide-05-137999829b85b554",
+            "guide-05-a29bd14c32b32b82",
+            "guide-04-63a06a11439153d3",
+            "guide-04-d14af54f3cf07478",
+            "guide-04-26d9cff8fe0fca54",
+            "guide-04-e2df879a3ae24e1b"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 0,
+          "recall_at_5": 0.0,
+          "any_evidence_recalled": false,
+          "all_evidence_recalled": false,
+          "reciprocal_rank_at_5": 0.0,
+          "elapsed_ms": 11.177400010637939,
+          "results": [
+            {
+              "chunk_id": "guide-04-c22a47f8db9e5a30",
+              "score": 0.016393442623,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": null,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": null,
+                "vector": 0.43239897
+              }
+            },
+            {
+              "chunk_id": "guide-04-8b1d3fd175c57841",
+              "score": 0.016129032258,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": null,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": null,
+                "vector": 0.43006486
+              }
+            },
+            {
+              "chunk_id": "guide-04-cee647fe496d41bc",
+              "score": 0.015873015873,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": null,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": null,
+                "vector": 0.42594242
+              }
+            },
+            {
+              "chunk_id": "guide-05-137999829b85b554",
+              "score": 0.015625,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": null,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": null,
+                "vector": 0.4212873
+              }
+            },
+            {
+              "chunk_id": "guide-05-a29bd14c32b32b82",
+              "score": 0.015384615385,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": null,
+                "vector": 5
+              },
+              "component_scores": {
+                "keyword": null,
+                "vector": 0.41496438
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-04-c22a47f8db9e5a30",
+            "guide-04-8b1d3fd175c57841",
+            "guide-04-cee647fe496d41bc",
+            "guide-05-137999829b85b554",
+            "guide-05-a29bd14c32b32b82",
+            "guide-04-63a06a11439153d3",
+            "guide-04-d14af54f3cf07478",
+            "guide-04-26d9cff8fe0fca54",
+            "guide-04-e2df879a3ae24e1b"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-16",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.47679999261163175,
+          "results": [
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 19.23076726,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-8e53620495f6fac2",
+              "score": 12.38480032,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-730eca15b0027939",
+              "score": 10.7342033,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-04-68f28d172a1afb3c",
+              "score": 10.5221677,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 9.56162215,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-01-26b3d0b13780d0f3",
+            "guide-03-8e53620495f6fac2",
+            "guide-03-730eca15b0027939",
+            "faq-04-68f28d172a1afb3c",
+            "faq-06-532b6606f99baf24",
+            "faq-04-243b566ac3654806",
+            "faq-06-cbee5805275340b2",
+            "guide-03-f0f92c2e54701b0c"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 0.5,
+          "elapsed_ms": 11.284899985184893,
+          "results": [
+            {
+              "chunk_id": "guide-03-8e53620495f6fac2",
+              "score": 0.64676368,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 0.63934153,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-03-730eca15b0027939",
+              "score": 0.62747192,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-03-4474cb98c8d5c86a",
+              "score": 0.6175257,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-03-4815fd1571c01678",
+              "score": 0.61184394,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-03-8e53620495f6fac2",
+            "faq-01-26b3d0b13780d0f3",
+            "guide-03-730eca15b0027939",
+            "faq-03-4474cb98c8d5c86a",
+            "faq-03-4815fd1571c01678",
+            "guide-03-f0f92c2e54701b0c"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 13.632999995024875,
+          "results": [
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 0.032522474881,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 19.23076726,
+                "vector": 0.63934153
+              }
+            },
+            {
+              "chunk_id": "guide-03-8e53620495f6fac2",
+              "score": 0.032522474881,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 12.38480032,
+                "vector": 0.64676368
+              }
+            },
+            {
+              "chunk_id": "guide-03-730eca15b0027939",
+              "score": 0.031746031746,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 10.7342033,
+                "vector": 0.62747192
+              }
+            },
+            {
+              "chunk_id": "faq-04-68f28d172a1afb3c",
+              "score": 0.030776515152,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 6
+              },
+              "component_scores": {
+                "keyword": 10.5221677,
+                "vector": 0.60982704
+              }
+            },
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 0.029273504274,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 5,
+                "vector": 12
+              },
+              "component_scores": {
+                "keyword": 9.56162215,
+                "vector": 0.58369088
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-01-26b3d0b13780d0f3",
+            "guide-03-8e53620495f6fac2",
+            "guide-03-730eca15b0027939",
+            "faq-04-68f28d172a1afb3c",
+            "faq-06-532b6606f99baf24",
+            "faq-04-243b566ac3654806",
+            "faq-06-cbee5805275340b2",
+            "guide-03-f0f92c2e54701b0c"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-17",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 1.0,
+          "elapsed_ms": 0.7404999923892319,
+          "results": [
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 25.04519718,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 15.18978193,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-137999829b85b554",
+              "score": 13.92724973,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-04-4e74edcb2ddc00c4",
+              "score": 12.72076758,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-04-1ab68fae2c78630d",
+              "score": 12.15819031,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-532b6606f99baf24",
+            "faq-04-243b566ac3654806",
+            "guide-05-137999829b85b554",
+            "faq-04-4e74edcb2ddc00c4",
+            "faq-04-1ab68fae2c78630d",
+            "faq-04-68f28d172a1afb3c",
+            "faq-06-cbee5805275340b2",
+            "guide-05-a29bd14c32b32b82"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 1,
+          "recalled_sections": 0,
+          "recall_at_5": 0.0,
+          "any_evidence_recalled": false,
+          "all_evidence_recalled": false,
+          "reciprocal_rank_at_5": 0.0,
+          "elapsed_ms": 12.385799986077473,
+          "results": [
+            {
+              "chunk_id": "guide-06-88296befb39a1912",
+              "score": 0.58441079,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-4e74edcb2ddc00c4",
+              "score": 0.54713148,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 0.54495966,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-68f28d172a1afb3c",
+              "score": 0.53254199,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-77ec42cc273d1d87",
+              "score": 0.52380753,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-06-88296befb39a1912",
+            "faq-04-4e74edcb2ddc00c4",
+            "faq-04-243b566ac3654806",
+            "faq-04-68f28d172a1afb3c",
+            "guide-05-77ec42cc273d1d87",
+            "faq-04-1ab68fae2c78630d",
+            "guide-05-f7ff9e433cb3df8c",
+            "guide-06-563fbb37efd55d1d"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 1,
+          "recalled_sections": 1,
+          "recall_at_5": 1.0,
+          "any_evidence_recalled": true,
+          "all_evidence_recalled": true,
+          "reciprocal_rank_at_5": 0.25,
+          "elapsed_ms": 18.286699982127175,
+          "results": [
+            {
+              "chunk_id": "faq-04-243b566ac3654806",
+              "score": 0.032002048131,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 15.18978193,
+                "vector": 0.54495966
+              }
+            },
+            {
+              "chunk_id": "faq-04-4e74edcb2ddc00c4",
+              "score": 0.031754032258,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 4,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": 12.72076758,
+                "vector": 0.54713148
+              }
+            },
+            {
+              "chunk_id": "guide-06-88296befb39a1912",
+              "score": 0.031544957774,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 6,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 7.92391794,
+                "vector": 0.58441079
+              }
+            },
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 0.031099324976,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 8
+              },
+              "component_scores": {
+                "keyword": 25.04519718,
+                "vector": 0.50301558
+              }
+            },
+            {
+              "chunk_id": "guide-05-137999829b85b554",
+              "score": 0.030158730159,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 10
+              },
+              "component_scores": {
+                "keyword": 13.92724973,
+                "vector": 0.49421078
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-04-243b566ac3654806",
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-06-88296befb39a1912",
+            "faq-06-532b6606f99baf24",
+            "guide-05-137999829b85b554",
+            "faq-04-1ab68fae2c78630d",
+            "faq-04-68f28d172a1afb3c",
+            "faq-06-cbee5805275340b2",
+            "guide-05-a29bd14c32b32b82",
+            "guide-06-563fbb37efd55d1d"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-18",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 0,
+          "recalled_sections": 0,
+          "recall_at_5": null,
+          "any_evidence_recalled": null,
+          "all_evidence_recalled": null,
+          "reciprocal_rank_at_5": null,
+          "elapsed_ms": 0.44579998939298093,
+          "results": [
+            {
+              "chunk_id": "faq-06-dc59de19d6b11332",
+              "score": 20.50676412,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-04-1ab68fae2c78630d",
+              "score": 6.32189496,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-97003d9f89f26237",
+              "score": 4.31551212,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-04-26d9cff8fe0fca54",
+              "score": 4.16137955,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-df954881920749b3",
+              "score": 4.05041822,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-dc59de19d6b11332",
+            "faq-04-1ab68fae2c78630d",
+            "guide-05-97003d9f89f26237",
+            "guide-04-26d9cff8fe0fca54",
+            "guide-03-df954881920749b3",
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-04-cee647fe496d41bc",
+            "guide-05-0a02bf3e2dac8c6f"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 0,
+          "recalled_sections": 0,
+          "recall_at_5": null,
+          "any_evidence_recalled": null,
+          "all_evidence_recalled": null,
+          "reciprocal_rank_at_5": null,
+          "elapsed_ms": 11.407599988160655,
+          "results": [
+            {
+              "chunk_id": "faq-06-dc59de19d6b11332",
+              "score": 0.53461611,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-02-bb0fa32b19391d74",
+              "score": 0.53357798,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-04-68f28d172a1afb3c",
+              "score": 0.52149743,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-01-9053f77f41f09364",
+              "score": 0.52033126,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-02-6b31796c49b25f22",
+              "score": 0.51596463,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-dc59de19d6b11332",
+            "guide-02-bb0fa32b19391d74",
+            "faq-04-68f28d172a1afb3c",
+            "guide-01-9053f77f41f09364",
+            "guide-02-6b31796c49b25f22",
+            "faq-04-243b566ac3654806",
+            "guide-01-a6b0b88c9a7fdd23",
+            "guide-02-697797dc9710e4da",
+            "guide-02-1702fa34e85cfced"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 0,
+          "recalled_sections": 0,
+          "recall_at_5": null,
+          "any_evidence_recalled": null,
+          "all_evidence_recalled": null,
+          "reciprocal_rank_at_5": null,
+          "elapsed_ms": 18.154999997932464,
+          "results": [
+            {
+              "chunk_id": "faq-06-dc59de19d6b11332",
+              "score": 0.032786885246,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": 20.50676412,
+                "vector": 0.53461611
+              }
+            },
+            {
+              "chunk_id": "guide-05-97003d9f89f26237",
+              "score": 0.031024531025,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 3,
+                "vector": 6
+              },
+              "component_scores": {
+                "keyword": 4.31551212,
+                "vector": 0.51540524
+              }
+            },
+            {
+              "chunk_id": "faq-04-1ab68fae2c78630d",
+              "score": 0.029286926995,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": 16
+              },
+              "component_scores": {
+                "keyword": 6.32189496,
+                "vector": 0.49781179
+              }
+            },
+            {
+              "chunk_id": "faq-06-532b6606f99baf24",
+              "score": 0.028850145289,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 6,
+                "vector": 13
+              },
+              "component_scores": {
+                "keyword": 3.27275828,
+                "vector": 0.50086832
+              }
+            },
+            {
+              "chunk_id": "faq-04-68f28d172a1afb3c",
+              "score": 0.028693528694,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 18,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": 1.99836709,
+                "vector": 0.52149743
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-06-dc59de19d6b11332",
+            "guide-05-97003d9f89f26237",
+            "faq-04-1ab68fae2c78630d",
+            "faq-06-532b6606f99baf24",
+            "faq-04-68f28d172a1afb3c",
+            "faq-04-4e74edcb2ddc00c4",
+            "faq-04-243b566ac3654806",
+            "faq-06-cbee5805275340b2",
+            "guide-05-0a02bf3e2dac8c6f"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-19",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 0,
+          "recalled_sections": 0,
+          "recall_at_5": null,
+          "any_evidence_recalled": null,
+          "all_evidence_recalled": null,
+          "reciprocal_rank_at_5": null,
+          "elapsed_ms": 0.3767999878618866,
+          "results": [
+            {
+              "chunk_id": "faq-04-4e74edcb2ddc00c4",
+              "score": 5.45245826,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-04-c22a47f8db9e5a30",
+              "score": 4.70046514,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-f0f92c2e54701b0c",
+              "score": 3.17025173,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-04-e2df879a3ae24e1b",
+              "score": 2.86481369,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-05-f7ff9e433cb3df8c",
+              "score": 2.82621984,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-04-c22a47f8db9e5a30",
+            "guide-03-f0f92c2e54701b0c",
+            "guide-04-e2df879a3ae24e1b",
+            "guide-05-f7ff9e433cb3df8c",
+            "faq-04-1ab68fae2c78630d",
+            "guide-03-8e53620495f6fac2",
+            "guide-05-77ec42cc273d1d87"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 0,
+          "recalled_sections": 0,
+          "recall_at_5": null,
+          "any_evidence_recalled": null,
+          "all_evidence_recalled": null,
+          "reciprocal_rank_at_5": null,
+          "elapsed_ms": 10.730299982242286,
+          "results": [
+            {
+              "chunk_id": "guide-06-88296befb39a1912",
+              "score": 0.48079324,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-06-d6949f78cde50c64",
+              "score": 0.40569001,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-97003d9f89f26237",
+              "score": 0.40260065,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-05-0a02bf3e2dac8c6f",
+              "score": 0.40199029,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "guide-02-1702fa34e85cfced",
+              "score": 0.39686948,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-06-88296befb39a1912",
+            "guide-06-d6949f78cde50c64",
+            "guide-05-97003d9f89f26237",
+            "guide-05-0a02bf3e2dac8c6f",
+            "guide-02-1702fa34e85cfced",
+            "guide-02-bb0fa32b19391d74",
+            "guide-06-563fbb37efd55d1d"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 0,
+          "recalled_sections": 0,
+          "recall_at_5": null,
+          "any_evidence_recalled": null,
+          "all_evidence_recalled": null,
+          "reciprocal_rank_at_5": null,
+          "elapsed_ms": 14.101500011747703,
+          "results": [
+            {
+              "chunk_id": "faq-04-4e74edcb2ddc00c4",
+              "score": 0.030282331512,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": 12
+              },
+              "component_scores": {
+                "keyword": 5.45245826,
+                "vector": 0.37243438
+              }
+            },
+            {
+              "chunk_id": "guide-05-0a02bf3e2dac8c6f",
+              "score": 0.029513888889,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 12,
+                "vector": 4
+              },
+              "component_scores": {
+                "keyword": 1.91970923,
+                "vector": 0.40199029
+              }
+            },
+            {
+              "chunk_id": "faq-04-1ab68fae2c78630d",
+              "score": 0.028790389395,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 8,
+                "vector": 11
+              },
+              "component_scores": {
+                "keyword": 2.49979824,
+                "vector": 0.37278038
+              }
+            },
+            {
+              "chunk_id": "guide-04-26d9cff8fe0fca54",
+              "score": 0.026992753623,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 9,
+                "vector": 20
+              },
+              "component_scores": {
+                "keyword": 2.41133542,
+                "vector": 0.34783679
+              }
+            },
+            {
+              "chunk_id": "guide-06-88296befb39a1912",
+              "score": 0.016393442623,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": null,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": null,
+                "vector": 0.48079324
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-05-0a02bf3e2dac8c6f",
+            "faq-04-1ab68fae2c78630d",
+            "guide-04-26d9cff8fe0fca54",
+            "guide-06-88296befb39a1912",
+            "guide-04-cee647fe496d41bc",
+            "guide-05-97003d9f89f26237",
+            "guide-06-563fbb37efd55d1d"
+          ],
+          "failed": false
+        }
+      }
+    },
+    {
+      "id": "test-20",
+      "split": "holdout",
+      "retrieval": {
+        "keyword": {
+          "expected_sections": 0,
+          "recalled_sections": 0,
+          "recall_at_5": null,
+          "any_evidence_recalled": null,
+          "all_evidence_recalled": null,
+          "reciprocal_rank_at_5": null,
+          "elapsed_ms": 0.34199998481199145,
+          "results": [
+            {
+              "chunk_id": "guide-04-d14af54f3cf07478",
+              "score": 3.783774,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-01-9053f77f41f09364",
+              "score": 3.22635746,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-04-7c3a84f84c635436",
+              "score": 2.87072376,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 0.0,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-3b3826bd63329b97",
+              "score": 0.0,
+              "method": "keyword"
+            }
+          ],
+          "expanded_context_ids": [
+            "guide-04-d14af54f3cf07478",
+            "guide-01-9053f77f41f09364",
+            "guide-04-7c3a84f84c635436",
+            "faq-01-26b3d0b13780d0f3",
+            "faq-01-3b3826bd63329b97",
+            "faq-01-93196e350a01cd7c",
+            "guide-01-a6b0b88c9a7fdd23",
+            "guide-04-63a06a11439153d3",
+            "guide-04-8b1d3fd175c57841"
+          ],
+          "failed": false
+        },
+        "vector": {
+          "expected_sections": 0,
+          "recalled_sections": 0,
+          "recall_at_5": null,
+          "any_evidence_recalled": null,
+          "all_evidence_recalled": null,
+          "reciprocal_rank_at_5": null,
+          "elapsed_ms": 9.058800002094358,
+          "results": [
+            {
+              "chunk_id": "faq-04-68f28d172a1afb3c",
+              "score": 0.35867888,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 0.35378182,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-03-4815fd1571c01678",
+              "score": 0.34574515,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-06-cbee5805275340b2",
+              "score": 0.34441763,
+              "method": "vector"
+            },
+            {
+              "chunk_id": "faq-05-21983a9bd3fbcf51",
+              "score": 0.33940327,
+              "method": "vector"
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-04-68f28d172a1afb3c",
+            "faq-01-26b3d0b13780d0f3",
+            "faq-03-4815fd1571c01678",
+            "faq-06-cbee5805275340b2",
+            "faq-05-21983a9bd3fbcf51",
+            "faq-03-4474cb98c8d5c86a",
+            "faq-04-243b566ac3654806",
+            "faq-06-532b6606f99baf24"
+          ],
+          "failed": false
+        },
+        "hybrid": {
+          "expected_sections": 0,
+          "recalled_sections": 0,
+          "recall_at_5": null,
+          "any_evidence_recalled": null,
+          "all_evidence_recalled": null,
+          "reciprocal_rank_at_5": null,
+          "elapsed_ms": 12.085599999409169,
+          "results": [
+            {
+              "chunk_id": "faq-04-68f28d172a1afb3c",
+              "score": 0.016393442623,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": null,
+                "vector": 1
+              },
+              "component_scores": {
+                "keyword": null,
+                "vector": 0.35867888
+              }
+            },
+            {
+              "chunk_id": "guide-04-d14af54f3cf07478",
+              "score": 0.016393442623,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 1,
+                "vector": null
+              },
+              "component_scores": {
+                "keyword": 3.783774,
+                "vector": null
+              }
+            },
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "score": 0.016129032258,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": null,
+                "vector": 2
+              },
+              "component_scores": {
+                "keyword": null,
+                "vector": 0.35378182
+              }
+            },
+            {
+              "chunk_id": "guide-01-9053f77f41f09364",
+              "score": 0.016129032258,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": 2,
+                "vector": null
+              },
+              "component_scores": {
+                "keyword": 3.22635746,
+                "vector": null
+              }
+            },
+            {
+              "chunk_id": "faq-03-4815fd1571c01678",
+              "score": 0.015873015873,
+              "method": "hybrid",
+              "ranks": {
+                "keyword": null,
+                "vector": 3
+              },
+              "component_scores": {
+                "keyword": null,
+                "vector": 0.34574515
+              }
+            }
+          ],
+          "expanded_context_ids": [
+            "faq-04-68f28d172a1afb3c",
+            "guide-04-d14af54f3cf07478",
+            "faq-01-26b3d0b13780d0f3",
+            "guide-01-9053f77f41f09364",
+            "faq-03-4815fd1571c01678",
+            "faq-03-4474cb98c8d5c86a",
+            "faq-04-243b566ac3654806",
+            "guide-01-a6b0b88c9a7fdd23",
+            "guide-04-63a06a11439153d3",
+            "guide-04-8b1d3fd175c57841"
+          ],
+          "failed": false
+        }
+      }
+    }
+  ],
+  "note": "Public metrics and ranking IDs only; original questions, labels, document excerpts and paths stay in local reports."
+}

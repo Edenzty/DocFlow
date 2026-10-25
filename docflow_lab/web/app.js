@@ -1,368 +1,93 @@
 "use strict";
-
 (() => {
   const byId = (id) => document.getElementById(id);
-  const state = { ticket: null, config: null, busy: false, evidence: [] };
-  const statusLabels = { awaiting_review: "等待人工审核", rejected: "草稿已驳回", approved: "已批准 · 等待提交", submitted: "已提交", submission_failed: "提交中断 · 可重试", generation_failed: "生成失败 · 可重试" };
-  const eventLabels = { created: "创建工单", retrieved: "检索证据", generated: "生成草稿", reviewed: "审核草稿", approved: "批准草稿", rejected: "驳回草稿", submitted: "提交完成", submission_failed: "提交中断", generation_failed: "生成失败", retried: "重试任务", resumed: "恢复工作流", model_call: "模型调用", draft_created: "草稿已保存", draft_generated: "草稿生成完成", local_reply_written: "本地系统已写入回复", idempotent_replay: "幂等重试 · 沿用已有回复", regenerated: "创建新草稿版本", review: "人工审核", submit: "本地提交", retrieve: "检索证据", generate: "生成草稿" };
-  const methods = { keyword: "关键词 · BM25", vector: "向量 · BGE / Chroma" };
-
-  function text(value) {
-    if (value === null || value === undefined) return "";
-    if (typeof value === "string") return value;
-    return JSON.stringify(value, null, 2);
+  const state = { ticket: null, config: null, busy: false, job: null, pollToken: 0, configured: false };
+  const labels = { queued: "排队中", running: "正在处理", completed: "处理完成", failed: "处理失败", interrupted: "已中断", stale: "等待恢复", awaiting_review: "等待人工审核", rejected: "草稿已驳回", approved: "已批准 · 等待提交", submitted: "已提交", submission_failed: "提交中断 · 可重试", generation_failed: "生成失败 · 可重试", generating: "正在生成" };
+  const eventLabels = { created: "创建工单", retrieved: "检索证据", generated: "生成草稿", reviewed: "审核草稿", approved: "批准草稿", rejected: "驳回草稿", submitted: "提交完成", submission_failed: "提交中断", generation_failed: "生成失败", retried: "重试任务", resumed: "恢复工作流", model_call: "模型调用", draft_created: "草稿已保存", draft_generated: "草稿生成完成", local_reply_written: "本地系统已写入回复", idempotent_replay: "幂等重试 · 沿用已有回复", regenerated: "创建新草稿版本", review: "人工审核", submit: "本地提交", retrieve: "检索证据", generate: "生成草稿", followup: "补充信息", edited: "人工修改草稿", draft_edited: "人工修改草稿", job_queued: "后台任务已排队", job_started: "后台任务已启动", agent_run: "只读 Agent 运行" };
+  const methods = { keyword: "关键词 · BM25", vector: "向量 · BGE / Chroma", hybrid: "混合 · RRF" };
+  const strategies = { agent: "检索 Agent", rag: "单次 RAG" };
+  const terminal = ["completed", "failed", "interrupted", "stale"];
+  const store = { get(k) { try { return localStorage.getItem(k); } catch (_) { return null; } }, set(k,v) { try { localStorage.setItem(k,v); } catch (_) { /* Server persistence is independent. */ } }, remove(k) { try { localStorage.removeItem(k); } catch (_) { /* Optional browser convenience. */ } } };
+  function text(value) { return value == null ? "" : typeof value === "string" ? value : JSON.stringify(value, null, 2); }
+  function el(tag, cls, value) { const node = document.createElement(tag); if (cls) node.className = cls; if (value !== undefined) node.textContent = text(value); return node; }
+  function date(value) { if (!value) return ""; const d = new Date(value); return Number.isNaN(d.getTime()) ? text(value) : d.toLocaleString("zh-CN", { month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false }); }
+  function message(value, kind="info") { const node = byId("global-message"); node.textContent = value; node.className = `message message-${kind}`; node.hidden = !value; }
+  function view(name) { document.querySelectorAll(".view").forEach(n => { n.hidden = n.id !== `view-${name}`; }); document.querySelectorAll("[data-view]").forEach(n => { const active=n.dataset.view===name; n.classList.toggle("active", active); if(active) n.setAttribute("aria-current","page"); else n.removeAttribute("aria-current"); }); if(name==="knowledge") loadKnowledge(); }
+  async function api(path, body, method="POST") {
+    const options={method,headers:{Accept:"application/json"},cache:"no-store"};
+    if(method!=="GET") { options.headers["Content-Type"]="application/json"; options.headers["X-DocFlow-Local"]="1"; options.body=JSON.stringify(body||{}); }
+    let response; try { response=await fetch(path,options); } catch (_) { throw new Error("无法连接本地服务。请确认 DocFlow 仍在运行，再载入工单继续。"); }
+    let data; try { data=await response.json(); } catch (_) { throw new Error(`服务返回了无法读取的结果（HTTP ${response.status}）。`); }
+    if(!response.ok) { const error=new Error(text(data.detail||data.error||`请求失败（HTTP ${response.status}）。`)); error.status=response.status; throw error; } return data;
   }
-
-  function element(tag, className, content) {
-    const node = document.createElement(tag);
-    if (className) node.className = className;
-    if (content !== undefined) node.textContent = text(content);
-    return node;
+  function selection() { return {question:byId("question").value.trim(),method:document.querySelector('input[name="method"]:checked').value,strategy:document.querySelector('input[name="strategy"]:checked').value,live:byId("live-mode").checked}; }
+  function setBusy(busy,trigger) { state.busy=busy; document.querySelectorAll("button").forEach(n=>{if(!n.dataset.view)n.disabled=busy;}); ["question-form","ticket-panel"].forEach(id=>byId(id).setAttribute("aria-busy",String(busy))); document.querySelectorAll(".is-loading").forEach(n=>n.classList.remove("is-loading")); if(busy&&trigger)trigger.classList.add("is-loading"); if(!busy)permissions(); }
+  async function operation(trigger,action) { if(state.busy)return; message(""); setBusy(true,trigger); try { await action(); } catch(error) { message(error.message||"操作失败，请稍后重试。","error"); } finally { setBusy(false); await Promise.allSettled([loadConfig(false),loadTickets(false)]); } }
+  function modelHint() { const live=byId("live-mode").checked; byId("live-mode").closest(".model-selection").classList.toggle("live-active",live); byId("model-hint").textContent=live?`会向 ${state.config?.model||"DeepSeek"} 发送问题和召回片段。Agent 可能调用多次，均计入剩余预算。`:"当前为离线模拟，验证工作流与工具轨迹，不消耗请求预算，也不代表真实模型效果。"; }
+  async function loadConfig(showError=true) {
+    try { const c=await api("/api/config",null,"GET"); state.config=c; state.configured=true; const budget=c.budget||{}, remaining=Number(budget.remaining??40),limit=Number(budget.limit??40);
+      byId("budget-remaining").textContent=String(remaining); byId("budget-limit").textContent=String(limit); byId("budget-progress").style.width=`${limit>0?Math.min(100,Math.max(0,remaining/limit*100)):0}%`;
+      byId("connection-status").textContent="服务已连接"; byId("connection-status").classList.remove("offline"); byId("runtime-status").textContent=`${c.model||"DeepSeek"} · ${c.live_enabled?"真实调用已配置":"离线模拟可用"} · ${c.vector_ready?"向量索引就绪":"向量索引未就绪"}`;
+      byId("vector-hint").textContent=c.vector_ready?"混合检索融合关键词与向量的排名；三种方式可在检索实验中比较。":"关键词可直接使用；向量与混合检索需要先建立本地索引。";
+      if(c.strategies&&!c.strategies.includes("agent"))document.querySelector('input[name="strategy"][value="rag"]').checked=true;
+      if(!c.live_enabled||remaining<=0)byId("live-mode").checked=false; modelHint(); statistics(c.statistics||{}); permissions();
+    } catch(error) { byId("connection-status").textContent="服务未连接"; byId("connection-status").classList.add("offline"); byId("runtime-status").textContent="请先启动本地 DocFlow 服务"; if(showError)message(error.message,"error"); }
   }
-
-  function message(content, kind = "info") {
-    const node = byId("global-message");
-    node.textContent = content;
-    node.className = `message message-${kind}`;
-    node.hidden = !content;
+  function statistics(s,items) { const counts=s.by_status||s.statuses||{},count=(...statuses)=>items?items.filter(t=>statuses.includes(t.status)).length:"—"; byId("stat-total").textContent=text(s.total??s.tickets??s.total_tickets??items?.length??"—"); byId("stat-review").textContent=text(s.awaiting_review??counts.awaiting_review??count("awaiting_review")); byId("stat-submitted").textContent=text(s.submitted??counts.submitted??count("submitted")); byId("stat-failed").textContent=text(s.failed??((counts.generation_failed!==undefined||counts.submission_failed!==undefined)?Number(counts.generation_failed||0)+Number(counts.submission_failed||0):count("generation_failed","submission_failed"))); }
+  async function loadTickets(showError=true) {
+    try { const params=new URLSearchParams({limit:"50"}); if(byId("status-filter").value)params.set("status",byId("status-filter").value); if(byId("ticket-filter").value.trim())params.set("q",byId("ticket-filter").value.trim()); const data=await api(`/api/tickets?${params}`,null,"GET"),list=byId("ticket-list"); list.replaceChildren(); byId("queue-count").textContent=text(data.total??data.items?.length??0);
+      (data.items||[]).forEach(t=>{ const button=el("button",`queue-item${state.ticket?.id===t.id?" selected":""}`); button.type="button"; const top=el("div","queue-item-header"); top.append(el("span",`queue-status ${t.status==="submitted"?"success":""}`,labels[t.status]||t.status),el("time","",date(t.updated_at||t.created_at))); button.append(top,el("span","queue-question",t.question),el("span","queue-meta",`${text(t.id).slice(0,12)} · v${t.version||1} · ${strategies[t.strategy]||"单次 RAG"}`)); button.addEventListener("click",()=>operation(button,async()=>renderTicket(await api(`/api/tickets/${encodeURIComponent(t.id)}`,null,"GET")))); button.disabled=state.busy; list.append(button); });
+      if(!data.items?.length)list.append(el("p","muted queue-empty","没有匹配的工单。可以在下方新建问题。")); if(!byId("status-filter").value&&!byId("ticket-filter").value.trim())statistics({...state.config?.statistics,total:data.total},data.items||[]);
+    } catch(error) { byId("ticket-list").replaceChildren(el("p","muted queue-empty",[404,405].includes(error.status)?"当前服务未提供列表，可通过编号载入。":"暂时无法读取工单列表，请稍后刷新。")); if(showError&&![404,405].includes(error.status))message(error.message,"error"); }
   }
-
-  async function api(path, body, method = "POST") {
-    const options = { method, headers: { Accept: "application/json" }, cache: "no-store" };
-    if (method !== "GET") {
-      options.headers["Content-Type"] = "application/json";
-      options.headers["X-DocFlow-Local"] = "1";
-      options.body = JSON.stringify(body || {});
-    }
-    let response;
-    try {
-      response = await fetch(path, options);
-    } catch (_) {
-      throw new Error("无法连接本地服务。请确认 DocFlow 仍在运行，再载入工单继续。");
-    }
-    let data;
-    try {
-      data = await response.json();
-    } catch (_) {
-      throw new Error(`服务返回了无法读取的结果（HTTP ${response.status}）。`);
-    }
-    if (!response.ok) {
-      const error = new Error(text(data.detail || data.error || `请求失败（HTTP ${response.status}）。`));
-      error.status = response.status;
-      throw error;
-    }
-    return data;
+  function flow(ticket,hasEvidence) { let active=ticket?.draft?2:!ticket&&hasEvidence?1:0; if(["approved","submission_failed"].includes(ticket?.status))active=3; if(ticket?.status==="submitted")active=4; ["flow-retrieve","flow-draft","flow-review","flow-submit"].map(byId).forEach((n,i)=>{n.classList.toggle("done",i<active);n.classList.toggle("current",i===Math.min(active,3));n.querySelector("span").textContent=i<active?"✓":String(i+1);}); }
+  function focusEvidence(id) { const node=Array.from(byId("evidence-list").children).find(n=>n.dataset.chunkId===id); if(!node)return; document.querySelectorAll(".evidence-item.highlight").forEach(n=>n.classList.remove("highlight")); node.open=true;node.classList.add("highlight");node.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"nearest"});node.querySelector("summary").focus({preventScroll:true}); }
+  function evidenceCard(item,i) { const d=el("details","evidence-item");d.dataset.chunkId=item.chunk_id;const summary=el("summary"),heading=el("div","evidence-summary");heading.append(el("h3","",item.title||item.document_id),el("p","",item.section||"正文"));summary.append(el("span","evidence-rank",String(i+1).padStart(2,"0")),heading);if(typeof item.score==="number")summary.append(el("span","evidence-score",`分数 ${item.score.toFixed(4)}`));summary.append(el("span","evidence-chevron","⌄"));const body=el("div","evidence-body");if(typeof item.score==="number")body.append(el("p","evidence-score-note",`${item.method==="hybrid"?"RRF":item.method==="vector"?"向量相似度":"BM25"} 分数：${item.score.toFixed(6)}（用于排序）`));body.append(el("pre","",item.text),el("p","evidence-source",`来源：${text(item.source)} · 版本：${text(item.version)}\n片段：${text(item.chunk_id)}`));if(item.ranks||item.component_ranks)body.append(el("p","evidence-source",`组成排名：${text(item.ranks||item.component_ranks)}`));d.append(summary,body);if(i===0)d.open=true;return d; }
+  function evidence(results,method) { const entries=Array.isArray(results)?results:[];byId("evidence-panel").hidden=false;byId("evidence-count").textContent=String(entries.length);byId("evidence-method").textContent=methods[method]||text(method);const list=byId("evidence-list");list.replaceChildren();if(!entries.length)list.append(el("p","evidence-empty","没有召回可用片段。可补充错误码、接口路径或具体操作后重试。"));entries.forEach((item,i)=>list.append(evidenceCard(item,i))); }
+  function events(entries) { const list=byId("event-list");list.replaceChildren();byId("events-panel").hidden=false;if(!Array.isArray(entries)||!entries.length)list.append(el("li","muted","暂无处理记录。"));else entries.forEach(event=>{const item=el("li"),body=el("div");body.append(el("h3","",eventLabels[event.kind]||event.kind),el("p","",event.detail));item.append(el("time","",date(event.created_at)),body);list.append(item);}); }
+  function quality(data={},reviewed=false) { const manual=data.validation==="manual_review_required";byId("quality-status").textContent=manual?(reviewed?"人工修改 · 已人工审核":"人工修改 · 待复核"):data.validation==="quote_presence_only"?`摘录匹配检查 · ${data.checked_quotes??0} 条`:"请人工核对引用";const warnings=byId("quality-warnings");warnings.replaceChildren();(data.warnings||[]).forEach(w=>warnings.append(el("p","quality-warning",w)));if(manual)warnings.append(el("p","quality-warning","此版本包含人工修改，引用及结论需要重新核查。"));const list=byId("claim-list");list.replaceChildren();(data.claims||[]).forEach((claim,i)=>{const item=el("details","claim-item");item.append(el("summary","",`${i+1}. ${text(claim.text)}`));(claim.quotes||[]).forEach(q=>{const wrap=el("div","claim-quote-wrap"),button=el("button","text-button",`查看原文 ${text(q.chunk_id)}`);button.type="button";button.addEventListener("click",()=>focusEvidence(q.chunk_id));wrap.append(el("blockquote","claim-quote",q.quote),button);item.append(wrap);});list.append(item);});if(!data.claims?.length)list.append(el("p","field-help","本版本没有逐项摘录记录；请展开下方证据检查草稿。")); }
+  function trace(entries,strategy) { const data=Array.isArray(entries)?entries:[];byId("trace-panel").hidden=strategy!=="agent"&&!data.length;const list=byId("trace-list");list.replaceChildren();if(!data.length)list.append(el("li","muted","当前没有工具调用轨迹。"));data.forEach((entry,i)=>{const item=el("li","trace-item"),top=el("div","trace-heading");top.append(el("span","trace-step",entry.step??i+1),el("strong","",entry.tool||entry.kind||"决策步骤"),el("span","mode-tag",entry.status||"已记录"));if(typeof entry.elapsed_ms==="number")top.append(el("time","",`${Math.round(entry.elapsed_ms)} ms`));item.append(top,el("pre","",entry.detail));list.append(item);}); }
+  function conversation(entries,ticket) { byId("conversation-panel").hidden=false;const list=byId("message-list");list.replaceChildren();const data=Array.isArray(entries)&&entries.length?entries:[{role:"user",content:ticket.question}];data.forEach(entry=>{const item=el("li",`conversation-message ${entry.role==="user"?"from-user":"from-assistant"}`),top=el("div","conversation-label");top.append(el("span","",entry.role==="user"?"用户":"助手"),el("time","",date(entry.created_at)));item.append(top,el("p","",entry.content));list.append(item);}); }
+  function versions(entries,ticket) { byId("versions-panel").hidden=false;const list=byId("version-list");list.replaceChildren();const data=Array.isArray(entries)&&entries.length?entries:[{version:ticket.version,question:ticket.question,draft:ticket.draft,status:ticket.status,created_at:ticket.created_at}];[...data].sort((a,b)=>Number(b.version)-Number(a.version)).forEach(v=>{const item=el("details",`version-item${v.version===ticket.version?" current-version":""}`),top=el("summary"),body=el("div","version-body");top.append(el("strong","",`v${v.version}`),el("span","",v.version===ticket.version?"当前版本":labels[v.status]||v.status),el("time","",date(v.created_at)));body.append(el("p","muted",v.question),el("p","",v.draft?.answer||"未生成草稿"));item.append(top,body);list.append(item);}); }
+  function renderTicket(ticket,{scroll=false}={}) {
+    state.ticket=ticket;byId("empty-state").hidden=true;byId("ticket-panel").hidden=false;byId("ticket-id").textContent=text(ticket.id);byId("ticket-id-input").value=text(ticket.id);byId("ticket-question").textContent=text(ticket.question);byId("question").value=text(ticket.question);byId("draft-version").textContent=`v${ticket.version??0}`;
+    byId("ticket-status").textContent=labels[ticket.status]||ticket.status;byId("ticket-status").className=`status-tag${["submitted","approved"].includes(ticket.status)?" success":["submission_failed","generation_failed","rejected"].includes(ticket.status)?" error":""}`;
+    byId("ticket-mode").textContent=ticket.quality?.validation==="manual_review_required"?"人工修改":ticket.mode==="live"?"真实模型 · DeepSeek":ticket.mode==="manual"?"人工修改":"离线模拟 · 非真实模型结果";byId("ticket-mode").classList.toggle("live",ticket.mode==="live");byId("ticket-strategy").textContent=strategies[ticket.strategy]||"单次 RAG";byId("ticket-method").textContent=methods[ticket.method]||ticket.method;byId("ticket-error").textContent=text(ticket.error);byId("ticket-error").hidden=!ticket.error;
+    const draft=ticket.draft||{};byId("draft-decision").textContent={answer:"基于证据的回复建议",needs_info:"需要补充信息",out_of_scope:"知识库未覆盖"}[draft.decision]||"等待生成草稿";byId("mock-note").textContent=ticket.quality?.validation==="manual_review_required"?"人工修改版本 · 非模型生成":ticket.mode==="live"?"请人工检查事实与引用":"模拟模型仅验证工程流程";byId("draft-answer").textContent=text(draft.answer||"当前没有可审核的草稿，请查看失败记录并重试。");
+    const citations=byId("draft-citations");citations.replaceChildren();(draft.citations||[]).forEach((citation,i)=>{const id=typeof citation==="string"?citation:citation.chunk_id,source=(ticket.evidence||[]).find(e=>e.chunk_id===id),button=el("button","citation-button",`[${i+1}] ${source?`${source.title} · ${source.section}`:text(id)}`);button.type="button";button.dataset.available=String(Boolean(source));button.title=source?`查看原文片段 ${id}`:`未找到此引用片段：${id}`;button.addEventListener("click",()=>focusEvidence(id));citations.append(button);});
+    const approval=ticket.approval;byId("approval-description").textContent=approval?.approved&&Number(approval.version)===Number(ticket.version)?`v${ticket.version} 已通过人工审核。`:approval&&!approval.approved?"当前草稿已驳回。补充问题或修改草稿后，需要重新审核。":"核对引用和建议后，再批准当前版本。";
+    byId("reply-panel").hidden=!ticket.reply;if(ticket.reply){byId("reply-id").textContent=`回复编号：${text(ticket.reply.id)} · 草稿 v${ticket.reply.version}`;byId("reply-body").textContent=text(ticket.reply.body);byId("reply-note").textContent=ticket.status==="submitted"?"工作流已确认提交完成。重复操作不会新增相同回复。":"本地系统已有回复。请点击“重试失败步骤”确认结果，幂等提交不会重复写入。";}
+    byId("edit-form").hidden=true;evidence(ticket.evidence||[],ticket.method);quality(ticket.quality||{},Boolean(ticket.approval?.approved&&Number(ticket.approval.version)===Number(ticket.version)));trace(ticket.trace,ticket.strategy);conversation(ticket.messages,ticket);versions(ticket.versions,ticket);events(ticket.events);flow(ticket,true);store.set("docflow.lastTicket",text(ticket.id));permissions();if(scroll)byId("ticket-panel").scrollIntoView({behavior:"smooth",block:"start"});
   }
-
-  function selection() {
-    return { question: byId("question").value.trim(), method: document.querySelector('input[name="method"]:checked').value, live: byId("live-mode").checked };
+  function permissions() {
+    if(state.busy)return;const t=state.ticket,reviewed=t?.approval?.approved&&Number(t.approval.version)===Number(t.version),reviewable=Boolean(t?.draft&&t.status==="awaiting_review"&&!t.approval),mutable=Boolean(t&&t.status!=="submitted"&&!t.reply);
+    byId("approve-button").disabled=!reviewable||Boolean(reviewed);byId("reject-button").disabled=!reviewable;byId("submit-button").disabled=!(t&&reviewed&&t.status==="approved");byId("retry-button").hidden=!t||!["submission_failed","generation_failed"].includes(t.status);byId("retry-button").disabled=byId("retry-button").hidden;
+    ["regenerate-button","edit-toggle-button","followup-button","edit-save-button"].forEach(id=>{byId(id).disabled=!mutable;});byId("edit-toggle-button").disabled=!mutable||!t?.draft;["refresh-button","copy-id-button"].forEach(id=>{byId(id).disabled=!t;});byId("simulate-timeout").disabled=!t||t.status==="submitted";
+    document.querySelectorAll(".citation-button").forEach(n=>{n.disabled=n.dataset.available!=="true";});byId("live-mode").disabled=!state.config?.live_enabled||(state.config?.budget?.remaining??40)<=0;
+    document.querySelectorAll('input[name="method"]').forEach(n=>{n.disabled=n.value!=="keyword"&&!state.config?.vector_ready;});document.querySelectorAll('input[name="strategy"]').forEach(n=>{n.disabled=Boolean(state.config?.strategies&&!state.config.strategies.includes(n.value));});if(document.querySelector('input[name="method"]:checked')?.disabled)document.querySelector('input[name="method"][value="keyword"]').checked=true;
+    byId("job-retry-button").disabled=!state.job||!["failed","interrupted","stale"].includes(state.job.status);
   }
-
-  function setBusy(busy, trigger) {
-    state.busy = busy;
-    document.querySelectorAll("button").forEach((node) => { node.disabled = busy; });
-    byId("question-form").setAttribute("aria-busy", String(busy));
-    byId("ticket-panel").setAttribute("aria-busy", String(busy));
-    document.querySelectorAll(".is-loading").forEach((node) => node.classList.remove("is-loading"));
-    if (busy && trigger) trigger.classList.add("is-loading");
-    if (!busy) applyPermissions();
-  }
-
-  async function operation(trigger, action) {
-    if (state.busy) return;
-    message("");
-    setBusy(true, trigger);
-    try {
-      await action();
-    } catch (error) {
-      message(error.message || "操作失败，请稍后重试。", "error");
-    } finally {
-      setBusy(false);
-      await loadConfig(false);
-    }
-  }
-
-  function updateModelHint() {
-    const live = byId("live-mode").checked;
-    byId("live-mode").closest(".model-selection").classList.toggle("live-active", live);
-    byId("model-hint").textContent = live
-      ? `将调用 ${state.config?.model || "DeepSeek"}，消耗真实请求预算；问题和召回的片段会发送给模型。`
-      : "当前使用离线模拟模型，不消耗请求预算。模拟输出用于验证流程。";
-  }
-
-  async function loadConfig(showError = true) {
-    try {
-      const config = await api("/api/config", null, "GET");
-      state.config = config;
-      const budget = config.budget || {};
-      const remaining = Number(budget.remaining ?? 40);
-      const limit = Number(budget.limit ?? 40);
-      byId("budget-remaining").textContent = String(remaining);
-      byId("budget-limit").textContent = String(limit);
-      byId("budget-progress").style.width = `${limit > 0 ? Math.min(100, Math.max(0, remaining / limit * 100)) : 0}%`;
-      byId("connection-status").textContent = "服务已连接";
-      byId("connection-status").classList.remove("offline");
-      byId("runtime-status").textContent = `${config.model || "DeepSeek"} · ${config.live_enabled ? "真实调用已配置" : "离线模拟可用"} · ${config.vector_ready ? "向量索引就绪" : "向量索引未就绪"}`;
-      byId("vector-hint").textContent = config.vector_ready ? "向量索引已就绪；可切换检索方式，对比召回的 Top 5。" : "关键词检索可直接使用；请先在终端建立向量索引，再体验向量检索。";
-      const liveControl = byId("live-mode");
-      liveControl.disabled = !config.live_enabled || remaining <= 0;
-      if (liveControl.disabled) liveControl.checked = false;
-      liveControl.title = !config.live_enabled ? "服务端未开启真实调用或未配置密钥" : remaining <= 0 ? "真实请求预算已用完" : "发送问题和召回片段至 DeepSeek";
-      updateModelHint();
-    } catch (error) {
-      byId("connection-status").textContent = "服务未连接";
-      byId("connection-status").classList.add("offline");
-      byId("runtime-status").textContent = "请先启动本地 DocFlow 服务";
-      if (showError) message(error.message, "error");
-    }
-  }
-
-  function renderFlow(ticket, hasEvidence) {
-    const nodes = ["flow-retrieve", "flow-draft", "flow-review", "flow-submit"].map(byId);
-    let active = 0;
-    if (ticket?.draft) active = 2;
-    if (ticket?.status === "approved" || ticket?.status === "submission_failed") active = 3;
-    if (ticket?.status === "submitted") active = 4;
-    if (!ticket && hasEvidence) active = 1;
-    nodes.forEach((node, index) => {
-      node.classList.toggle("done", index < active);
-      node.classList.toggle("current", index === Math.min(active, 3));
-      node.querySelector("span").textContent = index < active ? "✓" : String(index + 1);
-    });
-  }
-
-  function focusEvidence(chunkId) {
-    const evidence = Array.from(byId("evidence-list").children).find((node) => node.dataset.chunkId === chunkId);
-    if (!evidence) return;
-    document.querySelectorAll(".evidence-item.highlight").forEach((node) => node.classList.remove("highlight"));
-    evidence.open = true;
-    evidence.classList.add("highlight");
-    evidence.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest" });
-    evidence.querySelector("summary").focus({ preventScroll: true });
-  }
-
-  function renderEvidence(results, method) {
-    state.evidence = Array.isArray(results) ? results : [];
-    byId("evidence-panel").hidden = false;
-    byId("evidence-count").textContent = String(state.evidence.length);
-    byId("evidence-method").textContent = methods[method] || text(method);
-    const list = byId("evidence-list");
-    list.replaceChildren();
-    if (!state.evidence.length) {
-      list.append(element("p", "evidence-empty", "没有召回可用片段。可补充错误码、接口路径或具体操作后重试。"));
-      return;
-    }
-    state.evidence.forEach((item, index) => {
-      const details = element("details", "evidence-item");
-      details.dataset.chunkId = item.chunk_id;
-      const summary = element("summary");
-      summary.append(element("span", "evidence-rank", String(index + 1).padStart(2, "0")));
-      const heading = element("div", "evidence-summary");
-      heading.append(element("h3", "", item.title || item.document_id), element("p", "", item.section || "正文"));
-      summary.append(heading);
-      if (typeof item.score === "number") summary.append(element("span", "evidence-score", `score ${item.score.toFixed(3)}`));
-      summary.append(element("span", "evidence-chevron", "⌄"));
-      const body = element("div", "evidence-body");
-      body.append(element("pre", "", item.text), element("p", "evidence-source", `来源：${text(item.source)} · 版本：${text(item.version)}\n片段：${text(item.chunk_id)}`));
-      details.append(summary, body);
-      if (index === 0) details.open = true;
-      list.append(details);
-    });
-  }
-
-  function renderEvents(events) {
-    const list = byId("event-list");
-    list.replaceChildren();
-    byId("events-panel").hidden = false;
-    if (!Array.isArray(events) || !events.length) {
-      list.append(element("li", "", "暂无处理记录。"));
-      return;
-    }
-    events.forEach((event) => {
-      const item = element("li");
-      const date = new Date(event.created_at);
-      const validDate = !Number.isNaN(date.getTime());
-      const time = element("time", "", validDate ? date.toLocaleString("zh-CN", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }) : text(event.created_at));
-      if (validDate) time.dateTime = date.toISOString();
-      const detail = element("div");
-      detail.append(element("h3", "", eventLabels[event.kind] || event.kind), element("p", "", event.detail));
-      item.append(time, detail);
-      list.append(item);
-    });
-  }
-
-  function renderTicket(ticket, { scroll = false } = {}) {
-    state.ticket = ticket;
-    byId("empty-state").hidden = true;
-    byId("ticket-panel").hidden = false;
-    byId("ticket-id").textContent = text(ticket.id);
-    byId("ticket-id-input").value = text(ticket.id);
-    byId("ticket-question").textContent = text(ticket.question);
-    byId("question").value = text(ticket.question);
-    byId("draft-version").textContent = `v${ticket.version ?? 0}`;
-    byId("ticket-status").textContent = statusLabels[ticket.status] || ticket.status;
-    byId("ticket-status").className = `status-tag${ticket.status === "submitted" || ticket.status === "approved" ? " success" : ["submission_failed", "generation_failed", "rejected"].includes(ticket.status) ? " error" : ""}`;
-    byId("ticket-mode").textContent = ticket.mode === "live" ? "真实模型 · DeepSeek" : "离线模拟 · 非真实模型结果";
-    byId("ticket-mode").classList.toggle("live", ticket.mode === "live");
-    byId("ticket-method").textContent = methods[ticket.method] || ticket.method;
-    byId("ticket-error").textContent = text(ticket.error);
-    byId("ticket-error").hidden = !ticket.error;
-    const draft = ticket.draft || {};
-    byId("draft-decision").textContent = { answer: "基于证据的回复建议", needs_info: "需要补充信息", out_of_scope: "知识库未覆盖" }[draft.decision] || "等待生成草稿";
-    byId("mock-note").textContent = ticket.mode === "live" ? "请人工检查事实与引用" : "模拟模型仅验证工程流程";
-    byId("draft-answer").textContent = text(draft.answer || "当前没有可审核的草稿，请查看失败记录并重试。");
-    const citations = byId("draft-citations");
-    citations.replaceChildren();
-    (draft.citations || []).forEach((citation, index) => {
-      const chunkId = typeof citation === "string" ? citation : citation.chunk_id;
-      const evidence = (ticket.evidence || []).find((item) => item.chunk_id === chunkId);
-      const button = element("button", "citation-button", `[${index + 1}] ${evidence ? `${evidence.title} · ${evidence.section}` : text(chunkId)}`);
-      button.type = "button";
-      button.title = evidence ? `查看原文片段 ${chunkId}` : `未找到此引用片段：${chunkId}`;
-      button.disabled = !evidence;
-      button.addEventListener("click", () => focusEvidence(chunkId));
-      citations.append(button);
-    });
-    const approval = ticket.approval;
-    byId("approval-description").textContent = approval?.approved && Number(approval.version) === Number(ticket.version)
-      ? `v${ticket.version} 已通过人工审核。`
-      : approval && !approval.approved ? "当前草稿已驳回。可以修改问题并生成新版本，再重新审核。" : "核对引用和建议后，再批准当前版本。";
-    const reply = ticket.reply;
-    byId("reply-panel").hidden = !reply;
-    if (reply) {
-      byId("reply-id").textContent = `回复编号：${text(reply.id)} · 草稿 v${reply.version}`;
-      byId("reply-body").textContent = text(reply.body);
-      byId("reply-note").textContent = ticket.status === "submitted" ? "工作流已确认提交完成。重复操作不会新增相同回复。" : "本地系统已有回复。请点击“重试失败步骤”确认结果，幂等提交不会重复写入。";
-    }
-    renderEvidence(ticket.evidence || [], ticket.method);
-    renderEvents(ticket.events);
-    renderFlow(ticket, true);
-    applyPermissions();
-    try {
-      localStorage.setItem("docflow.lastTicket", text(ticket.id));
-    } catch (_) { /* A blocked browser store does not affect the server workflow. */ }
-    if (scroll) byId("ticket-panel").scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-  function applyPermissions() {
-    if (state.busy) return;
-    const ticket = state.ticket;
-    const reviewed = ticket?.approval?.approved && Number(ticket.approval.version) === Number(ticket.version);
-    const reviewable = Boolean(ticket?.draft && ticket.status === "awaiting_review" && !ticket.approval);
-    byId("approve-button").disabled = !reviewable || Boolean(reviewed);
-    byId("reject-button").disabled = !reviewable || ticket?.status === "rejected";
-    byId("submit-button").disabled = !(ticket && reviewed && ticket.status === "approved");
-    byId("retry-button").hidden = !ticket || !["submission_failed", "generation_failed"].includes(ticket.status);
-    byId("retry-button").disabled = byId("retry-button").hidden;
-    byId("regenerate-button").disabled = !ticket || ticket.status === "submitted" || Boolean(ticket.reply);
-    byId("regenerate-button").title = ticket?.reply ? "本地系统已保存回复；提交中断时请重试确认，不再生成新版本。" : "生成新版本后，需要重新审核。";
-    byId("refresh-button").disabled = !ticket;
-    byId("copy-id-button").disabled = !ticket;
-    byId("simulate-timeout").disabled = !ticket || ticket.status === "submitted";
-    document.querySelectorAll(".citation-button").forEach((button) => { button.disabled = button.title.startsWith("未找到"); });
-  }
-
-  async function refreshTicket() {
-    if (!state.ticket) return;
-    renderTicket(await api(`/api/tickets/${encodeURIComponent(state.ticket.id)}`, null, "GET"));
-  }
-
-  async function mutateTicket(action, body) {
-    const id = state.ticket.id;
-    try {
-      const ticket = await api(`/api/tickets/${encodeURIComponent(id)}/${action}`, body);
-      renderTicket(ticket);
-      return ticket;
-    } catch (error) {
-      // A timed-out response can follow a successful local write. Always re-read.
-      try { await refreshTicket(); } catch (_) { /* Keep the original operation error. */ }
-      throw error;
-    }
-  }
-
-  byId("question-form").addEventListener("submit", (event) => {
-    event.preventDefault();
-    if (!byId("question-form").reportValidity()) return;
-    operation(byId("create-button"), async () => {
-      const input = selection();
-      if (!input.question) throw new Error("请先输入一个具体问题。");
-      const ticket = await api("/api/tickets", input);
-      renderTicket(ticket, { scroll: window.innerWidth < 801 });
-      if (ticket.status === "generation_failed") {
-        message("工单已保存，但草稿生成失败。请查看错误记录，修复后点击“重试失败步骤”。", "error");
-      } else {
-        message(input.live ? "真实模型草稿已生成。请核查证据，再审核当前版本。" : "离线模拟草稿已生成；它用于验证检索、审核和恢复流程，不代表真实模型效果。", "info");
-      }
-    });
-  });
-
-  byId("search-button").addEventListener("click", () => operation(byId("search-button"), async () => {
-    const input = selection();
-    if (!input.question) { byId("question").focus(); throw new Error("请先输入要检索的问题。"); }
-    const result = await api("/api/search", { query: input.question, method: input.method });
-    // Standalone search must not visually replace evidence bound to an existing draft.
-    state.ticket = null;
-    byId("ticket-panel").hidden = true;
-    byId("events-panel").hidden = true;
-    byId("empty-state").hidden = true;
-    renderEvidence(result.results || [], input.method);
-    renderFlow(null, true);
-    message("仅展示本次检索结果，尚未创建工单。生成草稿后，会保存与该版本绑定的引用证据。", "info");
-  }));
-
-  byId("load-form").addEventListener("submit", (event) => {
-    event.preventDefault();
-    operation(byId("load-button"), async () => {
-      const id = byId("ticket-id-input").value.trim();
-      if (!id) throw new Error("请输入工单编号。");
-      renderTicket(await api(`/api/tickets/${encodeURIComponent(id)}`, null, "GET"), { scroll: window.innerWidth < 801 });
-      message("已载入服务端保存的工单状态。", "info");
-    });
-  });
-
-  byId("approve-button").addEventListener("click", () => operation(byId("approve-button"), async () => {
-    await mutateTicket("review", { version: state.ticket.version, approved: true });
-    message("当前版本已批准。请单独点击“提交到本地工单”完成提交。", "info");
-  }));
-  byId("reject-button").addEventListener("click", () => operation(byId("reject-button"), async () => {
-    await mutateTicket("review", { version: state.ticket.version, approved: false });
-    message("草稿已驳回，可以修改问题并生成新版本。新版本需要重新审核。", "info");
-  }));
-  byId("submit-button").addEventListener("click", () => operation(byId("submit-button"), async () => {
-    await mutateTicket("submit", { version: state.ticket.version, simulate_timeout: byId("simulate-timeout").checked });
-    message("已提交到本地模拟工单系统。", "info");
-  }));
-  byId("retry-button").addEventListener("click", () => operation(byId("retry-button"), async () => {
-    const ticket = await mutateTicket("retry", {});
-    message(["generation_failed", "submission_failed"].includes(ticket.status) ? "重试仍未完成，请查看错误记录后处理。" : "已重试失败步骤，请查看工单当前状态与处理记录。", ["generation_failed", "submission_failed"].includes(ticket.status) ? "error" : "info");
-  }));
-  byId("regenerate-button").addEventListener("click", () => operation(byId("regenerate-button"), async () => {
-    const input = selection();
-    if (!input.question) throw new Error("请先输入问题，再生成新版本。");
-    const ticket = await mutateTicket("draft", input);
-    message(ticket.status === "generation_failed" ? "新版本已创建，但生成失败。请查看错误记录并重试。" : "新草稿已保存。旧版本的审批不能用于当前版本，请重新审核。", ticket.status === "generation_failed" ? "error" : "info");
-  }));
-  byId("refresh-button").addEventListener("click", () => operation(byId("refresh-button"), refreshTicket));
-  byId("copy-id-button").addEventListener("click", async () => {
-    if (!state.ticket) return;
-    try {
-      await navigator.clipboard.writeText(state.ticket.id);
-      message("工单编号已复制。", "info");
-    } catch (_) {
-      byId("ticket-id-input").focus();
-      byId("ticket-id-input").select();
-      message("浏览器未开放剪贴板，已选中下方工单编号，可按 Ctrl+C 复制。", "info");
-    }
-  });
-  document.querySelectorAll("[data-example]").forEach((button) => button.addEventListener("click", () => {
-    byId("question").value = button.dataset.example;
-    byId("question").focus();
-  }));
-  byId("live-mode").addEventListener("change", updateModelHint);
-  try {
-    const saved = localStorage.getItem("docflow.lastTicket");
-    if (saved) byId("ticket-id-input").value = saved;
-  } catch (_) { /* Server persistence remains available without localStorage. */ }
-  applyPermissions();
-  loadConfig();
+  async function refreshTicket(){if(state.ticket)renderTicket(await api(`/api/tickets/${encodeURIComponent(state.ticket.id)}`,null,"GET"));}
+  async function mutate(action,body){try{const ticket=await api(`/api/tickets/${encodeURIComponent(state.ticket.id)}/${action}`,body);renderTicket(ticket);return ticket;}catch(error){try{await refreshTicket();}catch(_){/* Keep original error after uncertain write. */}throw error;}}
+  function renderJob(job){state.job=job;byId("job-panel").hidden=false;const active=["queued","running"].includes(job.status);byId("job-panel").classList.toggle("job-active",active);byId("job-panel").classList.toggle("job-completed",job.status==="completed");byId("job-title").textContent=active?"正在检索并生成草稿":job.status==="completed"?"后台任务已完成":"后台任务需要处理";byId("job-status").textContent=labels[job.status]||job.status;byId("job-detail").textContent=job.error?text(job.error):active?"状态保存在服务端，刷新页面后可以继续查看。":"completed"===job.status?"草稿已保存。请核对证据并审核当前版本。":"不会自动再次调用模型。检查失败原因后，可显式重试。";byId("job-id").textContent=`任务 ${text(job.id)}`;byId("job-retry-button").hidden=!["failed","interrupted","stale"].includes(job.status);if(active)store.set("docflow.lastJob",text(job.id));else store.remove("docflow.lastJob");}
+  async function pollJob(job){const token=++state.pollToken,started=Date.now();let current=job;renderJob(current);while(!terminal.includes(current.status)&&token===state.pollToken){if(Date.now()-started>180000){byId("job-detail").textContent="任务仍未结束。编号已保存；稍后刷新继续查看，不会自动重新生成。";return;}await new Promise(resolve=>setTimeout(resolve,1100));current=await api(`/api/jobs/${encodeURIComponent(job.id)}`,null,"GET");renderJob(current);}if(token!==state.pollToken)return;if(current.ticket_id)renderTicket(await api(`/api/tickets/${encodeURIComponent(current.ticket_id)}`,null,"GET"),{scroll:window.innerWidth<801});if(current.status!=="completed")message(`任务${labels[current.status]||current.status}。请查看错误信息后再决定是否重试。`,"error");}
+  function on(id,event,fn){byId(id).addEventListener(event,fn);}
+  on("question-form","submit",e=>{e.preventDefault();if(!e.currentTarget.reportValidity())return;operation(byId("create-button"),async()=>{const input=selection();if(!input.question)throw new Error("请先输入一个具体问题。");view("workbench");let job;try{job=await api("/api/jobs",input);}catch(error){if(![404,405].includes(error.status))throw error;renderTicket(await api("/api/tickets",input));return;}await pollJob(job);if(state.job?.status==="completed")message(input.live?"真实模型草稿已生成。请核查证据后审核。":"离线模拟草稿已生成，用于验证流程，不代表真实模型效果。");});});
+  on("search-button","click",()=>operation(byId("search-button"),async()=>{const input=selection();if(!input.question)throw new Error("请先输入要检索的问题。");const result=await api("/api/search",{query:input.question,method:input.method});state.ticket=null;["ticket-panel","events-panel","empty-state","conversation-panel","versions-panel","trace-panel"].forEach(id=>{byId(id).hidden=true;});evidence(result.results||[],input.method);flow(null,true);message("这是独立检索，没有创建工单，也没有替换任何已保存草稿的证据。");}));
+  on("load-form","submit",e=>{e.preventDefault();operation(byId("load-button"),async()=>{const id=byId("ticket-id-input").value.trim();if(!id)throw new Error("请输入工单编号。");renderTicket(await api(`/api/tickets/${encodeURIComponent(id)}`,null,"GET"),{scroll:window.innerWidth<801});message("已载入服务端保存的工单状态。");});});
+  on("approve-button","click",()=>operation(byId("approve-button"),async()=>{await mutate("review",{version:state.ticket.version,approved:true});message("当前版本已批准。请单独点击“提交到本地工单”完成提交。");}));
+  on("reject-button","click",()=>operation(byId("reject-button"),async()=>{await mutate("review",{version:state.ticket.version,approved:false});message("草稿已驳回。修改后生成的新版本需要重新审核。");}));
+  on("submit-button","click",()=>operation(byId("submit-button"),async()=>{await mutate("submit",{version:state.ticket.version,simulate_timeout:byId("simulate-timeout").checked});message("已提交到本地模拟工单系统。");}));
+  on("retry-button","click",()=>operation(byId("retry-button"),async()=>{const t=await mutate("retry",{});message(["generation_failed","submission_failed"].includes(t.status)?"重试仍未完成，请检查错误记录。":"已重试失败步骤，请查看当前状态。");}));
+  on("regenerate-button","click",()=>operation(byId("regenerate-button"),async()=>{const input=selection();if(!input.question)throw new Error("请先输入问题。");const t=await mutate("draft",input);message(t.status==="generation_failed"?"新版本已创建，但生成失败。":"新草稿已保存。旧版本审批不能用于当前版本，请重新审核。");}));
+  on("edit-toggle-button","click",()=>{byId("edit-form").hidden=false;byId("edit-answer").value=state.ticket?.draft?.answer||"";byId("edit-answer").focus();});on("edit-cancel-button","click",()=>{byId("edit-form").hidden=true;});
+  on("edit-form","submit",e=>{e.preventDefault();if(!e.currentTarget.reportValidity())return;operation(byId("edit-save-button"),async()=>{await mutate("edit",{version:state.ticket.version,answer:byId("edit-answer").value.trim()});message("人工修改已保存为新版本。之前审批已失效，请重新核查并审核。");});});
+  on("followup-form","submit",e=>{e.preventDefault();if(!e.currentTarget.reportValidity())return;operation(byId("followup-button"),async()=>{const input=selection();await mutate("followups",{message:byId("followup-message").value.trim(),method:input.method,live:input.live,strategy:input.strategy});byId("followup-message").value="";message("补充信息已保存，并创建新的草稿版本。请重新审核。");});});
+  on("job-retry-button","click",()=>operation(byId("job-retry-button"),async()=>pollJob(await api(`/api/jobs/${encodeURIComponent(state.job.id)}/retry`,{}))));
+  on("refresh-button","click",()=>operation(byId("refresh-button"),refreshTicket));on("refresh-list-button","click",()=>operation(byId("refresh-list-button"),()=>loadTickets()));on("filter-form","submit",e=>{e.preventDefault();operation(e.submitter,()=>loadTickets());});on("status-filter","change",()=>operation(null,()=>loadTickets()));
+  on("copy-id-button","click",async()=>{if(!state.ticket)return;try{await navigator.clipboard.writeText(state.ticket.id);message("工单编号已复制。");}catch(_){byId("ticket-id-input").focus();byId("ticket-id-input").select();message("已选中工单编号，可按 Ctrl+C 复制。");}});
+  on("compare-form","submit",e=>{e.preventDefault();if(!e.currentTarget.reportValidity())return;operation(byId("compare-button"),async()=>{const data=await api("/api/search/compare",{query:byId("compare-query").value.trim()}),grid=byId("compare-results");grid.replaceChildren();["keyword","vector","hybrid"].forEach(method=>{const panel=el("section","panel comparison-column");panel.append(el("h3","",methods[method]),el("p","field-help",{keyword:"词项匹配 · BM25 分数",vector:"语义近邻 · 向量相似度",hybrid:"融合排序 · RRF 分数"}[method]));if(data.errors?.[method])panel.append(el("p","comparison-error",data.errors[method]));else{const results=data.results?.[method]||[];if(!results.length)panel.append(el("p","muted","没有召回结果。"));results.forEach((item,i)=>panel.append(evidenceCard(item,i)));}grid.append(panel);});message("检索对比已完成，没有调用模型。请按命中章节和原文判断相关性。");});});
+  async function loadKnowledge(){try{const data=await api("/api/knowledge",null,"GET");byId("knowledge-summary").textContent=`${data.documents?.length||0} 篇文档 · ${data.chunks||0} 个片段`;const list=byId("knowledge-list");list.replaceChildren();(data.documents||[]).forEach((doc,i)=>{const card=el("article","panel knowledge-card"),top=el("div","knowledge-top"),footer=el("div","knowledge-footer");top.append(el("span","knowledge-index",String(i+1).padStart(2,"0")),el("span","mode-tag",doc.version));footer.append(el("span","",`${doc.sections} 个章节 · ${doc.chunks} 个片段`),el("code","",doc.document_id));card.append(top,el("h3","",doc.title),el("p","knowledge-source",doc.source),footer);list.append(card);});}catch(error){byId("knowledge-summary").textContent="暂时无法读取";byId("knowledge-list").replaceChildren(el("p","muted",error.message));}}
+  document.querySelectorAll("[data-view]").forEach(button=>button.addEventListener("click",()=>view(button.dataset.view)));document.querySelectorAll("[data-example]").forEach(button=>button.addEventListener("click",()=>{byId("question").value=button.dataset.example;byId("question").focus();}));on("live-mode","change",modelHint);
+  const saved=store.get("docflow.lastTicket");if(saved)byId("ticket-id-input").value=saved;permissions();Promise.allSettled([loadConfig(),loadTickets(false)]).then(async()=>{const id=store.get("docflow.lastJob");if(id)await operation(null,async()=>{try{await pollJob(await api(`/api/jobs/${encodeURIComponent(id)}`,null,"GET"));}catch(error){if(error.status===404)store.remove("docflow.lastJob");else throw error;}});});
 })();

@@ -7,9 +7,17 @@
 <table><thead><tr><th>方法</th><th>路径</th><th>请求 / 用途</th></tr></thead><tbody>
 <tr><td>GET</td><td><code>/api/config</code></td><td>当前模型、预算、索引可用性</td></tr>
 <tr><td>POST</td><td><code>/api/search</code></td><td><code>{"query":"设备返回403怎么排查？","method":"keyword"}</code></td></tr>
+<tr><td>POST</td><td><code>/api/search/compare</code></td><td><code>{"query":"设备返回403怎么排查？"}</code>；三路检索，失败分开报告，0次模型请求</td></tr>
+<tr><td>GET</td><td><code>/api/knowledge</code></td><td>文档目录、来源、版本及章节数量</td></tr>
+<tr><td>GET</td><td><code>/api/tickets?status=awaiting_review&amp;q=403&amp;limit=50</code></td><td>工单队列与筛选</td></tr>
+<tr><td>POST</td><td><code>/api/jobs</code></td><td><code>{"question":"key-a访问device-b为什么403？","method":"keyword","strategy":"agent","live":false}</code>；返回202和任务编号</td></tr>
+<tr><td>GET</td><td><code>/api/jobs/{id}</code></td><td>排队、运行、完成、失败或中断状态</td></tr>
+<tr><td>POST</td><td><code>/api/jobs/{id}/retry</code></td><td><code>{}</code>；明确重试当前版本失败或中断任务</td></tr>
 <tr><td>POST</td><td><code>/api/tickets</code></td><td><code>{"question":"设备返回403怎么排查？","method":"keyword","live":false}</code></td></tr>
 <tr><td>GET</td><td><code>/api/tickets/{id}</code></td><td>读取工单、草稿、引用、审批、回复与事件</td></tr>
 <tr><td>POST</td><td><code>/api/tickets/{id}/draft</code></td><td><code>{"method":"keyword","live":false}</code>；新版本清除旧审批</td></tr>
+<tr><td>POST</td><td><code>/api/tickets/{id}/followups</code></td><td><code>{"message":"补充：reason为device_forbidden","strategy":"agent","live":false}</code>；保存对话并生成新版本</td></tr>
+<tr><td>POST</td><td><code>/api/tickets/{id}/edit</code></td><td><code>{"version":1,"answer":"人工核对后的回复"}</code>；无模型调用，新版本需重新审核</td></tr>
 <tr><td>POST</td><td><code>/api/tickets/{id}/review</code></td><td><code>{"version":1,"approved":true}</code>；仅批准该版本，不提交</td></tr>
 <tr><td>POST</td><td><code>/api/tickets/{id}/submit</code></td><td><code>{"version":1,"simulate_timeout":false}</code>；写入本地模拟回复</td></tr>
 <tr><td>POST</td><td><code>/api/tickets/{id}/retry</code></td><td><code>{}</code>；从失败步骤恢复</td></tr>
