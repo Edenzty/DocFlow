@@ -1,0 +1,30 @@
+name: Offline verification
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      DEEPSEEK_API_KEY: ""
+      HF_HUB_OFFLINE: "1"
+      TRANSFORMERS_OFFLINE: "1"
+      ANONYMIZED_TELEMETRY: "False"
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: python -m pip install -e ".[dev]" chromadb==1.5.9
+      - run: python -m pip check
+      - run: python -m docflow_lab --help
+      - run: python -m pytest -q
+      - run: python -m docflow_lab demo --output reports/ci-demo
+      - run: python -m docflow_lab evaluate --suite all --method keyword --output reports/ci-evaluation

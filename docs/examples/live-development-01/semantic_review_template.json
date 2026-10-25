@@ -1,0 +1,82 @@
+[
+  {
+    "id": "dev-01",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "dev-02",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "dev-03",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "dev-04",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "dev-05",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "dev-06",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "dev-07",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "dev-08",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "dev-09",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "dev-10",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  }
+]

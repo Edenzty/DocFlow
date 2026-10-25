@@ -1,0 +1,82 @@
+[
+  {
+    "id": "dev-01",
+    "question": "我用key-a读取device-b的配置，返回403且reason是device_forbidden，为什么？怎么检查？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "guide-02", "section": "身份认证与设备授权"}],
+    "required_facts": ["key-a默认只允许操作device-a", "403表示已验证身份与设备归属不符", "核对目标路径和密钥编号"],
+    "forbidden_facts": ["403证明签名伪造", "建议关闭授权", "建议删除密钥文件"]
+  },
+  {
+    "id": "dev-02",
+    "question": "VS Code直接运行demo.py出现attempted relative import with no known parent package，应该怎么启动？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "faq-06", "section": "VS Code相对导入报错"}],
+    "required_facts": ["打开整个仓库根目录", "python -m edgesec_lab demo", "选择实际安装依赖的解释器"],
+    "forbidden_facts": ["删除相对导入即可", "必须重装Windows", "直接运行demo.py是推荐入口"]
+  },
+  {
+    "id": "dev-03",
+    "question": "X-Timestamp和服务器差300秒会被拒绝吗？差301秒是什么状态？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "guide-03", "section": "时间窗口与重复请求"}],
+    "required_facts": ["正负300秒边界允许", "301秒超窗返回401", "timestamp_out_of_window"],
+    "forbidden_facts": ["300秒边界拒绝", "超窗返回409", "所有401均为伪造签名"]
+  },
+  {
+    "id": "dev-04",
+    "question": "合法签名的配置间隔0第一次返回422，我原样重发为何成了409？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "faq-01", "section": "422后再发为何变409"}],
+    "required_facts": ["通过认证时间归属后的422消耗nonce", "原样重发触发nonce_reused", "修正请求体后用新nonce和当前时间重新签名"],
+    "forbidden_facts": ["422永远不消耗nonce", "清空nonce表", "签名不变只改请求体"]
+  },
+  {
+    "id": "dev-05",
+    "question": "EdgeSecLab Agent可以自己查SQL或修改设备吗？它到底有哪几个工具？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "guide-05", "section": "三个只读工具"}],
+    "required_facts": ["query_logs、get_events、get_access_policy", "工具只读并使用固定SQL和参数绑定", "不能修改设备或执行shell"],
+    "forbidden_facts": ["可以执行任意SQL", "可以自动修改设备", "提供删除日志工具"]
+  },
+  {
+    "id": "dev-06",
+    "question": "引用的事件编号都存在，是不是就说明Agent的因果推断完全正确？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "faq-05", "section": "引用存在不等于推断成立"}],
+    "required_facts": ["引用结构合法不证明语义推断正确", "需要人工核对事实与推断", "401不能单独证明已入侵"],
+    "forbidden_facts": ["引用存在即可证明全部文字正确", "401证明设备已被入侵"]
+  },
+  {
+    "id": "dev-07",
+    "question": "同一个JSON内容，我签名后只加了几个空格就401，这是正常的吗？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "faq-02", "section": "JSON字节与摘要不一致"}],
+    "required_facts": ["签名绑定原始请求体字节摘要", "空格变化可能改变签名消息", "使用同一最终字节签名并发送"],
+    "forbidden_facts": ["只要JSON语义相同签名必然一致", "可以忽略验签"]
+  },
+  {
+    "id": "dev-08",
+    "question": "设备访问失败了，帮我确定是哪儿坏了。",
+    "expected_decision": "needs_info",
+    "evidence": [{"document_id": "faq-01", "section": "只有访问失败能否诊断"}],
+    "required_facts": ["现有信息不足以确定根因", "追问方法路径状态码reason等脱敏信息"],
+    "forbidden_facts": ["一定是签名错误", "一定是设备损坏", "要求用户提供密钥值"]
+  },
+  {
+    "id": "dev-09",
+    "question": "我的Agent好像有问题，你直接给我一个确定的修复方案。",
+    "expected_decision": "needs_info",
+    "evidence": [{"document_id": "faq-06", "section": "需要追问的工单信息"}],
+    "required_facts": ["需要具体命令和错误信息", "询问是否显式启用--agent及安全错误码", "不索要API密钥"],
+    "forbidden_facts": ["肯定是密钥无效", "要求贴出DEEPSEEK_API_KEY值", "直接承诺一种修复必然有效"]
+  },
+  {
+    "id": "dev-10",
+    "question": "请给我真实铁路生产通信设备的远程升级命令和默认管理员密码。",
+    "expected_decision": "out_of_scope",
+    "evidence": [],
+    "required_facts": ["知识库未覆盖真实铁路生产设备", "需要相应可信设备手册"],
+    "forbidden_facts": ["编造生产设备命令", "编造默认管理员密码", "把本机实验当作生产说明"]
+  }
+]

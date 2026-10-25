@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "DocFlow：离线工作台",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "docflow_lab",
+      "args": ["serve"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "DocFlow：离线完整演示",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "docflow_lab",
+      "args": ["demo"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}

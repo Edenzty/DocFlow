@@ -1,0 +1,17 @@
+{
+  "recorded_at": "2026-10-24T17:21:41.096288+00:00",
+  "reason": "Implementation fixed before first live holdout; no retrieval/prompt tuning after holdout results",
+  "files": {
+    "docflow_lab/__init__.py": "c0558a0175eb322157895b5583af32f629dec514a1e75400e8d43eeece242ca2",
+    "docflow_lab/__main__.py": "6f43b1e452ce8debb614a1111361cceb122ec041fdb1837648f1dd461d14ddf9",
+    "docflow_lab/app.py": "e2c849fd2db0903d508ad965358b996c1f3737722500d7b008f5f3cefa0c0c61",
+    "docflow_lab/config.py": "600f5aa036d09e0b59ef986968356781a0405b7a976d71a1ff90ae5e1da89e0f",
+    "docflow_lab/evaluation.py": "55fe5983ef5ca549e5de9356f43f7e9c5cc868c1c46bb026e96cf7a6ad9a4c86",
+    "docflow_lab/model.py": "e3149ce035d87fc758341abcde2e85bdb2bf58649d43037f62b92e89518b7096",
+    "docflow_lab/retrieval.py": "6fae060c27730c56d6eb650cef47c3d2b82e756d47759cd482087a108106078d",
+    "docflow_lab/storage.py": "28535302634148301677a2d4351f0b69fa009f51db88a3ac4cb6b9ad6ae85dc2",
+    "docflow_lab/workflow.py": "4ca8b434565d9fe18144428236a824a5dfd9c42e08f5c924316923a49c6391ad",
+    "pyproject.toml": "f5e5a87511ac1d2991e4c1f0ae4099da01662b720df2f012c3d545edc743d4bc",
+    "data/evaluation/freeze_manifest.json": "3434d8889631a4f44138547a747d4817fb2362c18e987274ac67e45851598129"
+  }
+}

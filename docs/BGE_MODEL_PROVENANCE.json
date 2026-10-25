@@ -1,0 +1,85 @@
+{
+  "model": "BAAI/bge-small-zh-v1.5",
+  "revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "metadata_source": "https://huggingface.co/api/models/BAAI/bge-small-zh-v1.5/tree/7999e1d3359715c523056ef9478215996d62a620?recursive=true",
+  "checked_at": "2026-10-24T17:08:48.372806+00:00",
+  "files": [
+    {
+      "path": "1_Pooling/config.json",
+      "bytes": 190,
+      "sha256": "aaa8861589f80c961a03cc86c7eeaef7605c1676b9ab55329d33a304738769c6",
+      "git_oid": "e25f4f3261cf0c6156611f5b5fdba0825859f4f3",
+      "source": "https://huggingface.co/BAAI/bge-small-zh-v1.5/resolve/7999e1d3359715c523056ef9478215996d62a620/1_Pooling/config.json"
+    },
+    {
+      "path": "README.md",
+      "bytes": 27670,
+      "sha256": "c48a4eeea77f6b1d38b48ec1c5b8d4f86d5550cc43fa345a0db1b2ca1d082369",
+      "git_oid": "20e39cd51a31d3afb1d003a9a4239f527530b1c0",
+      "source": "https://huggingface.co/BAAI/bge-small-zh-v1.5/resolve/7999e1d3359715c523056ef9478215996d62a620/README.md"
+    },
+    {
+      "path": "config.json",
+      "bytes": 776,
+      "sha256": "3853a7979202c348751b753e36f579c41d8da7d36af617d3d907e1fc9b441f2a",
+      "git_oid": "f79ec8dfc5812a1d5d7d2e69253eb9054be2246d",
+      "source": "https://huggingface.co/BAAI/bge-small-zh-v1.5/resolve/7999e1d3359715c523056ef9478215996d62a620/config.json"
+    },
+    {
+      "path": "config_sentence_transformers.json",
+      "bytes": 124,
+      "sha256": "940d5f50db195fa6e5e6a4f122c095f77880de259d74b14a65779ed48bdd7c56",
+      "git_oid": "dcb0c0d97d09b930d13600b1a773ddb27e441aab",
+      "source": "https://huggingface.co/BAAI/bge-small-zh-v1.5/resolve/7999e1d3359715c523056ef9478215996d62a620/config_sentence_transformers.json"
+    },
+    {
+      "path": "model.safetensors",
+      "bytes": 95827648,
+      "sha256": "354763b9b1357bc9c44f62c6be2276321081ed2567773608c0d0785b61d5a026",
+      "git_oid": "f0a3ffbd80eb817ece290d57976319a542d3ce00",
+      "source": "https://huggingface.co/BAAI/bge-small-zh-v1.5/resolve/7999e1d3359715c523056ef9478215996d62a620/model.safetensors"
+    },
+    {
+      "path": "modules.json",
+      "bytes": 349,
+      "sha256": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf",
+      "git_oid": "952a9b81c0bfd99800fabf352f69c7ccd46c5e43",
+      "source": "https://huggingface.co/BAAI/bge-small-zh-v1.5/resolve/7999e1d3359715c523056ef9478215996d62a620/modules.json"
+    },
+    {
+      "path": "sentence_bert_config.json",
+      "bytes": 52,
+      "sha256": "84e39fda68ccbff05bfa723ae9c0e70e23e2ec373b76e0f8c6e71af72a693cbf",
+      "git_oid": "ea85692bff64b0d1917833c31ddbca8ab10f5455",
+      "source": "https://huggingface.co/BAAI/bge-small-zh-v1.5/resolve/7999e1d3359715c523056ef9478215996d62a620/sentence_bert_config.json"
+    },
+    {
+      "path": "special_tokens_map.json",
+      "bytes": 125,
+      "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3",
+      "git_oid": "a8b3208c2884c4efb86e49300fdd3dc877220cdf",
+      "source": "https://huggingface.co/BAAI/bge-small-zh-v1.5/resolve/7999e1d3359715c523056ef9478215996d62a620/special_tokens_map.json"
+    },
+    {
+      "path": "tokenizer.json",
+      "bytes": 439125,
+      "sha256": "48cea5d44424912a6fd1ea647bf4fe50b55ab8b1e5879c3275f80e339e8fae26",
+      "git_oid": "cdb3043fc938fc918c06e66cf704c2ba58f88747",
+      "source": "https://huggingface.co/BAAI/bge-small-zh-v1.5/resolve/7999e1d3359715c523056ef9478215996d62a620/tokenizer.json"
+    },
+    {
+      "path": "tokenizer_config.json",
+      "bytes": 367,
+      "sha256": "e6f3b96db926a37d4039995fbf5ad17de158dfb8f6343d607e4dbaad18d75f5a",
+      "git_oid": "3a59388f0fd1bd22dec2ce7902c1be8e1fb84107",
+      "source": "https://huggingface.co/BAAI/bge-small-zh-v1.5/resolve/7999e1d3359715c523056ef9478215996d62a620/tokenizer_config.json"
+    },
+    {
+      "path": "vocab.txt",
+      "bytes": 109540,
+      "sha256": "45bbac6b341c319adc98a532532882e91a9cefc0329aa57bac9ae761c27b291c",
+      "git_oid": "ca4f9781030019ab9b253c6dcb8c7878b6dc87a5",
+      "source": "https://huggingface.co/BAAI/bge-small-zh-v1.5/resolve/7999e1d3359715c523056ef9478215996d62a620/vocab.txt"
+    }
+  ]
+}

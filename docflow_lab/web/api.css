@@ -1,0 +1,6 @@
+.api-page{max-width:1100px;margin:auto;padding:36px 24px 64px}
+.api-page h1{margin:20px 0}.api-page h2{margin-top:26px}
+.api-page p{margin:18px 0;line-height:1.9}.api-page table{width:100%;border-collapse:collapse;background:#fff}
+.api-page th,.api-page td{text-align:left;vertical-align:top;border:1px solid var(--line);padding:12px;overflow-wrap:anywhere}
+.api-page pre{padding:18px;background:var(--green-light);overflow:auto;border-radius:12px;white-space:pre}
+@media(max-width:600px){.api-page{padding:24px 12px}.api-page th,.api-page td{padding:7px;font-size:12px}.api-page h1{font-size:26px}}

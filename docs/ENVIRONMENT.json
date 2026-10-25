@@ -1,0 +1,21 @@
+{
+  "python": "3.11.3 (tags/v3.11.3:f3909b8, Apr  4 2023, 23:49:59) [MSC v.1934 64 bit (AMD64)]",
+  "platform": "Windows; CPU embeddings",
+  "packages": {
+    "fastapi": "0.137.1",
+    "pydantic": "2.13.4",
+    "uvicorn": "0.49.0",
+    "requests": "2.33.0",
+    "langgraph": "1.2.17",
+    "langgraph-checkpoint-sqlite": "3.1.2",
+    "langchain-core": "1.7.0",
+    "chromadb": "1.5.9",
+    "sentence-transformers": "5.7.0",
+    "transformers": "5.20.2",
+    "torch": "2.13.0+cu126",
+    "jieba": "0.42.1",
+    "pytest": "9.1.0",
+    "httpx": "0.28.1"
+  },
+  "installation_note": "Local virtualenv reuses existing system torch through system-site-packages; global packages were not changed. Fresh installations use a normal isolated venv."
+}

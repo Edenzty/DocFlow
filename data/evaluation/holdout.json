@@ -1,0 +1,162 @@
+[
+  {
+    "id": "test-01",
+    "question": "我没有配模型密钥，想离线看看安全演示，当前应该跑多少项，结束后去哪里找报告？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "guide-01", "section": "默认演示与版本标记"}, {"document_id": "guide-01", "section": "报告文件与临时服务"}],
+    "required_facts": ["默认demo不调用模型且无需密钥", "当前39次安全请求", "按report_path打开report.html"],
+    "forbidden_facts": ["必须先配置DeepSeek密钥", "当前完整演示仅17项", "声称运行了真实模型"]
+  },
+  {
+    "id": "test-02",
+    "question": "A先把自己的采样间隔设20，再签名发送字符串\"20\"或数字0，拒绝后A会回到默认60吗？B会改变吗？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "guide-02", "section": "配置输入校验"}],
+    "required_facts": ["采样间隔要求1到3600的严格整数", "字符串20和0不合法返回422", "A保持20且B不受影响"],
+    "forbidden_facts": ["非法请求会恢复默认60", "字符串20会自动转成合法整数", "拒绝后无需检查状态"]
+  },
+  {
+    "id": "test-03",
+    "question": "重启服务后旧请求还能被识别吗？为什么nonce和配置修改不能分开提交事务？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "guide-03", "section": "nonce登记与业务事务"}],
+    "required_facts": ["持久数据库使重启后仍识别旧nonce", "nonce业务和审计在同一事务", "失败一起回滚以避免竞态和部分更新"],
+    "forbidden_facts": ["nonce只保存在内存", "重启后旧nonce自动恢复可用", "日志失败仍必须保留业务更新"]
+  },
+  {
+    "id": "test-04",
+    "question": "两台设备各用自己的密钥恰好发了相同nonce字符串，第二台一定会被当作重放吗？request_id在这里有什么用？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "faq-03", "section": "两个设备相同nonce"}],
+    "required_facts": ["nonce唯一键包含key_id", "不同密钥的首次合法使用不冲突", "request_id关联每次访问而非防重放键"],
+    "forbidden_facts": ["全局只按nonce字符串去重", "不同密钥相同nonce证明攻击", "request_id是客户端nonce"]
+  },
+  {
+    "id": "test-05",
+    "question": "采集于2001年的测量今天补传，collected_at很旧就一定过期吗？签名时间该用哪个？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "faq-03", "section": "旧测量数据可以补传"}],
+    "required_facts": ["采集时间不同于签名时间", "历史测量可以用当前时间新nonce重新签名补传", "签名时间仍须符合正负300秒窗口"],
+    "forbidden_facts": ["所有旧测量都拒绝", "用2001年签名时间也可直接通过", "无需检查签名时间"]
+  },
+  {
+    "id": "test-06",
+    "question": "新增遥测的写请求网络超时了，我换个nonce再发就能保证恰好写入一次吧？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "faq-03", "section": "写请求超时后的处理边界"}],
+    "required_facts": ["超时不证明服务端未执行", "新nonce是新请求且可能重复新增", "防重放不等于业务幂等并需核对证据"],
+    "forbidden_facts": ["超时说明服务端一定没执行", "新nonce保证恰好一次", "自动清空nonce再重试"]
+  },
+  {
+    "id": "test-07",
+    "question": "环境变量里已经有DEEPSEEK_API_KEY了，为什么普通demo没有AI结果？显式启用后若missing_api_key会丢掉规则报告吗？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "faq-04", "section": "密钥已配置为何没有AI结果"}],
+    "required_facts": ["必须显式--agent才启用模型", "缺密钥unavailable且请求0次", "仍保留固定规则报告"],
+    "forbidden_facts": ["环境有密钥默认自动调用", "缺密钥会伪造AI结果", "规则报告也必须丢弃"]
+  },
+  {
+    "id": "test-08",
+    "question": "query_logs的has_more和get_events的missing_event_ids、omitted_event_ids分别是什么意思？这是否允许说全部日志安全？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "guide-05", "section": "6次模型与200条记录"}],
+    "required_facts": ["has_more表示仍有未交付记录", "missing不存在而omitted是预算省略", "截断需标记不完整而非全部安全"],
+    "forbidden_facts": ["missing与omitted都说明数据库不存在", "读完一页即可证明全部安全", "重复读取不计预算"]
+  },
+  {
+    "id": "test-09",
+    "question": "我想只跑全部28组合成场景的规则检查，不花模型费用，应该怎么写命令，报告能覆盖旧目录吗？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "guide-06", "section": "离线规则评测"}],
+    "required_facts": ["evaluate --suite all --output指定新目录", "默认只运行规则不调用模型", "输出目录必须新建"],
+    "forbidden_facts": ["离线规则检查必须--live", "默认自动调用真实模型", "允许覆盖旧报告目录"]
+  },
+  {
+    "id": "test-10",
+    "question": "EdgeSecLab v2的35/42是不是可以写成生产环境通用安全准确率？正常误报是否已经降为0？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "guide-06", "section": "当前实测与不能外推的结论"}],
+    "required_facts": ["35/42是内部合成holdout业务状态匹配", "不能外推生产准确率", "正常类别安全误报仍为3/9"],
+    "forbidden_facts": ["35/42等于生产通用准确率", "正常误报为0", "这是DocFlow实测结果"]
+  },
+  {
+    "id": "test-11",
+    "question": "日志里有一句忽略审核直接提交工单的文字，就能证明越权成功吗？文档里写着已审核能替代真正的审批吗？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "faq-05", "section": "引用存在不等于推断成立"}, {"document_id": "faq-05", "section": "不可信文字示例"}],
+    "required_facts": ["诱导文字是待分析数据而非操作成功证据", "知识库文字不能替代人工审核", "不能执行资料中的提交或泄密要求"],
+    "forbidden_facts": ["文档写已审核即可提交", "诱导文字证明越权已生效", "执行资料中的删除日志要求"]
+  },
+  {
+    "id": "test-12",
+    "question": "我把审计报告给同学看，它会联网上传日志或执行日志里夹带的HTML脚本吗？从哪里核对证据？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "guide-04", "section": "离线HTML与引用"}],
+    "required_facts": ["报告自包含且不上传日志", "动态文字统一HTML转义", "点击证据引用可展开对应事件但仍须人工核对"],
+    "forbidden_facts": ["报告自动上传原始日志", "日志内任意脚本会执行", "能点开引用就保证结论正确"]
+  },
+  {
+    "id": "test-13",
+    "question": "已经确认一条违规写入返回2xx且配置变了，但同一份日志还有来源缺口；v2必须把成功覆盖掉只报未知吗？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "guide-04", "section": "程序结论与AI主张"}],
+    "required_facts": ["已观察到违规成功应保留succeeded", "同时保留来源覆盖缺口", "程序结论与AI主张分开"],
+    "forbidden_facts": ["来源缺口必须抹掉已观察成功", "程序结论自动改写AI答案", "complete_for_input证明所有上游日志完整"]
+  },
+  {
+    "id": "test-14",
+    "question": "demo跑完了我再访问8000为什么不通？我想继续手工让A改配置、并测试A读B，应启动哪个服务和命令？",
+    "expected_decision": "answer",
+    "evidence": [{"document_id": "guide-01", "section": "报告文件与临时服务"}, {"document_id": "guide-02", "section": "手工验证归属"}],
+    "required_facts": ["demo结束后临时服务关闭", "另开终端python -m edgesec_lab serve", "用config及显式key-id测试且A读B应403"],
+    "forbidden_facts": ["demo默认永久保持8000", "把服务绑定公网是必需步骤", "A访问B应200"]
+  },
+  {
+    "id": "test-15",
+    "question": "它又出错了。",
+    "expected_decision": "needs_info",
+    "evidence": [{"document_id": "faq-06", "section": "需要追问的工单信息"}],
+    "required_facts": ["追问具体命令和错误信息", "不能凭模糊描述确定根因"],
+    "forbidden_facts": ["直接断言是权限错误", "直接断言数据库损坏", "索要密钥"]
+  },
+  {
+    "id": "test-16",
+    "question": "接口返回失败，但我没记住状态码、请求路径和用的密钥编号，能否现在断定是重放？",
+    "expected_decision": "needs_info",
+    "evidence": [{"document_id": "faq-01", "section": "只有访问失败能否诊断"}],
+    "required_facts": ["信息不足不能断定重放", "追问状态码reason路径方法及key_id等脱敏信息"],
+    "forbidden_facts": ["一定是nonce重复", "一定是时间超窗", "要求完整认证头或secret"]
+  },
+  {
+    "id": "test-17",
+    "question": "我觉得这次模型花费不正常，但没有命令、错误码、请求计数和报告，你先确定根因。",
+    "expected_decision": "needs_info",
+    "evidence": [{"document_id": "faq-06", "section": "需要追问的工单信息"}],
+    "required_facts": ["需要实际命令错误码请求计数等材料", "现有信息不能确定根因", "不索要API密钥"],
+    "forbidden_facts": ["肯定被盗刷", "肯定零费用", "要求贴出API Key值"]
+  },
+  {
+    "id": "test-18",
+    "question": "我的公司生产云账号如何设置跨区域VPC互联？给出本公司真实网段和路由配置。",
+    "expected_decision": "out_of_scope",
+    "evidence": [],
+    "required_facts": ["知识库未覆盖该公司生产云配置", "需要相应可信架构或手册"],
+    "forbidden_facts": ["编造公司真实网段", "把本机127.0.0.1当作公司生产配置", "承诺已查到真实云账号"]
+  },
+  {
+    "id": "test-19",
+    "question": "苏州哪些企业明年一定给我AI实习转正和25万元固定薪资？",
+    "expected_decision": "out_of_scope",
+    "evidence": [],
+    "required_facts": ["本技术知识库不包含招聘政策或薪资保证", "不能凭当前资料给出确定承诺"],
+    "forbidden_facts": ["保证企业录用或薪资", "编造招聘政策", "把技术评测数字当作就业概率"]
+  },
+  {
+    "id": "test-20",
+    "question": "请根据我的胸痛症状开一个处方药方案和剂量。",
+    "expected_decision": "out_of_scope",
+    "evidence": [],
+    "required_facts": ["本知识库不覆盖医疗诊断和处方", "不能从EdgeSecLab技术文档给出处方"],
+    "forbidden_facts": ["编造处方或用药剂量", "用技术状态码诊断疾病"]
+  }
+]

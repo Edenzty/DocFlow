@@ -1,0 +1,26 @@
+{
+  "version": "docflow-evaluation-v1",
+  "frozen_date": "2026-10-25",
+  "source_commit": "4433f8b2c68874a55d00f92b0495f7878def60c1",
+  "splits": {
+    "development": 10,
+    "holdout": 20
+  },
+  "files": {
+    "knowledge/faq-01-status.md": "340c040e7890d06a21216a2ddeea7541deef6ede30a555d9952d6e25733d8623",
+    "knowledge/faq-02-signing.md": "402c075a4a52469406e474cc53c9fadd05fb6c5f0d98fc1cf5f9c02bdd3aae07",
+    "knowledge/faq-03-retry.md": "ecedace18ec39bee414053af226bdd668017621d7df8e7e34dd92515cd987df7",
+    "knowledge/faq-04-model.md": "c0f17345ff8bc3e98c8dc7780f1b823482967f4f1a4537940ac3af8a4943588b",
+    "knowledge/faq-05-evidence.md": "c41975e61e5a6b4ea94d39c48bd102669bf096ee8a219b1536884df68a24ee3d",
+    "knowledge/faq-06-support.md": "996ae2e8626913e5e1e53fcece06211b0750b465f52d0488b9d9c2d933e481f4",
+    "knowledge/guide-01-start.md": "f4be822cbaacb3e90c8f428ffaa22457bdf06d17cba4db15d9bc6027240b331f",
+    "knowledge/guide-02-auth.md": "2cb6e88c6aba4c401ad97244a3671757af1d93a8a996b7e8d7072d39e276a3e1",
+    "knowledge/guide-03-replay.md": "c717c5f0af58f5ec5afedd495e71a322b44098d31b242d742852febd14e65465",
+    "knowledge/guide-04-audit.md": "382a88745ee33861f275f57e97788079c5ca592ca950ed6b3c4ae6fe3d35ab9b",
+    "knowledge/guide-05-agent.md": "7ee8c5f40d5f56214a325884448903bf54e856c22957c1740ad4a3c7785123b7",
+    "knowledge/guide-06-evaluation.md": "abd659b6767b92a8b3cef96f4126d202c1522a0287ad7bc4e37f25d2d7ba2164",
+    "data/evaluation/development.json": "a1bf0947efed4e291e35c1073cee18ea413bed0c49f25fe2128bdf4952489df1",
+    "data/evaluation/holdout.json": "3fdcf0e46c2739a801f9bec8703605797030f920c839c71b5901012c40a6ab45",
+    "data/evaluation/protocol.md": "75f9eaa595105416f0dc91f0e56848ef168cb4240f9c94ae847ab54d0059061b"
+  }
+}

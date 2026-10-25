@@ -1,0 +1,162 @@
+[
+  {
+    "id": "test-01",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-02",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-03",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-04",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-05",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-06",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-07",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-08",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-09",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-10",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-11",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-12",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-13",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-14",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-15",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-16",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-17",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-18",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-19",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  },
+  {
+    "id": "test-20",
+    "reviewer": "",
+    "reviewer_type": "human",
+    "supported": null,
+    "appropriate_decision": null,
+    "notes": "逐条核查实际引用、required_facts和forbidden_facts，不按字面命中评分"
+  }
+]

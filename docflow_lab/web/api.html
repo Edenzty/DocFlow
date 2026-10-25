@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>DocFlow API 说明</title><link rel="stylesheet" href="/static/style.css"><link rel="stylesheet" href="/static/api.css"></head>
+<body><main class="api-page"><a href="/">← 返回工作台</a><h1>DocFlow 本地 API</h1>
+<p>单用户、本机运行。默认离线模拟；真实生成需要服务以 <code>serve --live</code> 启动，并在请求中指定 <code>live: true</code>。所有 POST 请求均需头 <code>X-DocFlow-Local: 1</code>，JSON 请求同时使用 <code>Content-Type: application/json</code>。</p>
+<p><a href="/openapi.json">完整 OpenAPI JSON</a> · 本页无需 CDN 或外部脚本，接口操作可使用 PowerShell、HTTP 客户端或项目工作台。</p>
+<table><thead><tr><th>方法</th><th>路径</th><th>请求 / 用途</th></tr></thead><tbody>
+<tr><td>GET</td><td><code>/api/config</code></td><td>当前模型、预算、索引可用性</td></tr>
+<tr><td>POST</td><td><code>/api/search</code></td><td><code>{"query":"设备返回403怎么排查？","method":"keyword"}</code></td></tr>
+<tr><td>POST</td><td><code>/api/tickets</code></td><td><code>{"question":"设备返回403怎么排查？","method":"keyword","live":false}</code></td></tr>
+<tr><td>GET</td><td><code>/api/tickets/{id}</code></td><td>读取工单、草稿、引用、审批、回复与事件</td></tr>
+<tr><td>POST</td><td><code>/api/tickets/{id}/draft</code></td><td><code>{"method":"keyword","live":false}</code>；新版本清除旧审批</td></tr>
+<tr><td>POST</td><td><code>/api/tickets/{id}/review</code></td><td><code>{"version":1,"approved":true}</code>；仅批准该版本，不提交</td></tr>
+<tr><td>POST</td><td><code>/api/tickets/{id}/submit</code></td><td><code>{"version":1,"simulate_timeout":false}</code>；写入本地模拟回复</td></tr>
+<tr><td>POST</td><td><code>/api/tickets/{id}/retry</code></td><td><code>{}</code>；从失败步骤恢复</td></tr>
+</tbody></table>
+<h2>PowerShell：先做一次无模型调用的检索</h2>
+<pre><code>$payload = @{query='设备A访问设备B为什么403？'; method='keyword'} | ConvertTo-Json
+Invoke-RestMethod -Uri 'http://127.0.0.1:8765/api/search' -Method Post -ContentType 'application/json; charset=utf-8' -Headers @{'X-DocFlow-Local'='1'} -Body ([System.Text.Encoding]::UTF8.GetBytes($payload))</code></pre>
+<p>常见错误：403表示请求来源或本地头不符合要求；409表示审批、版本、状态或预算冲突；422表示请求结构错误；503表示检索不可用；504可能表示本地回复已写成但响应超时，此时读取工单后重试，不能假设没有写入。</p>
+<p>POST 创建成功也应检查返回的 status：generation_failed 是已保存的失败工单，需要排查后重试。引用存在只代表片段编号有效，人工仍须核对回复内容。</p>
+</main></body></html>
