@@ -28,6 +28,14 @@ def main():
     retrieval_eval = sub.add_parser("evaluate-retrieval", help="比较BM25、BGE与RRF融合；不调用生成模型")
     retrieval_eval.add_argument("--suite", choices=["development", "holdout", "all"], default="all")
     retrieval_eval.add_argument("--output", type=Path, required=True)
+    compare_context = sub.add_parser("compare-context", help="离线对照完整文档章节与BM25检索；不调用真实模型")
+    compare_context.add_argument("--suite", choices=["development", "holdout", "all"], default="development")
+    compare_context.add_argument("--limit", type=int, help="只运行分区开头若干题，默认全部")
+    compare_context.add_argument("--output", type=Path, required=True)
+    compare_review = sub.add_parser("review-context", help="汇总人工复核，未复核不算支持")
+    compare_review.add_argument("--comparison", type=Path, required=True)
+    compare_review.add_argument("--review", type=Path, required=True)
+    compare_review.add_argument("--output", type=Path, required=True)
     evaluation = sub.add_parser("evaluate", help="冻结数据评测；默认模拟，不调用模型")
     evaluation.add_argument("--suite", choices=["development", "holdout", "all"], default="all")
     evaluation.add_argument("--method", choices=["keyword", "vector", "both"], default="both")
@@ -52,6 +60,21 @@ def main():
         from .retrieval_v2 import evaluate_retrieval
         result = evaluate_retrieval(settings, args.output, args.suite)
         print(json.dumps({"output": str(args.output.resolve()), "model_requests": 0}, ensure_ascii=False, indent=2))
+    elif args.command == "compare-context":
+        from .context_comparison import run_comparison
+        result = run_comparison(settings, args.output, args.suite, args.limit)
+        print(json.dumps({"output": str(args.output.resolve()), "mode": result["mode"], "model_requests": 0,
+                          "case_count": result["case_count"], "summary": result["summary"]}, ensure_ascii=False, indent=2))
+    elif args.command == "review-context":
+        from .context_comparison import summarize_review
+        if args.output.exists():
+            raise ValueError("输出文件已存在，请选择新路径")
+        result = summarize_review(args.comparison, args.review)
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        with args.output.open("x", encoding="utf-8") as stream:
+            json.dump(result, stream, ensure_ascii=False, indent=2)
+            stream.write("\n")
+        print(json.dumps(result, ensure_ascii=False, indent=2))
     elif args.command == "demo-v2":
         from .demo_v2 import run_demo
         result = run_demo(settings, args.output)
