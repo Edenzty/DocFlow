@@ -6,6 +6,8 @@
 
 新增[完整文档章节与BM25对照练习](docs/CONTEXT_COMPARISON.md)：固定问题与语料，记录逐题上下文、模拟草稿、失败及人工语义复核。[查看离线演示记录](docs/examples/context-comparison-offline/README.md)。当前仅支持离线固定模拟，不能据此比较真实模型效果，也不会动用原有40次模型请求预算。
 
+参考开源 Ragas 的证据ID匹配思路，新增[检索诊断与动手指南](docs/OPEN_SOURCE_IMPROVEMENTS.md)：历史Top5可离线重算标注章节精确率、nDCG与失败分组，校验冻结材料与片段编号。[查看本次离线诊断](docs/examples/retrieval-diagnostics-01/report.md)。独立实现，未集成Ragas依赖；指标不是回答正确率。
+
 这是可运行的学习项目。默认使用离线模拟模型，模拟结果只验证工程流程；[V2结果与已知问题](docs/V2_RESULTS.md)保存真实工具调用、检索对比和失败案例，[V1历史结果](docs/RESULTS.md)保留对照。代码实现完成和学习者独立掌握分开记录。
 
 ```text

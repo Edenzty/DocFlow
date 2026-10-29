@@ -261,6 +261,8 @@ def evaluate_retrieval(settings: Settings, output: Path, suite: str = "all") -> 
                                 "hybrid_minus_keyword": hybrid_hit - keyword_hit,
                                 "hybrid_minus_vector": hybrid_hit - vector_hit})
     report["differences"] = differences
+    from .retrieval_diagnostics import diagnose_report
+    report["ranking_diagnostics"] = diagnose_report(settings, report)
     (output / "retrieval.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     lines = ["# DocFlow V2 检索回归", "", report["protocol_note"], "", "真实BGE CPU；模型API请求0次。",
              "", "| 检索 | 成功/总题 | 标注章节召回micro@5 | 按题macro@5 | MRR@5 | 全证据/有证据题 |",

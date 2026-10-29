@@ -4,6 +4,8 @@
 
 实际数字统一放在[RESULTS.md](RESULTS.md)及对应原始报告，本页定义口径，不填写预期效果。
 
+新增[参考Ragas的离线检索诊断](OPEN_SOURCE_IMPROVEMENTS.md)：复用保存的三路Top5，核对冻结语料与标签，重算标注章节精确率、nDCG与失败分组。支持 `analyze-retrieval` 命令，无API请求；未标注的章节不能直接判为不相关。
+
 ## 先运行离线检索比较
 
 ```powershell

@@ -1,0 +1,2738 @@
+{
+  "schema_version": 1,
+  "mode": "offline_saved_ranking_diagnostics",
+  "model_requests": 0,
+  "source_mode_claim": "retrieval_only_real_bge_cpu",
+  "suite": "all",
+  "corpus_sha256": "04a514741f473f3b4d5a43db1855d087af922eccdcb000e381ede4a91ffb93d2",
+  "note": "只校验冻结语料、编号与标签并重算排名；不能独立证明历史运行来源，不能评判回答或语义支持。",
+  "metric_policy": {
+    "top_k": 5,
+    "labels": "冻结(document_id, section)二值目标；不是完整的相关性标注",
+    "precision": "命中标注的唯一章节/返回的唯一章节；重复章节不重复得分；不含空排名。",
+    "macro_precision": "所有有证据题平均；空排名或失败以0计，逐题undefined单列。",
+    "ndcg": "原始片段排名上唯一目标章节首次出现得1/log2(rank+1)；重复章节得0。",
+    "no_gold": "无标注证据题的相关性指标null，不把返回内容直接判为误报。",
+    "limitations": "已观察题集只作回归；召回、精确率和nDCG均非回答正确率。"
+  },
+  "summary": {
+    "keyword": {
+      "questions": 30,
+      "questions_with_gold": 26,
+      "no_gold_questions": 4,
+      "failed_queries": 0,
+      "expected_sections": 29,
+      "matched_sections": 28,
+      "micro_recall_at_5": 0.9655172413793104,
+      "hit_rate_at_5": 0.9615384615384616,
+      "mrr_at_5": 0.9423076923076923,
+      "macro_annotated_section_precision": 0.2538461538461539,
+      "mean_ndcg_at_5": 0.9384998249328615,
+      "undefined_empty_precision_count": 0,
+      "duplicate_section_slots": 19,
+      "outcomes": {
+        "all_targets_retrieved": 25,
+        "no_gold_not_scored": 4,
+        "no_target_retrieved": 1
+      }
+    },
+    "vector": {
+      "questions": 30,
+      "questions_with_gold": 26,
+      "no_gold_questions": 4,
+      "failed_queries": 0,
+      "expected_sections": 29,
+      "matched_sections": 23,
+      "micro_recall_at_5": 0.7931034482758621,
+      "hit_rate_at_5": 0.8461538461538461,
+      "mrr_at_5": 0.6923076923076923,
+      "macro_annotated_section_precision": 0.2307692307692308,
+      "mean_ndcg_at_5": 0.7249766710962796,
+      "undefined_empty_precision_count": 0,
+      "duplicate_section_slots": 26,
+      "outcomes": {
+        "all_targets_retrieved": 21,
+        "no_gold_not_scored": 4,
+        "no_target_retrieved": 4,
+        "partial_targets": 1
+      }
+    },
+    "hybrid": {
+      "questions": 30,
+      "questions_with_gold": 26,
+      "no_gold_questions": 4,
+      "failed_queries": 0,
+      "expected_sections": 29,
+      "matched_sections": 26,
+      "micro_recall_at_5": 0.896551724137931,
+      "hit_rate_at_5": 0.9615384615384616,
+      "mrr_at_5": 0.8493589743589745,
+      "macro_annotated_section_precision": 0.24743589743589745,
+      "mean_ndcg_at_5": 0.8535590794313965,
+      "undefined_empty_precision_count": 0,
+      "duplicate_section_slots": 24,
+      "outcomes": {
+        "all_targets_retrieved": 23,
+        "no_gold_not_scored": 4,
+        "no_target_retrieved": 1,
+        "partial_targets": 2
+      }
+    }
+  },
+  "by_expected_decision": {
+    "answer": {
+      "keyword": {
+        "questions": 21,
+        "questions_with_gold": 21,
+        "no_gold_questions": 0,
+        "failed_queries": 0,
+        "expected_sections": 24,
+        "matched_sections": 24,
+        "micro_recall_at_5": 1.0,
+        "hit_rate_at_5": 1.0,
+        "mrr_at_5": 0.9761904761904762,
+        "macro_annotated_section_precision": 0.27380952380952384,
+        "mean_ndcg_at_5": 0.9714759737263999,
+        "undefined_empty_precision_count": 0,
+        "duplicate_section_slots": 15,
+        "outcomes": {
+          "all_targets_retrieved": 21
+        }
+      },
+      "vector": {
+        "questions": 21,
+        "questions_with_gold": 21,
+        "no_gold_questions": 0,
+        "failed_queries": 0,
+        "expected_sections": 24,
+        "matched_sections": 20,
+        "micro_recall_at_5": 0.8333333333333334,
+        "hit_rate_at_5": 0.9047619047619048,
+        "mrr_at_5": 0.7380952380952381,
+        "macro_annotated_section_precision": 0.2420634920634921,
+        "mean_ndcg_at_5": 0.7723077949967531,
+        "undefined_empty_precision_count": 0,
+        "duplicate_section_slots": 18,
+        "outcomes": {
+          "all_targets_retrieved": 18,
+          "no_target_retrieved": 2,
+          "partial_targets": 1
+        }
+      },
+      "hybrid": {
+        "questions": 21,
+        "questions_with_gold": 21,
+        "no_gold_questions": 0,
+        "failed_queries": 0,
+        "expected_sections": 24,
+        "matched_sections": 22,
+        "micro_recall_at_5": 0.9166666666666666,
+        "hit_rate_at_5": 1.0,
+        "mrr_at_5": 0.8968253968253967,
+        "macro_annotated_section_precision": 0.2658730158730159,
+        "mean_ndcg_at_5": 0.8934218812925198,
+        "undefined_empty_precision_count": 0,
+        "duplicate_section_slots": 20,
+        "outcomes": {
+          "all_targets_retrieved": 19,
+          "partial_targets": 2
+        }
+      }
+    },
+    "needs_info": {
+      "keyword": {
+        "questions": 5,
+        "questions_with_gold": 5,
+        "no_gold_questions": 0,
+        "failed_queries": 0,
+        "expected_sections": 5,
+        "matched_sections": 4,
+        "micro_recall_at_5": 0.8,
+        "hit_rate_at_5": 0.8,
+        "mrr_at_5": 0.8,
+        "macro_annotated_section_precision": 0.17,
+        "mean_ndcg_at_5": 0.8,
+        "undefined_empty_precision_count": 0,
+        "duplicate_section_slots": 2,
+        "outcomes": {
+          "all_targets_retrieved": 4,
+          "no_target_retrieved": 1
+        }
+      },
+      "vector": {
+        "questions": 5,
+        "questions_with_gold": 5,
+        "no_gold_questions": 0,
+        "failed_queries": 0,
+        "expected_sections": 5,
+        "matched_sections": 3,
+        "micro_recall_at_5": 0.6,
+        "hit_rate_at_5": 0.6,
+        "mrr_at_5": 0.5,
+        "macro_annotated_section_precision": 0.18333333333333332,
+        "mean_ndcg_at_5": 0.5261859507142915,
+        "undefined_empty_precision_count": 0,
+        "duplicate_section_slots": 7,
+        "outcomes": {
+          "all_targets_retrieved": 3,
+          "no_target_retrieved": 2
+        }
+      },
+      "hybrid": {
+        "questions": 5,
+        "questions_with_gold": 5,
+        "no_gold_questions": 0,
+        "failed_queries": 0,
+        "expected_sections": 5,
+        "matched_sections": 4,
+        "micro_recall_at_5": 0.8,
+        "hit_rate_at_5": 0.8,
+        "mrr_at_5": 0.65,
+        "macro_annotated_section_precision": 0.17,
+        "mean_ndcg_at_5": 0.6861353116146786,
+        "undefined_empty_precision_count": 0,
+        "duplicate_section_slots": 2,
+        "outcomes": {
+          "all_targets_retrieved": 4,
+          "no_target_retrieved": 1
+        }
+      }
+    },
+    "out_of_scope": {
+      "keyword": {
+        "questions": 4,
+        "questions_with_gold": 0,
+        "no_gold_questions": 4,
+        "failed_queries": 0,
+        "expected_sections": 0,
+        "matched_sections": 0,
+        "micro_recall_at_5": null,
+        "hit_rate_at_5": null,
+        "mrr_at_5": null,
+        "macro_annotated_section_precision": null,
+        "mean_ndcg_at_5": null,
+        "undefined_empty_precision_count": 0,
+        "duplicate_section_slots": 2,
+        "outcomes": {
+          "no_gold_not_scored": 4
+        }
+      },
+      "vector": {
+        "questions": 4,
+        "questions_with_gold": 0,
+        "no_gold_questions": 4,
+        "failed_queries": 0,
+        "expected_sections": 0,
+        "matched_sections": 0,
+        "micro_recall_at_5": null,
+        "hit_rate_at_5": null,
+        "mrr_at_5": null,
+        "macro_annotated_section_precision": null,
+        "mean_ndcg_at_5": null,
+        "undefined_empty_precision_count": 0,
+        "duplicate_section_slots": 1,
+        "outcomes": {
+          "no_gold_not_scored": 4
+        }
+      },
+      "hybrid": {
+        "questions": 4,
+        "questions_with_gold": 0,
+        "no_gold_questions": 4,
+        "failed_queries": 0,
+        "expected_sections": 0,
+        "matched_sections": 0,
+        "micro_recall_at_5": null,
+        "hit_rate_at_5": null,
+        "mrr_at_5": null,
+        "macro_annotated_section_precision": null,
+        "mean_ndcg_at_5": null,
+        "undefined_empty_precision_count": 0,
+        "duplicate_section_slots": 2,
+        "outcomes": {
+          "no_gold_not_scored": 4
+        }
+      }
+    }
+  },
+  "failure_cases": [
+    {
+      "id": "test-01",
+      "method": "vector",
+      "outcome": "partial_targets"
+    },
+    {
+      "id": "test-01",
+      "method": "hybrid",
+      "outcome": "partial_targets"
+    },
+    {
+      "id": "test-02",
+      "method": "vector",
+      "outcome": "no_target_retrieved"
+    },
+    {
+      "id": "test-14",
+      "method": "vector",
+      "outcome": "no_target_retrieved"
+    },
+    {
+      "id": "test-14",
+      "method": "hybrid",
+      "outcome": "partial_targets"
+    },
+    {
+      "id": "test-15",
+      "method": "keyword",
+      "outcome": "no_target_retrieved"
+    },
+    {
+      "id": "test-15",
+      "method": "vector",
+      "outcome": "no_target_retrieved"
+    },
+    {
+      "id": "test-15",
+      "method": "hybrid",
+      "outcome": "no_target_retrieved"
+    },
+    {
+      "id": "test-17",
+      "method": "vector",
+      "outcome": "no_target_retrieved"
+    }
+  ],
+  "rows": [
+    {
+      "id": "dev-01",
+      "split": "development",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 3,
+          "duplicate_section_slots": 2,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.3333333333333333,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-02-4cb743dd327435be",
+            "faq-01-3b3826bd63329b97",
+            "guide-02-17124003c14d0913",
+            "guide-02-ee93c1db21363bab",
+            "faq-01-93196e350a01cd7c"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 4,
+          "target_ranks": [
+            4
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 0.25,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 0.43067655807339306,
+          "ranked_chunk_ids": [
+            "faq-01-3b3826bd63329b97",
+            "faq-01-26b3d0b13780d0f3",
+            "faq-01-93196e350a01cd7c",
+            "guide-02-4cb743dd327435be",
+            "guide-02-17124003c14d0913"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 2,
+          "target_ranks": [
+            2
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 0.5,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 0.6309297535714575,
+          "ranked_chunk_ids": [
+            "faq-01-3b3826bd63329b97",
+            "guide-02-4cb743dd327435be",
+            "faq-01-93196e350a01cd7c",
+            "guide-02-17124003c14d0913",
+            "faq-01-26b3d0b13780d0f3"
+          ]
+        }
+      }
+    },
+    {
+      "id": "dev-02",
+      "split": "development",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 3,
+          "duplicate_section_slots": 2,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.3333333333333333,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-06-d54ae357bb03dc50",
+            "guide-01-7f7d46c93bfdc812",
+            "guide-01-2998e44c39a045e2",
+            "faq-06-fdd7f4deb2eb6e27",
+            "guide-01-b90926d16e227c38"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-06-d54ae357bb03dc50",
+            "faq-06-fdd7f4deb2eb6e27",
+            "faq-06-532b6606f99baf24",
+            "guide-01-7f7d46c93bfdc812",
+            "faq-04-1ab68fae2c78630d"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 3,
+          "duplicate_section_slots": 2,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.3333333333333333,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-06-d54ae357bb03dc50",
+            "faq-06-fdd7f4deb2eb6e27",
+            "guide-01-7f7d46c93bfdc812",
+            "guide-01-2998e44c39a045e2",
+            "guide-01-b90926d16e227c38"
+          ]
+        }
+      }
+    },
+    {
+      "id": "dev-03",
+      "split": "development",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-03-f0f92c2e54701b0c",
+            "faq-03-0fef506d890a0970",
+            "guide-03-5da558a944a5142c",
+            "guide-02-697797dc9710e4da",
+            "guide-04-26d9cff8fe0fca54"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-03-f0f92c2e54701b0c",
+            "faq-03-0fef506d890a0970",
+            "faq-01-93196e350a01cd7c",
+            "guide-03-5da558a944a5142c",
+            "faq-03-4474cb98c8d5c86a"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-03-f0f92c2e54701b0c",
+            "faq-03-0fef506d890a0970",
+            "guide-03-5da558a944a5142c",
+            "faq-03-4474cb98c8d5c86a",
+            "guide-02-697797dc9710e4da"
+          ]
+        }
+      }
+    },
+    {
+      "id": "dev-04",
+      "split": "development",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-01-4e7f17f17a6eea6a",
+            "guide-03-df954881920749b3",
+            "guide-03-730eca15b0027939",
+            "guide-02-bb0fa32b19391d74",
+            "guide-03-8e53620495f6fac2"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-01-93196e350a01cd7c",
+            "guide-03-8e53620495f6fac2",
+            "faq-01-3b3826bd63329b97",
+            "guide-03-df954881920749b3"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-01-4e7f17f17a6eea6a",
+            "guide-03-df954881920749b3",
+            "guide-03-8e53620495f6fac2",
+            "guide-02-bb0fa32b19391d74",
+            "guide-03-730eca15b0027939"
+          ]
+        }
+      }
+    },
+    {
+      "id": "dev-05",
+      "split": "development",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-05-376b2939d1f60ebb",
+            "guide-05-7ae7f9f1f04312df",
+            "faq-05-8138af3a37218276",
+            "guide-06-8cd93f1a470193d0",
+            "guide-02-4cb743dd327435be"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 3,
+          "duplicate_section_slots": 2,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.3333333333333333,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-05-376b2939d1f60ebb",
+            "guide-05-7ae7f9f1f04312df",
+            "guide-05-0a02bf3e2dac8c6f",
+            "faq-04-243b566ac3654806",
+            "guide-05-97003d9f89f26237"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-05-376b2939d1f60ebb",
+            "guide-05-7ae7f9f1f04312df",
+            "faq-04-243b566ac3654806",
+            "guide-05-97003d9f89f26237",
+            "guide-02-4cb743dd327435be"
+          ]
+        }
+      }
+    },
+    {
+      "id": "dev-06",
+      "split": "development",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-05-cdf20472c1434f0e",
+            "guide-05-137999829b85b554",
+            "guide-05-a29bd14c32b32b82",
+            "guide-06-6cc1056663944039",
+            "faq-05-8138af3a37218276"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-05-cdf20472c1434f0e",
+            "faq-05-716dca93f951382c",
+            "faq-05-21983a9bd3fbcf51",
+            "faq-04-68f28d172a1afb3c",
+            "guide-06-6cc1056663944039"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-05-cdf20472c1434f0e",
+            "faq-05-716dca93f951382c",
+            "guide-06-6cc1056663944039",
+            "faq-05-8138af3a37218276",
+            "guide-05-a29bd14c32b32b82"
+          ]
+        }
+      }
+    },
+    {
+      "id": "dev-07",
+      "split": "development",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-02-2169169ebd0262d0",
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-02-f0ef315fdb4cc4e1",
+            "faq-02-bf168e7cdc89ab42",
+            "guide-02-728e57c8b07a0023"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-02-2169169ebd0262d0",
+            "faq-02-f0ef315fdb4cc4e1",
+            "guide-02-bb0fa32b19391d74",
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-02-bf168e7cdc89ab42"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-02-2169169ebd0262d0",
+            "faq-02-f0ef315fdb4cc4e1",
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-02-bf168e7cdc89ab42",
+            "guide-03-f0f92c2e54701b0c"
+          ]
+        }
+      }
+    },
+    {
+      "id": "dev-08",
+      "split": "development",
+      "expected_decision": "needs_info",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-01-26b3d0b13780d0f3",
+            "guide-04-26d9cff8fe0fca54",
+            "faq-06-532b6606f99baf24",
+            "faq-01-3b3826bd63329b97",
+            "guide-06-6cc1056663944039"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 3,
+          "duplicate_section_slots": 2,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.3333333333333333,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-01-26b3d0b13780d0f3",
+            "faq-04-243b566ac3654806",
+            "faq-04-68f28d172a1afb3c",
+            "guide-04-e2df879a3ae24e1b",
+            "guide-04-c22a47f8db9e5a30"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-01-26b3d0b13780d0f3",
+            "faq-04-68f28d172a1afb3c",
+            "faq-06-532b6606f99baf24",
+            "faq-04-243b566ac3654806",
+            "guide-05-137999829b85b554"
+          ]
+        }
+      }
+    },
+    {
+      "id": "dev-09",
+      "split": "development",
+      "expected_decision": "needs_info",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-06-532b6606f99baf24",
+            "guide-06-6cc1056663944039",
+            "guide-02-fcc8da8759db3338",
+            "faq-06-dc59de19d6b11332",
+            "guide-01-7f7d46c93bfdc812"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 3,
+          "duplicate_section_slots": 2,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.3333333333333333,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-06-532b6606f99baf24",
+            "faq-04-68f28d172a1afb3c",
+            "faq-04-243b566ac3654806",
+            "faq-06-cbee5805275340b2",
+            "faq-04-4e74edcb2ddc00c4"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-06-532b6606f99baf24",
+            "guide-02-fcc8da8759db3338",
+            "faq-01-26b3d0b13780d0f3",
+            "faq-06-dc59de19d6b11332",
+            "faq-04-68f28d172a1afb3c"
+          ]
+        }
+      }
+    },
+    {
+      "id": "dev-10",
+      "split": "development",
+      "expected_decision": "out_of_scope",
+      "retrieval": {
+        "keyword": {
+          "outcome": "no_gold_not_scored",
+          "failed": false,
+          "expected_sections": 0,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": null,
+          "hit_at_5": null,
+          "reciprocal_rank_at_5": null,
+          "annotated_section_precision": null,
+          "ndcg_at_5": null,
+          "ranked_chunk_ids": [
+            "faq-06-dc59de19d6b11332",
+            "guide-02-728e57c8b07a0023",
+            "guide-05-97003d9f89f26237",
+            "faq-04-1ab68fae2c78630d",
+            "guide-05-0a02bf3e2dac8c6f"
+          ]
+        },
+        "vector": {
+          "outcome": "no_gold_not_scored",
+          "failed": false,
+          "expected_sections": 0,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": null,
+          "hit_at_5": null,
+          "reciprocal_rank_at_5": null,
+          "annotated_section_precision": null,
+          "ndcg_at_5": null,
+          "ranked_chunk_ids": [
+            "faq-06-dc59de19d6b11332",
+            "guide-01-55aa792301c7b45a",
+            "faq-05-8138af3a37218276",
+            "guide-05-0a02bf3e2dac8c6f",
+            "guide-05-376b2939d1f60ebb"
+          ]
+        },
+        "hybrid": {
+          "outcome": "no_gold_not_scored",
+          "failed": false,
+          "expected_sections": 0,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": null,
+          "hit_at_5": null,
+          "reciprocal_rank_at_5": null,
+          "annotated_section_precision": null,
+          "ndcg_at_5": null,
+          "ranked_chunk_ids": [
+            "faq-06-dc59de19d6b11332",
+            "guide-01-55aa792301c7b45a",
+            "guide-05-0a02bf3e2dac8c6f",
+            "faq-04-1ab68fae2c78630d",
+            "guide-05-97003d9f89f26237"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-01",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 2,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 2,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1,
+            2
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.5,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-01-55aa792301c7b45a",
+            "guide-01-9053f77f41f09364",
+            "guide-06-d6949f78cde50c64",
+            "guide-01-0447812a6452f292",
+            "guide-01-b90926d16e227c38"
+          ]
+        },
+        "vector": {
+          "outcome": "partial_targets",
+          "failed": false,
+          "expected_sections": 2,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 4,
+          "target_ranks": [
+            4
+          ],
+          "recall_at_5": 0.5,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 0.25,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 0.2640681225725909,
+          "ranked_chunk_ids": [
+            "faq-04-4e74edcb2ddc00c4",
+            "faq-04-1ab68fae2c78630d",
+            "faq-01-3b3826bd63329b97",
+            "guide-01-55aa792301c7b45a",
+            "faq-04-243b566ac3654806"
+          ]
+        },
+        "hybrid": {
+          "outcome": "partial_targets",
+          "failed": false,
+          "expected_sections": 2,
+          "returned_chunks": 5,
+          "unique_returned_sections": 3,
+          "duplicate_section_slots": 2,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 0.5,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.3333333333333333,
+          "ndcg_at_5": 0.6131471927654584,
+          "ranked_chunk_ids": [
+            "guide-01-55aa792301c7b45a",
+            "faq-04-1ab68fae2c78630d",
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-01-0447812a6452f292",
+            "guide-06-d6949f78cde50c64"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-02",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-02-1702fa34e85cfced",
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-02-bf168e7cdc89ab42",
+            "guide-02-bb0fa32b19391d74",
+            "guide-03-730eca15b0027939"
+          ]
+        },
+        "vector": {
+          "outcome": "no_target_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": 0.0,
+          "hit_at_5": false,
+          "reciprocal_rank_at_5": 0.0,
+          "annotated_section_precision": 0.0,
+          "ndcg_at_5": 0.0,
+          "ranked_chunk_ids": [
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-02-bf168e7cdc89ab42",
+            "faq-05-21983a9bd3fbcf51",
+            "faq-03-0fef506d890a0970",
+            "faq-02-2169169ebd0262d0"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 3,
+          "target_ranks": [
+            3
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 0.3333333333333333,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 0.5,
+          "ranked_chunk_ids": [
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-02-bf168e7cdc89ab42",
+            "guide-02-1702fa34e85cfced",
+            "faq-02-2169169ebd0262d0",
+            "faq-02-f0ef315fdb4cc4e1"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-03",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-03-2a3c8996c6de39ed",
+            "guide-03-730eca15b0027939",
+            "guide-03-11f9e5f33afb215f",
+            "guide-03-5da558a944a5142c",
+            "guide-03-df954881920749b3"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 3,
+          "duplicate_section_slots": 2,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.3333333333333333,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-03-11f9e5f33afb215f",
+            "guide-03-8e53620495f6fac2",
+            "faq-03-4474cb98c8d5c86a",
+            "guide-03-2a3c8996c6de39ed",
+            "faq-03-4815fd1571c01678"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-03-11f9e5f33afb215f",
+            "guide-03-2a3c8996c6de39ed",
+            "guide-03-730eca15b0027939",
+            "guide-03-8e53620495f6fac2",
+            "guide-03-df954881920749b3"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-04",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 2,
+          "target_ranks": [
+            2
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 0.5,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 0.6309297535714575,
+          "ranked_chunk_ids": [
+            "guide-03-8e53620495f6fac2",
+            "faq-03-93f0877493ed47c1",
+            "faq-01-4e7f17f17a6eea6a",
+            "guide-03-730eca15b0027939",
+            "faq-03-4474cb98c8d5c86a"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 2,
+          "target_ranks": [
+            2
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 0.5,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 0.6309297535714575,
+          "ranked_chunk_ids": [
+            "guide-03-8e53620495f6fac2",
+            "faq-03-93f0877493ed47c1",
+            "guide-03-df954881920749b3",
+            "guide-02-697797dc9710e4da",
+            "guide-03-730eca15b0027939"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 2,
+          "target_ranks": [
+            2
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 0.5,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 0.6309297535714575,
+          "ranked_chunk_ids": [
+            "guide-03-8e53620495f6fac2",
+            "faq-03-93f0877493ed47c1",
+            "guide-03-df954881920749b3",
+            "guide-03-730eca15b0027939",
+            "guide-02-697797dc9710e4da"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-05",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-03-0fef506d890a0970",
+            "guide-03-5da558a944a5142c",
+            "faq-01-4e7f17f17a6eea6a",
+            "guide-03-f0f92c2e54701b0c",
+            "guide-03-df954881920749b3"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-03-0fef506d890a0970",
+            "guide-03-5da558a944a5142c",
+            "faq-03-4474cb98c8d5c86a",
+            "guide-03-f0f92c2e54701b0c",
+            "guide-04-cee647fe496d41bc"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-03-0fef506d890a0970",
+            "guide-03-5da558a944a5142c",
+            "guide-03-f0f92c2e54701b0c",
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-03-4474cb98c8d5c86a"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-06",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-03-4474cb98c8d5c86a",
+            "guide-03-5da558a944a5142c",
+            "guide-03-730eca15b0027939",
+            "guide-03-2a3c8996c6de39ed",
+            "faq-01-4e7f17f17a6eea6a"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-03-4474cb98c8d5c86a",
+            "faq-03-0fef506d890a0970",
+            "guide-03-5da558a944a5142c",
+            "faq-03-4815fd1571c01678",
+            "faq-03-93f0877493ed47c1"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-03-4474cb98c8d5c86a",
+            "guide-03-5da558a944a5142c",
+            "faq-03-4815fd1571c01678",
+            "faq-03-0fef506d890a0970",
+            "faq-01-4e7f17f17a6eea6a"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-07",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 3,
+          "duplicate_section_slots": 2,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.3333333333333333,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-04-1ab68fae2c78630d",
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-05-97003d9f89f26237",
+            "faq-06-532b6606f99baf24",
+            "guide-05-0a02bf3e2dac8c6f"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 3,
+          "duplicate_section_slots": 2,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.3333333333333333,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-04-4e74edcb2ddc00c4",
+            "faq-04-1ab68fae2c78630d",
+            "guide-05-97003d9f89f26237",
+            "faq-06-532b6606f99baf24",
+            "guide-05-0a02bf3e2dac8c6f"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 3,
+          "duplicate_section_slots": 2,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.3333333333333333,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-04-1ab68fae2c78630d",
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-05-97003d9f89f26237",
+            "faq-06-532b6606f99baf24",
+            "guide-05-0a02bf3e2dac8c6f"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-08",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-05-f7ff9e433cb3df8c",
+            "guide-05-7ae7f9f1f04312df",
+            "guide-04-63a06a11439153d3",
+            "guide-01-a6b0b88c9a7fdd23",
+            "guide-04-8b1d3fd175c57841"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 2,
+          "target_ranks": [
+            2
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 0.5,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 0.6309297535714575,
+          "ranked_chunk_ids": [
+            "guide-04-8b1d3fd175c57841",
+            "guide-05-f7ff9e433cb3df8c",
+            "guide-04-cee647fe496d41bc",
+            "guide-05-7ae7f9f1f04312df",
+            "guide-04-e2df879a3ae24e1b"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-05-f7ff9e433cb3df8c",
+            "guide-04-8b1d3fd175c57841",
+            "guide-05-7ae7f9f1f04312df",
+            "guide-01-a6b0b88c9a7fdd23",
+            "guide-04-63a06a11439153d3"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-09",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-06-74097e5d9466ecf2",
+            "guide-05-137999829b85b554",
+            "guide-05-97003d9f89f26237",
+            "guide-03-2a3c8996c6de39ed",
+            "guide-01-55aa792301c7b45a"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 2,
+          "target_ranks": [
+            2
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 0.5,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 0.6309297535714575,
+          "ranked_chunk_ids": [
+            "guide-05-77ec42cc273d1d87",
+            "guide-06-74097e5d9466ecf2",
+            "guide-05-f7ff9e433cb3df8c",
+            "guide-06-88296befb39a1912",
+            "faq-04-243b566ac3654806"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-06-74097e5d9466ecf2",
+            "guide-05-77ec42cc273d1d87",
+            "faq-04-243b566ac3654806",
+            "guide-05-97003d9f89f26237",
+            "guide-05-f7ff9e433cb3df8c"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-10",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-06-667099c43ef4f00c",
+            "guide-06-6cc1056663944039",
+            "faq-04-243b566ac3654806",
+            "guide-05-77ec42cc273d1d87",
+            "guide-01-0c11d4174c049b67"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-06-6cc1056663944039",
+            "guide-06-667099c43ef4f00c",
+            "faq-04-243b566ac3654806",
+            "guide-05-77ec42cc273d1d87",
+            "guide-05-137999829b85b554"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-06-667099c43ef4f00c",
+            "guide-06-6cc1056663944039",
+            "faq-04-243b566ac3654806",
+            "guide-05-77ec42cc273d1d87",
+            "guide-01-9053f77f41f09364"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-11",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 2,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 2,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1,
+            3
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.5,
+          "ndcg_at_5": 0.9197207891481876,
+          "ranked_chunk_ids": [
+            "faq-05-21983a9bd3fbcf51",
+            "guide-04-e2df879a3ae24e1b",
+            "faq-05-cdf20472c1434f0e",
+            "faq-05-716dca93f951382c",
+            "guide-04-7c3a84f84c635436"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 2,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 2,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1,
+            2
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.5,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-05-21983a9bd3fbcf51",
+            "faq-05-716dca93f951382c",
+            "faq-05-cdf20472c1434f0e",
+            "guide-04-8b1d3fd175c57841",
+            "faq-05-8138af3a37218276"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 2,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 2,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1,
+            2
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.5,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-05-21983a9bd3fbcf51",
+            "faq-05-716dca93f951382c",
+            "faq-05-cdf20472c1434f0e",
+            "faq-05-8138af3a37218276",
+            "guide-04-cee647fe496d41bc"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-12",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-04-7c3a84f84c635436",
+            "faq-05-8138af3a37218276",
+            "faq-05-cdf20472c1434f0e",
+            "guide-04-8b1d3fd175c57841",
+            "guide-01-9053f77f41f09364"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-04-7c3a84f84c635436",
+            "faq-05-8138af3a37218276",
+            "guide-04-63a06a11439153d3",
+            "guide-04-e2df879a3ae24e1b",
+            "faq-05-21983a9bd3fbcf51"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-04-7c3a84f84c635436",
+            "faq-05-8138af3a37218276",
+            "guide-04-8b1d3fd175c57841",
+            "guide-04-63a06a11439153d3",
+            "faq-05-cdf20472c1434f0e"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-13",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-04-c22a47f8db9e5a30",
+            "guide-04-26d9cff8fe0fca54",
+            "guide-06-563fbb37efd55d1d",
+            "guide-05-f7ff9e433cb3df8c",
+            "faq-05-cdf20472c1434f0e"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 3,
+          "duplicate_section_slots": 2,
+          "matched_sections": 1,
+          "first_target_rank": 2,
+          "target_ranks": [
+            2
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 0.5,
+          "annotated_section_precision": 0.3333333333333333,
+          "ndcg_at_5": 0.6309297535714575,
+          "ranked_chunk_ids": [
+            "guide-04-cee647fe496d41bc",
+            "guide-04-c22a47f8db9e5a30",
+            "guide-04-e2df879a3ae24e1b",
+            "guide-04-8b1d3fd175c57841",
+            "guide-04-26d9cff8fe0fca54"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 3,
+          "duplicate_section_slots": 2,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.3333333333333333,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "guide-04-c22a47f8db9e5a30",
+            "guide-04-26d9cff8fe0fca54",
+            "guide-04-cee647fe496d41bc",
+            "guide-04-e2df879a3ae24e1b",
+            "faq-05-cdf20472c1434f0e"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-14",
+      "split": "holdout",
+      "expected_decision": "answer",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 2,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 2,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1,
+            5
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.4,
+          "ndcg_at_5": 0.8503449055347546,
+          "ranked_chunk_ids": [
+            "guide-01-9053f77f41f09364",
+            "faq-01-3b3826bd63329b97",
+            "guide-02-1702fa34e85cfced",
+            "faq-06-fdd7f4deb2eb6e27",
+            "guide-02-ee93c1db21363bab"
+          ]
+        },
+        "vector": {
+          "outcome": "no_target_retrieved",
+          "failed": false,
+          "expected_sections": 2,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": 0.0,
+          "hit_at_5": false,
+          "reciprocal_rank_at_5": 0.0,
+          "annotated_section_precision": 0.0,
+          "ndcg_at_5": 0.0,
+          "ranked_chunk_ids": [
+            "faq-06-532b6606f99baf24",
+            "faq-06-fdd7f4deb2eb6e27",
+            "faq-01-26b3d0b13780d0f3",
+            "faq-04-68f28d172a1afb3c",
+            "faq-02-bf168e7cdc89ab42"
+          ]
+        },
+        "hybrid": {
+          "outcome": "partial_targets",
+          "failed": false,
+          "expected_sections": 2,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 2,
+          "target_ranks": [
+            2
+          ],
+          "recall_at_5": 0.5,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 0.5,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 0.38685280723454163,
+          "ranked_chunk_ids": [
+            "faq-06-fdd7f4deb2eb6e27",
+            "guide-01-9053f77f41f09364",
+            "faq-02-bf168e7cdc89ab42",
+            "guide-01-b90926d16e227c38",
+            "guide-02-1702fa34e85cfced"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-15",
+      "split": "holdout",
+      "expected_decision": "needs_info",
+      "retrieval": {
+        "keyword": {
+          "outcome": "no_target_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": 0.0,
+          "hit_at_5": false,
+          "reciprocal_rank_at_5": 0.0,
+          "annotated_section_precision": 0.0,
+          "ndcg_at_5": 0.0,
+          "ranked_chunk_ids": [
+            "faq-01-26b3d0b13780d0f3",
+            "faq-01-3b3826bd63329b97",
+            "faq-01-4e7f17f17a6eea6a",
+            "faq-01-93196e350a01cd7c",
+            "faq-02-2169169ebd0262d0"
+          ]
+        },
+        "vector": {
+          "outcome": "no_target_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": 0.0,
+          "hit_at_5": false,
+          "reciprocal_rank_at_5": 0.0,
+          "annotated_section_precision": 0.0,
+          "ndcg_at_5": 0.0,
+          "ranked_chunk_ids": [
+            "guide-04-c22a47f8db9e5a30",
+            "guide-04-8b1d3fd175c57841",
+            "guide-04-cee647fe496d41bc",
+            "guide-05-137999829b85b554",
+            "guide-05-a29bd14c32b32b82"
+          ]
+        },
+        "hybrid": {
+          "outcome": "no_target_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": 0.0,
+          "hit_at_5": false,
+          "reciprocal_rank_at_5": 0.0,
+          "annotated_section_precision": 0.0,
+          "ndcg_at_5": 0.0,
+          "ranked_chunk_ids": [
+            "guide-04-c22a47f8db9e5a30",
+            "guide-04-8b1d3fd175c57841",
+            "guide-04-cee647fe496d41bc",
+            "guide-05-137999829b85b554",
+            "guide-05-a29bd14c32b32b82"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-16",
+      "split": "holdout",
+      "expected_decision": "needs_info",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-01-26b3d0b13780d0f3",
+            "guide-03-8e53620495f6fac2",
+            "guide-03-730eca15b0027939",
+            "faq-04-68f28d172a1afb3c",
+            "faq-06-532b6606f99baf24"
+          ]
+        },
+        "vector": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 2,
+          "target_ranks": [
+            2
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 0.5,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 0.6309297535714575,
+          "ranked_chunk_ids": [
+            "guide-03-8e53620495f6fac2",
+            "faq-01-26b3d0b13780d0f3",
+            "guide-03-730eca15b0027939",
+            "faq-03-4474cb98c8d5c86a",
+            "faq-03-4815fd1571c01678"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-01-26b3d0b13780d0f3",
+            "guide-03-8e53620495f6fac2",
+            "guide-03-730eca15b0027939",
+            "faq-04-68f28d172a1afb3c",
+            "faq-06-532b6606f99baf24"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-17",
+      "split": "holdout",
+      "expected_decision": "needs_info",
+      "retrieval": {
+        "keyword": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 1,
+          "first_target_rank": 1,
+          "target_ranks": [
+            1
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 1.0,
+          "annotated_section_precision": 0.25,
+          "ndcg_at_5": 1.0,
+          "ranked_chunk_ids": [
+            "faq-06-532b6606f99baf24",
+            "faq-04-243b566ac3654806",
+            "guide-05-137999829b85b554",
+            "faq-04-4e74edcb2ddc00c4",
+            "faq-04-1ab68fae2c78630d"
+          ]
+        },
+        "vector": {
+          "outcome": "no_target_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": 0.0,
+          "hit_at_5": false,
+          "reciprocal_rank_at_5": 0.0,
+          "annotated_section_precision": 0.0,
+          "ndcg_at_5": 0.0,
+          "ranked_chunk_ids": [
+            "guide-06-88296befb39a1912",
+            "faq-04-4e74edcb2ddc00c4",
+            "faq-04-243b566ac3654806",
+            "faq-04-68f28d172a1afb3c",
+            "guide-05-77ec42cc273d1d87"
+          ]
+        },
+        "hybrid": {
+          "outcome": "all_targets_retrieved",
+          "failed": false,
+          "expected_sections": 1,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 1,
+          "first_target_rank": 4,
+          "target_ranks": [
+            4
+          ],
+          "recall_at_5": 1.0,
+          "hit_at_5": true,
+          "reciprocal_rank_at_5": 0.25,
+          "annotated_section_precision": 0.2,
+          "ndcg_at_5": 0.43067655807339306,
+          "ranked_chunk_ids": [
+            "faq-04-243b566ac3654806",
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-06-88296befb39a1912",
+            "faq-06-532b6606f99baf24",
+            "guide-05-137999829b85b554"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-18",
+      "split": "holdout",
+      "expected_decision": "out_of_scope",
+      "retrieval": {
+        "keyword": {
+          "outcome": "no_gold_not_scored",
+          "failed": false,
+          "expected_sections": 0,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": null,
+          "hit_at_5": null,
+          "reciprocal_rank_at_5": null,
+          "annotated_section_precision": null,
+          "ndcg_at_5": null,
+          "ranked_chunk_ids": [
+            "faq-06-dc59de19d6b11332",
+            "faq-04-1ab68fae2c78630d",
+            "guide-05-97003d9f89f26237",
+            "guide-04-26d9cff8fe0fca54",
+            "guide-03-df954881920749b3"
+          ]
+        },
+        "vector": {
+          "outcome": "no_gold_not_scored",
+          "failed": false,
+          "expected_sections": 0,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": null,
+          "hit_at_5": null,
+          "reciprocal_rank_at_5": null,
+          "annotated_section_precision": null,
+          "ndcg_at_5": null,
+          "ranked_chunk_ids": [
+            "faq-06-dc59de19d6b11332",
+            "guide-02-bb0fa32b19391d74",
+            "faq-04-68f28d172a1afb3c",
+            "guide-01-9053f77f41f09364",
+            "guide-02-6b31796c49b25f22"
+          ]
+        },
+        "hybrid": {
+          "outcome": "no_gold_not_scored",
+          "failed": false,
+          "expected_sections": 0,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": null,
+          "hit_at_5": null,
+          "reciprocal_rank_at_5": null,
+          "annotated_section_precision": null,
+          "ndcg_at_5": null,
+          "ranked_chunk_ids": [
+            "faq-06-dc59de19d6b11332",
+            "guide-05-97003d9f89f26237",
+            "faq-04-1ab68fae2c78630d",
+            "faq-06-532b6606f99baf24",
+            "faq-04-68f28d172a1afb3c"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-19",
+      "split": "holdout",
+      "expected_decision": "out_of_scope",
+      "retrieval": {
+        "keyword": {
+          "outcome": "no_gold_not_scored",
+          "failed": false,
+          "expected_sections": 0,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": null,
+          "hit_at_5": null,
+          "reciprocal_rank_at_5": null,
+          "annotated_section_precision": null,
+          "ndcg_at_5": null,
+          "ranked_chunk_ids": [
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-04-c22a47f8db9e5a30",
+            "guide-03-f0f92c2e54701b0c",
+            "guide-04-e2df879a3ae24e1b",
+            "guide-05-f7ff9e433cb3df8c"
+          ]
+        },
+        "vector": {
+          "outcome": "no_gold_not_scored",
+          "failed": false,
+          "expected_sections": 0,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": null,
+          "hit_at_5": null,
+          "reciprocal_rank_at_5": null,
+          "annotated_section_precision": null,
+          "ndcg_at_5": null,
+          "ranked_chunk_ids": [
+            "guide-06-88296befb39a1912",
+            "guide-06-d6949f78cde50c64",
+            "guide-05-97003d9f89f26237",
+            "guide-05-0a02bf3e2dac8c6f",
+            "guide-02-1702fa34e85cfced"
+          ]
+        },
+        "hybrid": {
+          "outcome": "no_gold_not_scored",
+          "failed": false,
+          "expected_sections": 0,
+          "returned_chunks": 5,
+          "unique_returned_sections": 4,
+          "duplicate_section_slots": 1,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": null,
+          "hit_at_5": null,
+          "reciprocal_rank_at_5": null,
+          "annotated_section_precision": null,
+          "ndcg_at_5": null,
+          "ranked_chunk_ids": [
+            "faq-04-4e74edcb2ddc00c4",
+            "guide-05-0a02bf3e2dac8c6f",
+            "faq-04-1ab68fae2c78630d",
+            "guide-04-26d9cff8fe0fca54",
+            "guide-06-88296befb39a1912"
+          ]
+        }
+      }
+    },
+    {
+      "id": "test-20",
+      "split": "holdout",
+      "expected_decision": "out_of_scope",
+      "retrieval": {
+        "keyword": {
+          "outcome": "no_gold_not_scored",
+          "failed": false,
+          "expected_sections": 0,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": null,
+          "hit_at_5": null,
+          "reciprocal_rank_at_5": null,
+          "annotated_section_precision": null,
+          "ndcg_at_5": null,
+          "ranked_chunk_ids": [
+            "guide-04-d14af54f3cf07478",
+            "guide-01-9053f77f41f09364",
+            "guide-04-7c3a84f84c635436",
+            "faq-01-26b3d0b13780d0f3",
+            "faq-01-3b3826bd63329b97"
+          ]
+        },
+        "vector": {
+          "outcome": "no_gold_not_scored",
+          "failed": false,
+          "expected_sections": 0,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": null,
+          "hit_at_5": null,
+          "reciprocal_rank_at_5": null,
+          "annotated_section_precision": null,
+          "ndcg_at_5": null,
+          "ranked_chunk_ids": [
+            "faq-04-68f28d172a1afb3c",
+            "faq-01-26b3d0b13780d0f3",
+            "faq-03-4815fd1571c01678",
+            "faq-06-cbee5805275340b2",
+            "faq-05-21983a9bd3fbcf51"
+          ]
+        },
+        "hybrid": {
+          "outcome": "no_gold_not_scored",
+          "failed": false,
+          "expected_sections": 0,
+          "returned_chunks": 5,
+          "unique_returned_sections": 5,
+          "duplicate_section_slots": 0,
+          "matched_sections": 0,
+          "first_target_rank": null,
+          "target_ranks": [],
+          "recall_at_5": null,
+          "hit_at_5": null,
+          "reciprocal_rank_at_5": null,
+          "annotated_section_precision": null,
+          "ndcg_at_5": null,
+          "ranked_chunk_ids": [
+            "faq-04-68f28d172a1afb3c",
+            "guide-04-d14af54f3cf07478",
+            "faq-01-26b3d0b13780d0f3",
+            "guide-01-9053f77f41f09364",
+            "faq-03-4815fd1571c01678"
+          ]
+        }
+      }
+    }
+  ],
+  "source_sha256": "7420ca87db040c3a76e902e99b1c9dcff3d80e5e5a6b942002ec3158373fa8d6",
+  "created_at": "2026-10-29T09:14:56.790400+00:00"
+}

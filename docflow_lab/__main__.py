@@ -28,6 +28,9 @@ def main():
     retrieval_eval = sub.add_parser("evaluate-retrieval", help="比较BM25、BGE与RRF融合；不调用生成模型")
     retrieval_eval.add_argument("--suite", choices=["development", "holdout", "all"], default="all")
     retrieval_eval.add_argument("--output", type=Path, required=True)
+    retrieval_diagnostics = sub.add_parser("analyze-retrieval", help="离线核对历史三路排名，诊断标注精确率、nDCG与失败；不运行模型")
+    retrieval_diagnostics.add_argument("--input", type=Path, required=True)
+    retrieval_diagnostics.add_argument("--output", type=Path, required=True)
     compare_context = sub.add_parser("compare-context", help="离线对照完整文档章节与BM25检索；不调用真实模型")
     compare_context.add_argument("--suite", choices=["development", "holdout", "all"], default="development")
     compare_context.add_argument("--limit", type=int, help="只运行分区开头若干题，默认全部")
@@ -60,6 +63,11 @@ def main():
         from .retrieval_v2 import evaluate_retrieval
         result = evaluate_retrieval(settings, args.output, args.suite)
         print(json.dumps({"output": str(args.output.resolve()), "model_requests": 0}, ensure_ascii=False, indent=2))
+    elif args.command == "analyze-retrieval":
+        from .retrieval_diagnostics import analyze_saved
+        result = analyze_saved(settings, args.input, args.output)
+        print(json.dumps({"output": str(args.output.resolve()), "model_requests": 0,
+                          "summary": result["summary"]}, ensure_ascii=False, indent=2))
     elif args.command == "compare-context":
         from .context_comparison import run_comparison
         result = run_comparison(settings, args.output, args.suite, args.limit)

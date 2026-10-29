@@ -207,6 +207,7 @@ def test_evaluator_exports_all_three_rankings_without_passing_labels_to_search(t
     import json
     import docflow_lab.evaluation as evaluation
     import docflow_lab.retrieval_v2 as module
+    import docflow_lab.retrieval_diagnostics as diagnostics
 
     chunks = [chunk("a"), chunk("b")]
     question = {"id": "dev-example", "question": "唯一问题内容", "expected_decision": "answer",
@@ -218,6 +219,7 @@ def test_evaluator_exports_all_three_rankings_without_passing_labels_to_search(t
     checked = []
     monkeypatch.setattr(evaluation, "verify_materials", lambda root: checked.append(root))
     monkeypatch.setattr(module, "load_chunks", lambda path: chunks)
+    monkeypatch.setattr(diagnostics, "load_chunks", lambda path: chunks)
     keyword = RankedDouble(chunks, [("a", 3), ("b", 0)])
     vector = RankedDouble(chunks, [("b", 0.9), ("a", 0.8)])
     vector.info = lambda: {"embedding_mode": "test_double"}
@@ -225,7 +227,7 @@ def test_evaluator_exports_all_three_rankings_without_passing_labels_to_search(t
     monkeypatch.setattr(module, "VectorRetriever", lambda *args, **kwargs: vector)
     settings = SimpleNamespace(root=tmp_path, knowledge_dir=tmp_path / "knowledge", vector_dir=tmp_path / "chroma", model_path=None)
     report = module.evaluate_retrieval(settings, tmp_path / "results", "development")
-    assert checked == [tmp_path]
+    assert checked == [tmp_path, tmp_path]  # run preflight and diagnostic provenance check
     assert report["model_requests"] == 0
     assert report["summary"]["keyword"]["micro_recall_at_5"] == 1.0
     assert report["summary"]["vector"]["mrr_at_5"] == 0.5
