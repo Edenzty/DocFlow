@@ -1,0 +1,414 @@
+{
+  "mode": "real_document_lifecycle_with_mock_generation",
+  "model_requests": 0,
+  "passed": 10,
+  "checks": [
+    "导入与预览不会影响在线检索",
+    "发布后真实BM25检索命中新文档，工单绑定该知识快照",
+    "过期发布请求冲突，当前版本保持不变",
+    "更新后新查询只读取该文档的新修订，旧片段不混入",
+    "已有草稿和证据保留原快照，不被新文档重写",
+    "明确追问生成新草稿使用当前快照，历史草稿仍可追溯",
+    "逐次检索保存快照、查询、方法、排名、正文与耗时",
+    "回滚后新检索恢复旧修订",
+    "退役文档后不再进入新查询，历史证据仍保留",
+    "服务重启后修订、快照和检索记录仍然存在"
+  ],
+  "example": {
+    "question": "设备接口出现DFX900时重试间隔配置为多少秒？",
+    "old_snapshot": "kb-b223c0b632d7419a95b89ccd35f53fe0",
+    "new_snapshot": "kb-2a03d3bf8efd45568bf32dc356b51eb2",
+    "trace": {
+      "trace_id": "484d34f20bd1469aa7ab5a552c0e982a",
+      "snapshot_id": "kb-2a03d3bf8efd45568bf32dc356b51eb2",
+      "ticket_id": null,
+      "ticket_version": null,
+      "query": "设备接口出现DFX900时重试间隔配置为多少秒？",
+      "method": "keyword",
+      "stage": "search",
+      "elapsed_ms": 0.31680000392952934,
+      "results": [
+        {
+          "chunk_id": "user-e356f76cd69c6042e662eb6cd58f0d29",
+          "document_id": "demo-queue",
+          "title": "演示网关维护手册",
+          "section": "DFX900队列积压",
+          "source": "原创合成演示手册",
+          "version": "r2",
+          "text": "设备接口出现DFX900时，先查看队列长度，重试间隔配置为45秒。",
+          "score": 33.45674997,
+          "method": "keyword",
+          "rank": 1
+        },
+        {
+          "chunk_id": "guide-02-697797dc9710e4da",
+          "document_id": "guide-02",
+          "title": "EdgeSecLab v2 身份签名与设备归属",
+          "section": "认证头与签名原文",
+          "source": "edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1:docs/WEEK2_GUIDE.md;edgesec_lab/security.py;edgesec_lab/models.py",
+          "version": "edgesec-v2.0-curated-2026-10-25",
+          "text": "设备接口必须带四个认证头，且每个只能出现一次：X-Key-Id、X-Timestamp、X-Nonce、X-Signature。X-Timestamp 是Unix秒数字符串；X-Nonce 为32位小写十六进制；X-Signature 为64位小写十六进制。每个设备使用独立32字节密钥，密钥不能写入工单或报告。",
+          "score": 8.16747595,
+          "method": "keyword",
+          "rank": 2
+        },
+        {
+          "chunk_id": "guide-03-f0f92c2e54701b0c",
+          "document_id": "guide-03",
+          "title": "EdgeSecLab v2 防重放与事务",
+          "section": "时间窗口与重复请求",
+          "source": "edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1:docs/WEEK3_GUIDE.md;edgesec_lab/replay.py;docs/ARCHITECTURE.md",
+          "version": "edgesec-v2.0-curated-2026-10-25",
+          "text": "请求签名时间 X-Timestamp 与服务器当前整数秒的绝对差不得超过300秒，正负300秒均允许，正负301秒拒绝。时间超窗返回401，reason=timestamp_out_of_window；签名可能已经验证，因此401不一定表示伪造签名。等待SQLite写锁后还会重新检查时间。\n\n服务端以 (key_id, nonce) 为唯一键持久登记请求。",
+          "score": 5.80593567,
+          "method": "keyword",
+          "rank": 3
+        },
+        {
+          "chunk_id": "faq-01-26b3d0b13780d0f3",
+          "document_id": "faq-01",
+          "title": "FAQ：401、403、422和409怎么排查",
+          "section": "只有访问失败能否诊断",
+          "source": "docflow-original:faq-01;grounded-in-edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1",
+          "version": "docflow-kb-v1-2026-10-25",
+          "text": "只有“设备访问失败”或“接口不行”不足以定位根因。需要追问HTTP方法、目标路径、返回状态码、reason、使用的key_id、请求发生时间与是否重试；可提供脱敏request_id便于关联。不要索要API密钥、设备密钥或完整认证头。没有这些信息不能断言必然是签名、权限或重放问题。",
+          "score": 5.76819777,
+          "method": "keyword",
+          "rank": 4
+        },
+        {
+          "chunk_id": "faq-03-0fef506d890a0970",
+          "document_id": "faq-03",
+          "title": "FAQ：超时重试、nonce与历史补传",
+          "section": "旧测量数据可以补传",
+          "source": "docflow-original:faq-03;grounded-in-edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1",
+          "version": "docflow-kb-v1-2026-10-25",
+          "text": "collected_at记录采集时间，X-Timestamp记录这一次请求签名时间。历史测量可以使用当前时间与新nonce重新签名后上传，不能直接把旧采集日期当作签名过期。请求时间仍应在服务器正负300秒窗口内，原样复用旧签名时间不等于合法补传。",
+          "score": 5.03391705,
+          "method": "keyword",
+          "rank": 5
+        }
+      ],
+      "error": null,
+      "created_at": "2026-10-29T10:31:25.215529+00:00"
+    },
+    "ticket": {
+      "id": "cf6db1ff1bcf41deac36d7e9cb5a03b2",
+      "question": "设备接口出现DFX900时重试间隔配置为多少秒？",
+      "method": "keyword",
+      "mode": "mock",
+      "status": "awaiting_review",
+      "version": 2,
+      "draft": {
+        "decision": "answer",
+        "answer": "【离线模拟草稿，仅摘录召回文档，未调用真实模型】\n参考《演示网关维护手册》/DFX900队列积压：设备接口出现DFX900时，先查看队列长度，重试间隔配置为45秒。\n\n参考《EdgeSecLab v2 本机启动与演示》/调试暂停与终端输出：VS Code 可选择已有 EdgeSecLab: demo 运行配置。停在黄色代码行表示断点暂停，按F5继续；完整JSON在演示结束后输出。确认终端命令、解释器和断点状态，再判断是否异常，不要仅凭暂时无输出就关闭安全检查。长时间暂停可能使已签名请求超出300秒窗口，结束调试后重新运行即可。",
+        "citations": [
+          "user-e356f76cd69c6042e662eb6cd58f0d29",
+          "guide-01-b90926d16e227c38"
+        ]
+      },
+      "evidence": [
+        {
+          "chunk_id": "user-e356f76cd69c6042e662eb6cd58f0d29",
+          "document_id": "demo-queue",
+          "title": "演示网关维护手册",
+          "section": "DFX900队列积压",
+          "source": "原创合成演示手册",
+          "version": "r2",
+          "text": "设备接口出现DFX900时，先查看队列长度，重试间隔配置为45秒。",
+          "score": 38.37178498,
+          "method": "keyword"
+        },
+        {
+          "chunk_id": "guide-01-b90926d16e227c38",
+          "document_id": "guide-01",
+          "title": "EdgeSecLab v2 本机启动与演示",
+          "section": "调试暂停与终端输出",
+          "source": "edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1:README.md;docs/WEEK1_GUIDE.md;docs/FIRST_HANDS_ON.md",
+          "version": "edgesec-v2.0-curated-2026-10-25",
+          "text": "VS Code 可选择已有 EdgeSecLab: demo 运行配置。停在黄色代码行表示断点暂停，按F5继续；完整JSON在演示结束后输出。确认终端命令、解释器和断点状态，再判断是否异常，不要仅凭暂时无输出就关闭安全检查。长时间暂停可能使已签名请求超出300秒窗口，结束调试后重新运行即可。",
+          "score": 10.39409958,
+          "method": "keyword"
+        },
+        {
+          "chunk_id": "guide-03-f0f92c2e54701b0c",
+          "document_id": "guide-03",
+          "title": "EdgeSecLab v2 防重放与事务",
+          "section": "时间窗口与重复请求",
+          "source": "edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1:docs/WEEK3_GUIDE.md;edgesec_lab/replay.py;docs/ARCHITECTURE.md",
+          "version": "edgesec-v2.0-curated-2026-10-25",
+          "text": "请求签名时间 X-Timestamp 与服务器当前整数秒的绝对差不得超过300秒，正负300秒均允许，正负301秒拒绝。时间超窗返回401，reason=timestamp_out_of_window；签名可能已经验证，因此401不一定表示伪造签名。等待SQLite写锁后还会重新检查时间。\n\n服务端以 (key_id, nonce) 为唯一键持久登记请求。",
+          "score": 9.08179028,
+          "method": "keyword"
+        },
+        {
+          "chunk_id": "faq-03-0fef506d890a0970",
+          "document_id": "faq-03",
+          "title": "FAQ：超时重试、nonce与历史补传",
+          "section": "旧测量数据可以补传",
+          "source": "docflow-original:faq-03;grounded-in-edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1",
+          "version": "docflow-kb-v1-2026-10-25",
+          "text": "collected_at记录采集时间，X-Timestamp记录这一次请求签名时间。历史测量可以使用当前时间与新nonce重新签名后上传，不能直接把旧采集日期当作签名过期。请求时间仍应在服务器正负300秒窗口内，原样复用旧签名时间不等于合法补传。",
+          "score": 8.64652293,
+          "method": "keyword"
+        },
+        {
+          "chunk_id": "guide-02-697797dc9710e4da",
+          "document_id": "guide-02",
+          "title": "EdgeSecLab v2 身份签名与设备归属",
+          "section": "认证头与签名原文",
+          "source": "edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1:docs/WEEK2_GUIDE.md;edgesec_lab/security.py;edgesec_lab/models.py",
+          "version": "edgesec-v2.0-curated-2026-10-25",
+          "text": "设备接口必须带四个认证头，且每个只能出现一次：X-Key-Id、X-Timestamp、X-Nonce、X-Signature。X-Timestamp 是Unix秒数字符串；X-Nonce 为32位小写十六进制；X-Signature 为64位小写十六进制。每个设备使用独立32字节密钥，密钥不能写入工单或报告。",
+          "score": 8.16747595,
+          "method": "keyword"
+        }
+      ],
+      "draft_hash": "e22644ba7b2576008510cb164cdbf47c2f57139e2c171af240fff0b4944db05c",
+      "approval": null,
+      "error": null,
+      "created_at": "2026-10-29T10:31:24.528489+00:00",
+      "strategy": "rag",
+      "quality": null,
+      "trace": [],
+      "updated_at": "2026-10-29T10:31:25.288853+00:00",
+      "knowledge_snapshot_id": "kb-2a03d3bf8efd45568bf32dc356b51eb2",
+      "reply": null,
+      "events": [
+        {
+          "kind": "created",
+          "detail": "创建本地模拟工单；尚未生成或提交回复",
+          "created_at": "2026-10-29T10:31:24.529488+00:00"
+        },
+        {
+          "kind": "retrieved",
+          "detail": "v1 使用keyword，返回5个片段",
+          "created_at": "2026-10-29T10:31:24.586646+00:00"
+        },
+        {
+          "kind": "model_call",
+          "detail": "离线摘录模拟：真实模型请求0次",
+          "created_at": "2026-10-29T10:31:24.601252+00:00"
+        },
+        {
+          "kind": "draft_generated",
+          "detail": "v1 已生成；引用已校验，等待人工审核",
+          "created_at": "2026-10-29T10:31:24.612641+00:00"
+        },
+        {
+          "kind": "regenerated",
+          "detail": "创建新草稿版本，旧审核立即失效",
+          "created_at": "2026-10-29T10:31:25.235084+00:00"
+        },
+        {
+          "kind": "retrieved",
+          "detail": "v2 使用keyword，返回5个片段",
+          "created_at": "2026-10-29T10:31:25.264555+00:00"
+        },
+        {
+          "kind": "model_call",
+          "detail": "离线摘录模拟：真实模型请求0次",
+          "created_at": "2026-10-29T10:31:25.276201+00:00"
+        },
+        {
+          "kind": "draft_generated",
+          "detail": "v2 已生成；引用已校验，等待人工审核",
+          "created_at": "2026-10-29T10:31:25.288853+00:00"
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "设备接口出现DFX900时重试间隔配置为多少秒？",
+          "version": 1,
+          "created_at": "2026-10-29T10:31:24.529488+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "【离线模拟草稿，仅摘录召回文档，未调用真实模型】\n参考《演示网关维护手册》/DFX900队列积压：设备接口出现DFX900时，先查看队列长度，重试间隔配置为15秒。\n\n参考《EdgeSecLab v2 身份签名与设备归属》/认证头与签名原文：设备接口必须带四个认证头，且每个只能出现一次：X-Key-Id、X-Timestamp、X-Nonce、X-Signature。X-Timestamp 是Unix秒数字符串；X-Nonce 为32位小写十六进制；X-Signature 为64位小写十六进制。每个设备使用独立32字节密钥，密钥不能写入工单或报告。",
+          "version": 1,
+          "created_at": "2026-10-29T10:31:24.612641+00:00"
+        },
+        {
+          "role": "user",
+          "content": "请按当前手册重新确认配置",
+          "version": 2,
+          "created_at": "2026-10-29T10:31:25.235084+00:00"
+        },
+        {
+          "role": "assistant",
+          "content": "【离线模拟草稿，仅摘录召回文档，未调用真实模型】\n参考《演示网关维护手册》/DFX900队列积压：设备接口出现DFX900时，先查看队列长度，重试间隔配置为45秒。\n\n参考《EdgeSecLab v2 本机启动与演示》/调试暂停与终端输出：VS Code 可选择已有 EdgeSecLab: demo 运行配置。停在黄色代码行表示断点暂停，按F5继续；完整JSON在演示结束后输出。确认终端命令、解释器和断点状态，再判断是否异常，不要仅凭暂时无输出就关闭安全检查。长时间暂停可能使已签名请求超出300秒窗口，结束调试后重新运行即可。",
+          "version": 2,
+          "created_at": "2026-10-29T10:31:25.288853+00:00"
+        }
+      ],
+      "versions": [
+        {
+          "id": "cf6db1ff1bcf41deac36d7e9cb5a03b2",
+          "question": "设备接口出现DFX900时重试间隔配置为多少秒？",
+          "method": "keyword",
+          "mode": "mock",
+          "status": "awaiting_review",
+          "version": 2,
+          "draft": {
+            "decision": "answer",
+            "answer": "【离线模拟草稿，仅摘录召回文档，未调用真实模型】\n参考《演示网关维护手册》/DFX900队列积压：设备接口出现DFX900时，先查看队列长度，重试间隔配置为45秒。\n\n参考《EdgeSecLab v2 本机启动与演示》/调试暂停与终端输出：VS Code 可选择已有 EdgeSecLab: demo 运行配置。停在黄色代码行表示断点暂停，按F5继续；完整JSON在演示结束后输出。确认终端命令、解释器和断点状态，再判断是否异常，不要仅凭暂时无输出就关闭安全检查。长时间暂停可能使已签名请求超出300秒窗口，结束调试后重新运行即可。",
+            "citations": [
+              "user-e356f76cd69c6042e662eb6cd58f0d29",
+              "guide-01-b90926d16e227c38"
+            ]
+          },
+          "evidence": [
+            {
+              "chunk_id": "user-e356f76cd69c6042e662eb6cd58f0d29",
+              "document_id": "demo-queue",
+              "title": "演示网关维护手册",
+              "section": "DFX900队列积压",
+              "source": "原创合成演示手册",
+              "version": "r2",
+              "text": "设备接口出现DFX900时，先查看队列长度，重试间隔配置为45秒。",
+              "score": 38.37178498,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-01-b90926d16e227c38",
+              "document_id": "guide-01",
+              "title": "EdgeSecLab v2 本机启动与演示",
+              "section": "调试暂停与终端输出",
+              "source": "edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1:README.md;docs/WEEK1_GUIDE.md;docs/FIRST_HANDS_ON.md",
+              "version": "edgesec-v2.0-curated-2026-10-25",
+              "text": "VS Code 可选择已有 EdgeSecLab: demo 运行配置。停在黄色代码行表示断点暂停，按F5继续；完整JSON在演示结束后输出。确认终端命令、解释器和断点状态，再判断是否异常，不要仅凭暂时无输出就关闭安全检查。长时间暂停可能使已签名请求超出300秒窗口，结束调试后重新运行即可。",
+              "score": 10.39409958,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-f0f92c2e54701b0c",
+              "document_id": "guide-03",
+              "title": "EdgeSecLab v2 防重放与事务",
+              "section": "时间窗口与重复请求",
+              "source": "edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1:docs/WEEK3_GUIDE.md;edgesec_lab/replay.py;docs/ARCHITECTURE.md",
+              "version": "edgesec-v2.0-curated-2026-10-25",
+              "text": "请求签名时间 X-Timestamp 与服务器当前整数秒的绝对差不得超过300秒，正负300秒均允许，正负301秒拒绝。时间超窗返回401，reason=timestamp_out_of_window；签名可能已经验证，因此401不一定表示伪造签名。等待SQLite写锁后还会重新检查时间。\n\n服务端以 (key_id, nonce) 为唯一键持久登记请求。",
+              "score": 9.08179028,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-03-0fef506d890a0970",
+              "document_id": "faq-03",
+              "title": "FAQ：超时重试、nonce与历史补传",
+              "section": "旧测量数据可以补传",
+              "source": "docflow-original:faq-03;grounded-in-edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1",
+              "version": "docflow-kb-v1-2026-10-25",
+              "text": "collected_at记录采集时间，X-Timestamp记录这一次请求签名时间。历史测量可以使用当前时间与新nonce重新签名后上传，不能直接把旧采集日期当作签名过期。请求时间仍应在服务器正负300秒窗口内，原样复用旧签名时间不等于合法补传。",
+              "score": 8.64652293,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-02-697797dc9710e4da",
+              "document_id": "guide-02",
+              "title": "EdgeSecLab v2 身份签名与设备归属",
+              "section": "认证头与签名原文",
+              "source": "edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1:docs/WEEK2_GUIDE.md;edgesec_lab/security.py;edgesec_lab/models.py",
+              "version": "edgesec-v2.0-curated-2026-10-25",
+              "text": "设备接口必须带四个认证头，且每个只能出现一次：X-Key-Id、X-Timestamp、X-Nonce、X-Signature。X-Timestamp 是Unix秒数字符串；X-Nonce 为32位小写十六进制；X-Signature 为64位小写十六进制。每个设备使用独立32字节密钥，密钥不能写入工单或报告。",
+              "score": 8.16747595,
+              "method": "keyword"
+            }
+          ],
+          "draft_hash": "e22644ba7b2576008510cb164cdbf47c2f57139e2c171af240fff0b4944db05c",
+          "approval": null,
+          "error": null,
+          "created_at": "2026-10-29T10:31:25.235084+00:00",
+          "strategy": "rag",
+          "quality": null,
+          "trace": [],
+          "updated_at": "2026-10-29T10:31:25.288853+00:00",
+          "knowledge_snapshot_id": "kb-2a03d3bf8efd45568bf32dc356b51eb2"
+        },
+        {
+          "id": "cf6db1ff1bcf41deac36d7e9cb5a03b2",
+          "question": "设备接口出现DFX900时重试间隔配置为多少秒？",
+          "method": "keyword",
+          "mode": "mock",
+          "status": "awaiting_review",
+          "version": 1,
+          "draft": {
+            "decision": "answer",
+            "answer": "【离线模拟草稿，仅摘录召回文档，未调用真实模型】\n参考《演示网关维护手册》/DFX900队列积压：设备接口出现DFX900时，先查看队列长度，重试间隔配置为15秒。\n\n参考《EdgeSecLab v2 身份签名与设备归属》/认证头与签名原文：设备接口必须带四个认证头，且每个只能出现一次：X-Key-Id、X-Timestamp、X-Nonce、X-Signature。X-Timestamp 是Unix秒数字符串；X-Nonce 为32位小写十六进制；X-Signature 为64位小写十六进制。每个设备使用独立32字节密钥，密钥不能写入工单或报告。",
+            "citations": [
+              "user-fcf5ce7f7f36ce28e3aab8be21339062",
+              "guide-02-697797dc9710e4da"
+            ]
+          },
+          "evidence": [
+            {
+              "chunk_id": "user-fcf5ce7f7f36ce28e3aab8be21339062",
+              "document_id": "demo-queue",
+              "title": "演示网关维护手册",
+              "section": "DFX900队列积压",
+              "source": "原创合成演示手册",
+              "version": "r1",
+              "text": "设备接口出现DFX900时，先查看队列长度，重试间隔配置为15秒。",
+              "score": 33.45674997,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-02-697797dc9710e4da",
+              "document_id": "guide-02",
+              "title": "EdgeSecLab v2 身份签名与设备归属",
+              "section": "认证头与签名原文",
+              "source": "edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1:docs/WEEK2_GUIDE.md;edgesec_lab/security.py;edgesec_lab/models.py",
+              "version": "edgesec-v2.0-curated-2026-10-25",
+              "text": "设备接口必须带四个认证头，且每个只能出现一次：X-Key-Id、X-Timestamp、X-Nonce、X-Signature。X-Timestamp 是Unix秒数字符串；X-Nonce 为32位小写十六进制；X-Signature 为64位小写十六进制。每个设备使用独立32字节密钥，密钥不能写入工单或报告。",
+              "score": 8.16747595,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "guide-03-f0f92c2e54701b0c",
+              "document_id": "guide-03",
+              "title": "EdgeSecLab v2 防重放与事务",
+              "section": "时间窗口与重复请求",
+              "source": "edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1:docs/WEEK3_GUIDE.md;edgesec_lab/replay.py;docs/ARCHITECTURE.md",
+              "version": "edgesec-v2.0-curated-2026-10-25",
+              "text": "请求签名时间 X-Timestamp 与服务器当前整数秒的绝对差不得超过300秒，正负300秒均允许，正负301秒拒绝。时间超窗返回401，reason=timestamp_out_of_window；签名可能已经验证，因此401不一定表示伪造签名。等待SQLite写锁后还会重新检查时间。\n\n服务端以 (key_id, nonce) 为唯一键持久登记请求。",
+              "score": 5.80593567,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-01-26b3d0b13780d0f3",
+              "document_id": "faq-01",
+              "title": "FAQ：401、403、422和409怎么排查",
+              "section": "只有访问失败能否诊断",
+              "source": "docflow-original:faq-01;grounded-in-edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1",
+              "version": "docflow-kb-v1-2026-10-25",
+              "text": "只有“设备访问失败”或“接口不行”不足以定位根因。需要追问HTTP方法、目标路径、返回状态码、reason、使用的key_id、请求发生时间与是否重试；可提供脱敏request_id便于关联。不要索要API密钥、设备密钥或完整认证头。没有这些信息不能断言必然是签名、权限或重放问题。",
+              "score": 5.76819777,
+              "method": "keyword"
+            },
+            {
+              "chunk_id": "faq-03-0fef506d890a0970",
+              "document_id": "faq-03",
+              "title": "FAQ：超时重试、nonce与历史补传",
+              "section": "旧测量数据可以补传",
+              "source": "docflow-original:faq-03;grounded-in-edgesec-lab@4433f8b2c68874a55d00f92b0495f7878def60c1",
+              "version": "docflow-kb-v1-2026-10-25",
+              "text": "collected_at记录采集时间，X-Timestamp记录这一次请求签名时间。历史测量可以使用当前时间与新nonce重新签名后上传，不能直接把旧采集日期当作签名过期。请求时间仍应在服务器正负300秒窗口内，原样复用旧签名时间不等于合法补传。",
+              "score": 5.03391705,
+              "method": "keyword"
+            }
+          ],
+          "draft_hash": "7159d9b14d76238c75fe9631cb0725f24df022a80d64d7546d29a0116f0ff41b",
+          "approval": null,
+          "error": null,
+          "created_at": "2026-10-29T10:31:24.529488+00:00",
+          "strategy": "rag",
+          "quality": null,
+          "trace": [],
+          "updated_at": "2026-10-29T10:31:24.612641+00:00",
+          "knowledge_snapshot_id": "kb-b223c0b632d7419a95b89ccd35f53fe0"
+        }
+      ],
+      "job": null
+    }
+  }
+}

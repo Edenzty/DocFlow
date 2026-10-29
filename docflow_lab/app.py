@@ -98,6 +98,34 @@ class EditInput(BaseModel):
         return value.strip()
 
 
+class DocumentImport(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    document_id: str = Field(min_length=1, max_length=80)
+    title: str = Field(min_length=1, max_length=160)
+    source: str = Field(min_length=1, max_length=300)
+    filename: str = Field(min_length=1, max_length=200)
+    content: str = Field(min_length=1, max_length=200000)
+
+
+class PublishInput(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    version_id: str = Field(min_length=1, max_length=100)
+    expected_snapshot_id: str = Field(min_length=1, max_length=100)
+
+
+class SnapshotInput(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    expected_snapshot_id: str = Field(min_length=1, max_length=100)
+
+
+class ActivateInput(SnapshotInput):
+    snapshot_id: str = Field(min_length=1, max_length=100)
+
+
+class RemoveDocumentInput(SnapshotInput):
+    document_id: str = Field(min_length=1, max_length=80)
+
+
 def create_app(settings: Settings | None = None, *, engine: Engine | None = None):
     settings = settings or (engine.settings if engine else Settings())
     owned = engine is None
@@ -109,7 +137,7 @@ def create_app(settings: Settings | None = None, *, engine: Engine | None = None
         if owned:
             service.close()
 
-    app = FastAPI(title="DocFlow · 技术文档与工单 Agent", version="0.2.0", lifespan=lifespan,
+    app = FastAPI(title="DocFlow · 技术文档与工单 Agent", version="0.3.0", lifespan=lifespan,
                   docs_url=None, redoc_url=None)
     app.state.engine = service
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "testserver", "[::1]"])
@@ -129,7 +157,7 @@ def create_app(settings: Settings | None = None, *, engine: Engine | None = None
         response.headers["Cache-Control"] = "no-store"
         return response
 
-    for exception, code in [(Conflict, 409), (NotFound, 404), (RetrievalError, 503), (ModelError, 502), (TimeoutError, 504)]:
+    for exception, code in [(Conflict, 409), (NotFound, 404), (RetrievalError, 503), (ModelError, 502), (TimeoutError, 504), (ValueError, 422)]:
         async def handler(request, exc, status=code):
             return JSONResponse({"detail": str(exc)}, status_code=status)
         app.add_exception_handler(exception, handler)
@@ -149,15 +177,16 @@ def create_app(settings: Settings | None = None, *, engine: Engine | None = None
 
     @app.get("/api/config")
     def config():
-        vector = service.retrievers.get("vector")
+        knowledge = service.knowledge_summary()
         return {"model": settings.model, "live_enabled": settings.allow_live,
-                "budget": service.budget.summary(), "vector_ready": bool(vector and vector.ready),
-                "knowledge_documents": len({c.document_id for c in service.chunks}), "chunks": len(service.chunks),
+                "budget": service.budget.summary(), "vector_ready": knowledge["vector_ready"],
+                "knowledge_documents": len(knowledge["documents"]), "chunks": knowledge["chunks"],
+                "knowledge_snapshot_id": knowledge["snapshot_id"],
                 "strategies": ["rag", "agent"], "methods": list(service.retrievers), "statistics": service.store.statistics()}
 
     @app.post("/api/search")
     def search(data: SearchInput):
-        return {"results": service.search(data.query, data.method)}
+        return service.search_traced(data.query, data.method)
 
     @app.post("/api/search/compare")
     def compare(data: SearchInput):
@@ -171,13 +200,47 @@ def create_app(settings: Settings | None = None, *, engine: Engine | None = None
 
     @app.get("/api/knowledge")
     def knowledge():
-        documents = {}
-        for chunk in service.chunks:
-            item = documents.setdefault(chunk.document_id, {"document_id": chunk.document_id, "title": chunk.title,
-                                         "source": chunk.source, "version": chunk.version, "sections": set(), "chunks": 0})
-            item["sections"].add(chunk.section)
-            item["chunks"] += 1
-        return {"documents": [{**item, "sections": len(item["sections"])} for item in documents.values()], "chunks": len(service.chunks)}
+        return service.knowledge_summary()
+
+    @app.get("/api/knowledge/snapshots")
+    def snapshots():
+        return {"snapshots": service.knowledge.snapshots()}
+
+    @app.post("/api/knowledge/import", status_code=201)
+    def import_document(data: DocumentImport):
+        return service.knowledge.import_document(**data.model_dump())
+
+    @app.get("/api/knowledge/versions/{version_id}")
+    def knowledge_version(version_id: str):
+        return service.knowledge.get_version(version_id)
+
+    @app.get("/api/knowledge/documents/{document_id}/versions")
+    def document_versions(document_id: str):
+        return {"versions": service.knowledge.document_versions(document_id)}
+
+    @app.post("/api/knowledge/publish")
+    def publish_document(data: PublishInput):
+        return service.publish_knowledge(data.version_id, data.expected_snapshot_id)
+
+    @app.post("/api/knowledge/remove")
+    def remove_document(data: RemoveDocumentInput):
+        return service.remove_knowledge(data.document_id, data.expected_snapshot_id)
+
+    @app.post("/api/knowledge/activate")
+    def activate_snapshot(data: ActivateInput):
+        return service.activate_knowledge(data.snapshot_id, data.expected_snapshot_id)
+
+    @app.post("/api/knowledge/index")
+    def build_current_index(data: SnapshotInput):
+        return service.build_active_index(data.expected_snapshot_id)
+
+    @app.get("/api/retrieval-traces")
+    def retrieval_traces(ticket_id: str | None = None, limit: int = 20):
+        return {"traces": service.store.list_retrievals(ticket_id, limit)}
+
+    @app.get("/api/retrieval-traces/{trace_id}")
+    def retrieval_trace(trace_id: str):
+        return service.store.get_retrieval(trace_id)
 
     @app.get("/api/tickets")
     def listing(status: str | None = None, q: str | None = None, limit: int = 50):

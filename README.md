@@ -1,6 +1,14 @@
-# DocFlow · 技术文档检索与工单处理 Agent
+# DocFlow · 可版本化知识库与技术支持 Agent
 
 [![Offline verification](https://github.com/Edenzty/DocFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/Edenzty/DocFlow/actions/workflows/ci.yml)
+
+**V3知识库工作区**：支持Markdown/TXT导入、切分预览、修订发布、快照回滚与文档退役；工单草稿绑定生成时的资料快照，逐次检索保存查询、方法、排名、证据和耗时。实际使用LangChain Core、LangGraph、Chroma与FastAPI。[操作、框架分工与演示](docs/V3_WORKSPACE_GUIDE.md)。
+
+```powershell
+python -m docflow_lab demo-knowledge --output reports/knowledge-v3-01
+```
+
+知识生命周期和BM25真实运行，草稿仍默认离线模拟；开启真实DeepSeek沿用原共享预算。基础冻结题集保留，新导入文档只在本地数据目录保存。
 
 **将技术问题变成带证据、可追问、可审核、可恢复的工单回复。** DocFlow V2包含可调用只读工具的Agent、三路检索对比、逐条主张引文、工单版本历史和持久化后台任务。检索12篇技术文档，经人工批准后写入本地模拟工单系统。运行范围是本机单用户、单进程。
 

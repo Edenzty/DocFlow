@@ -63,11 +63,19 @@ class Store:
                     error TEXT, created_at TEXT NOT NULL, started_at TEXT, finished_at TEXT
                 );
                 CREATE INDEX IF NOT EXISTS jobs_status ON jobs(status);
+                CREATE TABLE IF NOT EXISTS retrieval_traces (
+                    trace_id TEXT PRIMARY KEY, snapshot_id TEXT NOT NULL,
+                    ticket_id TEXT, ticket_version INTEGER, query TEXT NOT NULL,
+                    method TEXT NOT NULL, stage TEXT NOT NULL, elapsed_ms REAL NOT NULL,
+                    results TEXT NOT NULL, error TEXT, created_at TEXT NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS traces_ticket ON retrieval_traces(ticket_id, created_at);
             """)
             columns = {row[1] for row in db.execute("PRAGMA table_info(tickets)")}
             for name, definition in {
                 "strategy": "TEXT NOT NULL DEFAULT 'rag'", "quality": "TEXT",
                 "trace": "TEXT NOT NULL DEFAULT '[]'", "updated_at": "TEXT",
+                "knowledge_snapshot_id": "TEXT",
             }.items():
                 if name not in columns:
                     db.execute(f"ALTER TABLE tickets ADD COLUMN {name} {definition}")
@@ -136,18 +144,19 @@ class Store:
             result["job"] = dict(job) if job else None
             return result
 
-    def create(self, question: str, method: str, live: bool, strategy="rag", status="generating") -> str:
+    def create(self, question: str, method: str, live: bool, strategy="rag", status="generating", *, knowledge_snapshot_id=None) -> str:
         tid = uuid4().hex
         with self.connect() as db:
             timestamp = now()
             db.execute("INSERT INTO tickets(id,question,method,mode,status,version,created_at,updated_at,strategy) VALUES(?,?,?,?,?,?,?,?,?)",
                        (tid, question, method, "live" if live else "mock", status, 1, timestamp, timestamp, strategy))
+            db.execute("UPDATE tickets SET knowledge_snapshot_id=? WHERE id=?", (knowledge_snapshot_id, tid))
             self._event(db, tid, "created", "创建本地模拟工单；尚未生成或提交回复")
             self._message(db, tid, "user", question, 1)
             self._snapshot(db, tid)
         return tid
 
-    def regenerate(self, tid: str, question: str, method: str, live: bool, strategy=None, message=None) -> dict:
+    def regenerate(self, tid: str, question: str, method: str, live: bool, strategy=None, message=None, *, knowledge_snapshot_id=None) -> dict:
         with self.connect() as db:
             db.execute("BEGIN IMMEDIATE")
             row = db.execute("SELECT * FROM tickets WHERE id=?", (tid,)).fetchone()
@@ -160,6 +169,8 @@ class Store:
             self._snapshot(db, tid)
             db.execute("UPDATE tickets SET question=?,method=?,mode=?,strategy=?,version=version+1,status='generating',draft=NULL,evidence='[]',draft_hash=NULL,approval=NULL,error=NULL,quality=NULL,trace='[]',updated_at=? WHERE id=?",
                        (question, method, "live" if live else "mock", strategy or row["strategy"], now(), tid))
+            if knowledge_snapshot_id is not None:
+                db.execute("UPDATE tickets SET knowledge_snapshot_id=? WHERE id=?", (knowledge_snapshot_id, tid))
             self._event(db, tid, "regenerated", "创建新草稿版本，旧审核立即失效")
             if message:
                 self._message(db, tid, "user", message, row["version"] + 1)
@@ -167,6 +178,40 @@ class Store:
                 self._message(db, tid, "user", question, row["version"] + 1)
             self._snapshot(db, tid)
         return self.get(tid)
+
+    def bind_knowledge(self, tid: str, snapshot_id: str):
+        """Pin a pre-v3 unfinished ticket once; never relabel saved evidence."""
+        with self.connect() as db:
+            db.execute("UPDATE tickets SET knowledge_snapshot_id=? WHERE id=? AND knowledge_snapshot_id IS NULL AND draft IS NULL",
+                       (snapshot_id, tid))
+            self._snapshot(db, tid)
+
+    def record_retrieval(self, *, snapshot_id, query, method, results, elapsed_ms,
+                         ticket_id=None, ticket_version=None, stage="search", error=None):
+        trace_id = uuid4().hex
+        ranked = [{**item, "rank": rank} for rank, item in enumerate(results, 1)]
+        with self.connect() as db:
+            db.execute("INSERT INTO retrieval_traces(trace_id,snapshot_id,ticket_id,ticket_version,query,method,stage,elapsed_ms,results,error,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                       (trace_id, snapshot_id, ticket_id, ticket_version, query, method, stage,
+                        elapsed_ms, json.dumps(ranked, ensure_ascii=False), error, now()))
+        return self.get_retrieval(trace_id)
+
+    def get_retrieval(self, trace_id):
+        with self.connect() as db:
+            row = db.execute("SELECT * FROM retrieval_traces WHERE trace_id=?", (trace_id,)).fetchone()
+            if row is None:
+                raise NotFound("检索记录不存在")
+            result = dict(row)
+            result["results"] = json.loads(result["results"])
+            return result
+
+    def list_retrievals(self, ticket_id=None, limit=20):
+        if type(limit) is not int or not 1 <= limit <= 100:
+            raise ValueError("limit必须为1到100的整数")
+        with self.connect() as db:
+            where, args = (" WHERE ticket_id=?", [ticket_id]) if ticket_id else ("", [])
+            rows = db.execute("SELECT * FROM retrieval_traces" + where + " ORDER BY created_at DESC, trace_id DESC LIMIT ?", [*args, limit]).fetchall()
+            return [{**dict(row), "results": json.loads(row["results"])} for row in rows]
 
     def save_draft(self, tid: str, version: int, draft: dict, evidence: list, quality=None, trace=None):
         with self.connect() as db:

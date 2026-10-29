@@ -333,13 +333,13 @@ class VectorRetriever:
             raise RetrievalError("向量模型返回空向量、非有限值或数量不匹配。")
         return [[float(value) for value in vector] for vector in values]
 
-    def build(self) -> dict[str, Any]:
+    def build(self, *, allow_download: bool = True) -> dict[str, Any]:
         """Explicit opt-in to model download/build; incomplete indexes stay unusable."""
         if self.ready:
             return self.info(reused=True)
         # Keep short fragments intelligible even when they start with "this case".
         # Titles/sections remain provenance too; the tokenizer checks the FULL input.
-        vectors = self._encode([f"{chunk.title}\n{chunk.section}\n{chunk.text}" for chunk in self.chunks], allow_download=True)
+        vectors = self._encode([f"{chunk.title}\n{chunk.section}\n{chunk.text}" for chunk in self.chunks], allow_download=allow_download)
         client = self._get_client()
         try:
             client.delete_collection(name=self.collection_name)

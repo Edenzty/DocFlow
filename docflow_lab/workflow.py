@@ -6,6 +6,7 @@ again after failure; the transactional store makes that replay idempotent.
 from concurrent.futures import ThreadPoolExecutor
 import sqlite3
 from threading import RLock, Lock
+import time
 from typing import TypedDict
 
 from langgraph.checkpoint.sqlite import SqliteSaver
@@ -18,6 +19,7 @@ from .model import DeepSeekModel, MockModel, ModelError, safe_model_text, valida
 from .retrieval import KeywordRetriever, VectorRetriever, load_chunks
 from .retrieval_v2 import HybridRetriever, expand_evidence
 from .storage import Conflict, RequestBudget, Store
+from .knowledge import KnowledgeStore
 
 
 class FlowState(TypedDict, total=False):
@@ -42,13 +44,14 @@ class Engine:
         self.store = Store(settings.data_dir / "tickets.sqlite3")
         self.budget = RequestBudget(settings.budget_path)
         self.lock = RLock()  # Deliberately single-process; serialize graph mutations.
-        self.chunks = load_chunks(settings.knowledge_dir)
-        self.retrievers = retrievers or {
-            "keyword": KeywordRetriever(self.chunks),
-            "vector": VectorRetriever(self.chunks, settings.vector_dir, model_path=settings.model_path),
-        }
-        if "keyword" in self.retrievers and "vector" in self.retrievers:
+        self.knowledge = KnowledgeStore(settings.data_dir / "knowledge.sqlite3", load_chunks(settings.knowledge_dir))
+        self._contexts = {}
+        active = self.knowledge.active()
+        self.chunks = self.knowledge.chunks(active["snapshot_id"])
+        self.retrievers = retrievers or self._make_retrievers(self.chunks)
+        if "keyword" in self.retrievers and "vector" in self.retrievers and "hybrid" not in self.retrievers:
             self.retrievers["hybrid"] = HybridRetriever(self.chunks, self.retrievers["keyword"], self.retrievers["vector"])
+        self._contexts[active["snapshot_id"]] = (self.chunks, self.retrievers)
         self.injected_model = model
         self.job_lock = Lock()
         self.executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="docflow-generation")
@@ -80,10 +83,78 @@ class Engine:
     def _config(self, ticket: dict):
         return {"configurable": {"thread_id": f"{ticket['id']}:v{ticket['version']}"}}
 
-    def search(self, question: str, method: str) -> list[dict]:
-        if method not in self.retrievers:
-            raise Conflict("检索方法不可用；请选择keyword、vector或hybrid")
-        return self.retrievers[method].search(question, top_k=5)
+    def _make_retrievers(self, chunks):
+        keyword = KeywordRetriever(chunks)
+        vector = VectorRetriever(chunks, self.settings.vector_dir, model_path=self.settings.model_path)
+        return {"keyword": keyword, "vector": vector, "hybrid": HybridRetriever(chunks, keyword, vector)}
+
+    def _context(self, snapshot_id=None):
+        snapshot_id = snapshot_id or self.knowledge.active()["snapshot_id"]
+        if snapshot_id not in self._contexts:
+            chunks = self.knowledge.chunks(snapshot_id)
+            self._contexts[snapshot_id] = (chunks, self._make_retrievers(chunks))
+            # Contexts can be rebuilt from durable snapshots; cap in-memory BM25 caches.
+            while len(self._contexts) > 4:
+                del self._contexts[next(iter(self._contexts))]
+        return snapshot_id, *self._contexts[snapshot_id]
+
+    def refresh_knowledge(self):
+        _, self.chunks, self.retrievers = self._context()
+        return self.knowledge_summary()
+
+    def knowledge_summary(self):
+        with self.lock:
+            snapshot_id, chunks, retrievers = self._context()
+            vector = retrievers.get("vector")
+            return {**self.knowledge.active(), "chunks": len(chunks),
+                    "vector_ready": bool(vector and vector.ready)}
+
+    def publish_knowledge(self, version_id, expected_snapshot_id):
+        with self.lock:
+            self.knowledge.publish(version_id, expected_snapshot_id)
+            return self.refresh_knowledge()
+
+    def remove_knowledge(self, document_id, expected_snapshot_id):
+        with self.lock:
+            self.knowledge.remove(document_id, expected_snapshot_id)
+            return self.refresh_knowledge()
+
+    def activate_knowledge(self, snapshot_id, expected_snapshot_id):
+        with self.lock:
+            self.knowledge.activate(snapshot_id, expected_snapshot_id)
+            return self.refresh_knowledge()
+
+    def build_active_index(self, expected_snapshot_id):
+        with self.lock:
+            snapshot_id, _, retrievers = self._context()
+            if snapshot_id != expected_snapshot_id:
+                raise Conflict("知识库版本已改变，请刷新后再构建索引")
+            vector = retrievers.get("vector")
+            if not isinstance(vector, VectorRetriever):
+                raise Conflict("当前检索器不支持真实向量索引构建")
+            return {"snapshot_id": snapshot_id, "index": vector.build(allow_download=False)}
+
+    def search_traced(self, question, method, *, snapshot_id=None, ticket_id=None, ticket_version=None, stage="search"):
+        with self.lock:
+            snapshot_id, _, retrievers = self._context(snapshot_id)
+            if method not in retrievers:
+                raise Conflict("检索方法不可用；请选择keyword、vector或hybrid")
+            started = time.perf_counter()
+            try:
+                results = retrievers[method].search(question, top_k=5)
+            except Exception as exc:
+                self.store.record_retrieval(snapshot_id=snapshot_id, query=question, method=method, results=[],
+                                            elapsed_ms=(time.perf_counter() - started) * 1000,
+                                            ticket_id=ticket_id, ticket_version=ticket_version, stage=stage,
+                                            error=safe_model_text(str(exc)))
+                raise
+            trace = self.store.record_retrieval(snapshot_id=snapshot_id, query=question, method=method, results=results,
+                                                elapsed_ms=(time.perf_counter() - started) * 1000,
+                                                ticket_id=ticket_id, ticket_version=ticket_version, stage=stage)
+            return {"results": results, "trace": trace}
+
+    def search(self, question: str, method: str, **kwargs) -> list[dict]:
+        return self.search_traced(question, method, **kwargs)["results"]
 
     def _options(self, method, strategy, live):
         self._check_live(live)
@@ -107,7 +178,11 @@ class Engine:
         if state.get("strategy") == "agent" or sum(m["role"] == "user" for m in ticket["messages"]) > 1:
             latest = [m["content"] for m in ticket["messages"] if m["role"] == "user"][-1]
             query = (ticket["question"][:150] + " " + latest[-149:])[:300]
-        evidence = self.search(query, state["method"])
+        if not ticket.get("knowledge_snapshot_id"):
+            self.store.bind_knowledge(ticket["id"], self.knowledge.active()["snapshot_id"])
+            ticket = self.store.get(ticket["id"])
+        evidence = self.search(query, state["method"], snapshot_id=ticket["knowledge_snapshot_id"],
+                               ticket_id=ticket["id"], ticket_version=ticket["version"], stage="initial")
         self.store.event(state["ticket_id"], "retrieved", f"v{state['version']} 使用{state['method']}，返回{len(evidence)}个片段")
         return {"evidence": evidence}
 
@@ -120,9 +195,11 @@ class Engine:
         if state.get("strategy") == "agent":
             agent = SupportAgent(self.budget, self.settings.model, live=state["live"])
             try:
+                snapshot_id, chunks, _ = self._context(ticket.get("knowledge_snapshot_id"))
                 result = agent.run(state["question"], state["evidence"],
-                                   search=self.search,
-                                   expand=lambda seeds, max_chunks=15: expand_evidence(self.chunks, seeds, max_chunks=max_chunks),
+                                   search=lambda query, method: self.search(query, method, snapshot_id=snapshot_id,
+                                       ticket_id=ticket["id"], ticket_version=ticket["version"], stage="agent_tool"),
+                                   expand=lambda seeds, max_chunks=15: expand_evidence(chunks, seeds, max_chunks=max_chunks),
                                    context={"ticket_id": ticket["id"], "version": ticket["version"],
                                             "question": ticket["question"], "messages": ticket["messages"][-8:],
                                             "versions": [{"version": v["version"], "status": v["status"]} for v in ticket["versions"][:5]]})
@@ -176,7 +253,7 @@ class Engine:
     def create(self, question: str, method="keyword", live=False, strategy="rag"):
         with self.lock:
             self._options(method, strategy, live)
-            tid = self.store.create(question, method, live, strategy)
+            tid = self.store.create(question, method, live, strategy, knowledge_snapshot_id=self.knowledge.active()["snapshot_id"])
             return self._run_new(self.store.get(tid))
 
     def _run_new(self, ticket):
@@ -193,14 +270,16 @@ class Engine:
         with self.lock:
             old = self.store.get(tid)
             self._options(method or old["method"], strategy or old["strategy"], live)
-            ticket = self.store.regenerate(tid, question or old["question"], method or old["method"], live, strategy)
+            ticket = self.store.regenerate(tid, question or old["question"], method or old["method"], live, strategy,
+                                           knowledge_snapshot_id=self.knowledge.active()["snapshot_id"])
             return self._run_new(ticket)
 
     def followup(self, tid, message, method=None, live=False, strategy=None):
         with self.lock:
             old = self.store.get(tid)
             self._options(method or old["method"], strategy or old["strategy"], live)
-            ticket = self.store.regenerate(tid, old["question"], method or old["method"], live, strategy, message=message)
+            ticket = self.store.regenerate(tid, old["question"], method or old["method"], live, strategy, message=message,
+                                           knowledge_snapshot_id=self.knowledge.active()["snapshot_id"])
             return self._run_new(ticket)
 
     def edit(self, tid, version, answer):
@@ -220,7 +299,8 @@ class Engine:
         # A separate short lock lets job creation/reads proceed during a slow LLM request.
         with self.job_lock:
             self._options(method, strategy, live)
-            tid = self.store.create(question, method, live, strategy, status="queued")
+            tid = self.store.create(question, method, live, strategy, status="queued",
+                                    knowledge_snapshot_id=self.knowledge.active()["snapshot_id"])
             try:
                 job = self.store.create_job(tid, 1)
             except Conflict as exc:

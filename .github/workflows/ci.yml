@@ -30,6 +30,8 @@ jobs:
       - run: python -m pytest -q
       - run: python -m docflow_lab demo --output reports/ci-demo
       - run: python -m docflow_lab demo-v2 --output reports/ci-demo-v2
+      - name: Exercise document publication and snapshot recovery offline
+        run: python -m docflow_lab demo-knowledge --output reports/ci-knowledge-v3
       - run: python -m docflow_lab evaluate --suite all --method keyword --output reports/ci-evaluation
       - name: Diagnose archived retrieval rankings without downloads or model calls
         run: python -m docflow_lab analyze-retrieval --input docs/examples/v2-retrieval-01/retrieval.json --output reports/ci-retrieval-diagnostics

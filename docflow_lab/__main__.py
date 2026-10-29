@@ -19,12 +19,15 @@ def main():
     serve = sub.add_parser("serve", help="启动本地页面与API，仅绑定127.0.0.1")
     serve.add_argument("--live", action="store_true", help="允许显式选择真实DeepSeek，每个请求计入40次总预算")
     serve.add_argument("--port", type=int, default=8765)
-    sub.add_parser("build-index", help="显式下载BGE中文模型并建立CPU向量索引")
+    build_index = sub.add_parser("build-index", help="显式下载BGE中文模型并为当前知识库版本建立CPU向量索引")
+    build_index.add_argument("--baseline", action="store_true", help="为原始12篇冻结文档构建索引，供历史评测使用")
     sub.add_parser("budget", help="读取共享模型请求账本")
     demo = sub.add_parser("demo", help="离线演示：审核、版本失效、超时后幂等恢复")
     demo.add_argument("--output", type=Path)
     demo_v2 = sub.add_parser("demo-v2", help="离线演示：只读Agent、追问、人工编辑、后台任务与恢复")
     demo_v2.add_argument("--output", type=Path, required=True)
+    demo_v3 = sub.add_parser("demo-knowledge", help="离线演示：文档导入、发布、更新、回滚与检索追踪")
+    demo_v3.add_argument("--output", type=Path, required=True)
     retrieval_eval = sub.add_parser("evaluate-retrieval", help="比较BM25、BGE与RRF融合；不调用生成模型")
     retrieval_eval.add_argument("--suite", choices=["development", "holdout", "all"], default="all")
     retrieval_eval.add_argument("--output", type=Path, required=True)
@@ -56,7 +59,11 @@ def main():
         print(json.dumps(RequestBudget(settings.budget_path).summary(), ensure_ascii=False, indent=2))
     elif args.command == "build-index":
         from .retrieval import VectorRetriever, load_chunks
-        vector = VectorRetriever(load_chunks(settings.knowledge_dir), settings.vector_dir, model_path=settings.model_path)
+        from .knowledge import KnowledgeStore
+        chunks = load_chunks(settings.knowledge_dir)
+        if not args.baseline:
+            chunks = KnowledgeStore(settings.data_dir / "knowledge.sqlite3", chunks).chunks()
+        vector = VectorRetriever(chunks, settings.vector_dir, model_path=settings.model_path)
         vector.build()
         print(json.dumps(vector.info(), ensure_ascii=False, indent=2))
     elif args.command == "evaluate-retrieval":
@@ -83,6 +90,11 @@ def main():
             json.dump(result, stream, ensure_ascii=False, indent=2)
             stream.write("\n")
         print(json.dumps(result, ensure_ascii=False, indent=2))
+    elif args.command == "demo-knowledge":
+        from .demo_v3 import run_demo
+        result = run_demo(settings, args.output)
+        print(json.dumps({"output": str(args.output.resolve()), "passed": result["passed"],
+                          "model_requests": 0, "checks": result["checks"]}, ensure_ascii=False, indent=2))
     elif args.command == "demo-v2":
         from .demo_v2 import run_demo
         result = run_demo(settings, args.output)
